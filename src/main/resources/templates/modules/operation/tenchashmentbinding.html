@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>商户与用户的提现账户绑定</title>
+		<#include "/header.html">
+</head>
+<style>
+    .ui-jqgrid .ui-pg-button span{
+        margin: 0px 0px!important;
+    }
+    #communityPager_left{
+        width:70px;
+    }
+</style>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <#if shiro.hasPermission("operation:tenchashmentbinding:list")>
+            <div class="form-group col-sm-2">
+                <input type="text"  class="form-control" v-model="q.objectName" placeholder="商户名称">
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
+            </#if>
+			<#if shiro.hasPermission("operation:tenchashmentbinding:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("operation:tenchashmentbinding:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("operation:tenchashmentbinding:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+
+        <!--↓↓↓商户名字查询弹出框 d↓↓↓-->
+        <div class="modal modal.fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  style="z-index: 1041">
+            <div class="modal-dialog" role="document" style="width: 750px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">商户名字查询</h4>
+                    </div>
+                    <div class="modal-body col-sm-12">
+                                    <div class="col-sm-2">商户名称</div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" v-model="q.merchantName"  placeholder="请输入商户名字,手机号"/>
+                        </div>
+                        <button type="button" class="btn btn-default" id="commercialNameReload">查询</button>
+
+                    </div>
+                    <!--显示弹窗table-->
+                            <div class="form-group col-sm-12" id="jqGrid_wrapper" style="width: 900px">
+                                <table id="commercialName"></table>
+                                <div id="commercialNamePager"></div>
+                            </div>.
+                        <!--</div>-->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="window-close-button">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--↑↑↑商户名字查询弹出框 d↑↑↑-->
+
+        <!--↓↓↓社区查询弹出框 d↓↓↓-->
+        <div class="modal modal.fade" id="communityModal" tabindex="-1" role="dialog" aria-labelledby="communityModalLabel"  style="z-index: 1041">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="communityModalLabel">开户行查询</h4>
+                    </div>
+                    <div class="modal-body">
+                                <div class="col-sm-2">开户行</div>
+                        <div class="col-sm-4">
+                            <input type="text" id="value" class="form-control" v-model="q.value"  placeholder="请输入开户行名称"/>
+                        </div>
+                              <button type="button" class="btn btn-default" id="communityModalReload">查询</button>
+                    </div>
+                    <!--显示社区弹窗table-->
+                    <table id="community"></table>
+                    <div id="communityPager"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="community-window-close-button" >确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--↑↑↑社区查询弹出框 d↑↑↑-->
+
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商户名或用户名<i style="color:red;margin-right:5px">*</i></div>
+                        <div class="col-sm-10">
+                            <input type="text" id="objectName" class="form-control" v-model="tEnchashmentBinding.objectName" placeholder="请选择商户名或用户名" data-toggle="modal" data-target="#myModal" readonly="readonly" style="cursor:pointer;"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">是否是默认提现账号<i style="color:red;margin-right:5px">*</i></div>
+                         <label class="radio-inline">
+                             <input type="radio" name="isDefault" value="1" v-model="tEnchashmentBinding.isDefault"/> 是
+                         </label>
+                          <label class="radio-inline">
+                              <input type="radio" name="isDefault" value="0" v-model="tEnchashmentBinding.isDefault"/> 否
+                          </label>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">银行卡号<i style="color:red;margin-right:5px">*</i></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" maxlength="19" v-model="tEnchashmentBinding.account" placeholder="银行卡号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">开户行<i style="color:red;margin-right:5px">*</i></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="subbranch" readonly="readonly"  maxlength="50" style="cursor:pointer;" placeholder="开户行" v-model="tEnchashmentBinding.subbranch" data-toggle="modal" data-target="#communityModal"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">开户名<i style="color:red;margin-right:5px">*</i></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" maxlength="30" v-model="tEnchashmentBinding.accountName" placeholder="开户名"/>
+                        </div>
+                    </div>
+											                    <!--<div class="form-group">-->
+                        <!--<div class="col-sm-2 control-label">银联号<i style="color:red;margin-right:5px">*</i></div>-->
+                        <!--<div class="col-sm-10">-->
+                            <!--<input type="text" class="form-control"  v-model="tEnchashmentBinding.bankUnionId" placeholder="银联号"/>-->
+                        <!--</div>-->
+                    <!--</div>-->
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary"  id="text1" onclick="$(this).blur();" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<script src="${request.contextPath}/statics/js/modules/operation/tenchashmentbinding.js?_${.now?long}"></script>
+</body>
+</html>

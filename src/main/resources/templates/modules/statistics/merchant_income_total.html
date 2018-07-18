@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>商户交易统计</title>
+    <#include "/header.html">
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/plugins/cover/css/ycbootstrap.css"/>
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/plugins/cover/css/reset.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
+    <script src="${request.contextPath}/statics/js/echarts.js"></script>
+    <script src="${request.contextPath}/statics/plugins/layui/layui.all.js"></script>
+    <style type="text/css">
+        span{
+            color: #00B83F;
+        }
+    </style>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <#if shiro.hasPermission("statistics:merchantIncomeTotal:list")>
+        <div class="grid-btn">
+            <div class="form-group col-sm-2">
+                <input type="text" id="startTime-endTime" class="form-control"  placeholder="选择时间段">
+            </div>
+            <div class="form-group col-sm-1">
+                <select name="areaProvince" v-model="q.province"  class="form-control" placeholder="省"  id="areaProvince" >
+                    <option value="0" selected="selected">请选择省</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-1">
+                <select name="areaCity" v-model="q.city" class="form-control" placeholder="市"  id="areaCity">
+                    <option value="0" selected="selected">请选择市</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-1">
+                <select name="areaArea" v-model="q.area" class="form-control" placeholder="区"  id="areaArea">
+                    <option value="0" selected="selected">请选择区</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-1">
+                <select name="areaTown" v-model="q.town" class="form-control" placeholder="乡镇"  id="areaTown">
+                    <option value="0" selected="selected">请选择乡镇</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-1">
+                <input type="text" name="merchantName" class="form-control" v-model="q.merchantName" @keyup.enter="query" placeholder="商户名称">
+            </div>
+            <div class="form-group col-sm-1">
+                <input type="text" name="sysUserName" class="form-control" v-model="q.sysUserName" @keyup.enter="query" placeholder="业务员">
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
+        </div>
+        </#if>
+    <div style="display : none">
+        <table id="jqGrid" ></table>
+        <div id="jqGridPager"></div>
+    </div>
+    <br />
+
+    <!--<div style="height: 600px;text-align: center;font-size: 100px; line-height: 600px; color:rgba(0,0,0,0.1);">-->
+        <!---->
+    <!--</div>-->
+
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="barGraph" style="width: 600px;height:400px;float: left; margin-left: 150px;margin-top: 50px"></div>
+
+    <div id="fanShapedGraph" style="width: 600px;height:400px;float: left;margin-left: 100px;margin-top: 50px"></div>
+    <br />
+    <div style="margin-top: 500px">
+        <p style="text-align: center; font-size: 25px">总收入：<span id="totalIncome">0</span>   总笔数：<span id="totalNumberOfPen">0</span>   微宝收入：<span>0</span>   微宝笔数：<span>0</span>   总支出：<span id="totalExpenditure">0</span>   支出笔数：<span id="expenditureNumberOfPen">0</span></p>
+    </div>
+</div>
+</div>
+<script src="${request.contextPath}/statics/js/modules/statistics/merchant_income_total.js?_${.now?long}"></script>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.scxxwb.net.admin.modules.operation.dao.MerchantDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.scxxwb.net.admin.modules.operation.entity.MerchantEntity" id="merchantMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="loginUsername" column="login_username"/>
+        <result property="loginPwd" column="login_pwd"/>
+        <result property="agentId" column="agent_id"/>
+        <result property="merchantName" column="merchant_name"/>
+        <result property="avatar" column="avatar"/>
+        <result property="photos" column="photos"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="contacts" column="contacts"/>
+        <result property="telphone" column="telphone"/>
+        <result property="status" column="status"/>
+        <result property="recommend" column="recommend"/>
+        <result property="typeId" column="type_id"/>
+        <result property="typeName" column="type_name"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="area" column="area"/>
+        <result property="town" column="town"/>
+        <result property="address" column="address"/>
+        <result property="simpleAddress" column="simple_address"/>
+        <result property="communityId" column="community_id"/>
+        <result property="score" column="score"/>
+        <result property="pushDeviceId" column="push_device_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="merchantCode" column="merchant_code"/>
+        <result property="sysUserId" column="sys_user_id"/>
+        <result property="supportDispatching" column="support_dispatching"/>
+        <result property="payChannel" column="pay_channel"/>
+        <result property="isVoiceFunction" column="is_voice_function"/>
+        <result property="remark" column="remark"/>
+        <result property="salesman" column="salesman"/>
+
+    </resultMap>
+
+    <select id="getMerchant" parameterType="java.util.List" resultType="Integer">
+        select id from t_merchant
+        <if test="_parameter != null">
+            where agent_id in
+            <foreach collection="list" item="age" open="(" close=")" separator=",">
+                #{age}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getMerchantByLoginUserName" resultType="Integer">
+        select id from t_merchant
+        where login_username = #{loginUserName}
+    </select>
+
+    <select id="getMerchantByCode" resultMap="merchantMap">
+        select id, merchant_code from t_merchant
+        where merchant_code = #{merchantCode}
+    </select>
+
+    <select id="getMerchantByMerchantName" resultMap="merchantMap">
+        select id, merchant_name from t_merchant
+        where merchant_name = #{merchantName}
+    </select>
+
+    <select id="getMerchantByArea" resultMap="merchantMap">
+        select * from t_merchant inner join t_sys_user on t_sys_user.user_id = t_merchant.sys_user_id  where 1=1
+        <if test="province != null and province > 0">
+            and province = #{province}
+        </if>
+        <if test="city != null and city > 0">
+            and city = #{city}
+        </if>
+        <if test="area != null and area > 0">
+            and area = #{area}
+        </if>
+        <if test="town != null and town > 0">
+            and town = #{town}
+        </if>
+        <if test="merchantName != null and merchantName != ''">
+            and merchant_name like CONCAT('%',#{merchantName},'%')
+        </if>
+        <if test="sysUserName != null and sysUserName != ''">
+            and t_sys_user.user_name like CONCAT('%',#{sysUserName},'%')
+        </if>
+        <if test="size != null and size != 0">
+            limit #{current},#{size}
+        </if>
+    </select>
+
+    <select id="getMerchantByAreaTotal" resultType="Integer">
+        select count(1) from t_merchant inner join t_sys_user on t_sys_user.user_id = t_merchant.sys_user_id  where 1=1
+        <if test="province != null and province > 0">
+            and province = #{province}
+        </if>
+        <if test="city != null and city > 0">
+            and city = #{city}
+        </if>
+        <if test="area != null and area > 0">
+            and area = #{area}
+        </if>
+        <if test="town != null and town > 0">
+            and town = #{town}
+        </if>
+        <if test="merchantName != null and merchantName != ''">
+            and merchant_name like CONCAT('%',#{merchantName},'%')
+        </if>
+        <if test="sysUserName != null and sysUserName != ''">
+            and t_sys_user.user_name like CONCAT('%',#{sysUserName},'%')
+        </if>
+    </select>
+
+    <update id="updateStatus">
+        update t_merchant set status = #{status} where id = #{id}
+    </update>
+
+    <update id="updateStatusAndRemark">
+        update t_merchant set status = #{status}, remark = #{remark} where id = #{id}
+    </update>
+</mapper>

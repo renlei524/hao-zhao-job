@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>社区管理</title>
+<#include "/header.html">
+	<style>
+		.ui-jqgrid .ui-jqgrid-btable tbody tr.jqgrow td{
+
+			text-overflow:ellipsis!important;
+
+		}
+		  .span{
+			  color: #FF5722;
+		  }
+
+	</style>
+</head>
+
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+        <div class="grid-btn">
+			<div class="form-group col-sm-2">
+				<select name="status" v-model="q.status" class="form-control" placeholder="乡镇街办">
+					<option value="" >请选择使用状态</option>
+					<option value="0" >禁用</option>
+					<option value="1" >启用</option>
+				</select>
+			</div>
+			<div class="form-group col-sm-3">
+				<input type="text" class="form-control" v-model="q.communityName" @keyup.enter="query" placeholder="请输入机构名称">
+			</div>
+			<a class="btn btn-primary" @click="query">查询</a>
+			<!--<#if shiro.hasPermission("sys:dept:save")>-->
+
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<!--</#if>-->
+			<!--<#if shiro.hasPermission("sys:dept:update")>-->
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<!--</#if>-->
+			<!--<#if shiro.hasPermission("sys:dept:delete")>-->
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			<!--</#if>-->
+		</div>
+		<table id="jqGrid"></table>
+		<div id="jqGridPager"></div>
+	</div>
+
+	<div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-2 control-label">机构名称<span class="span"> *</span></div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="community.name" placeholder="机构名称" maxlength="18"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">负责人<span class="span"> *</span></div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="community.leader" placeholder="负责人" maxlength="15"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">联系电话<span class="span"> *</span></div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="community.leaderTel" placeholder="负责人电话号码" maxlength="11"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">所属地区<span class="span"> *</span></div>
+				<div class="col-sm-10">
+					<select name="province" class="form-control" v-model="community.province" placeholder="省"  id="province" style="width: 370px;">
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<div class="col-sm-10">
+					<select name="city" class="form-control" v-model="community.city" placeholder="市"  id="city" style="width: 370px;">
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<div class="col-sm-10">
+					<select name="area" class="form-control" v-model="community.area" placeholder="区"  id="area" style="width: 370px;">
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<div class="col-sm-10">
+					<select name="town" class="form-control" v-model="community.town" placeholder="乡镇"  id="town" style="width: 370px;">
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">状态<span class="span"> *</span></div>
+                    <label class="radio-inline">
+                        <input type="radio" name="status" value="1" v-model="community.status" /> 启用
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="status" value="0" v-model="community.status"/> 禁用
+                    </label>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<input type="button" id="text1" onclick="$(this).blur();" class="btn btn-primary" @click="saveOrUpdate" value="保存"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="取消"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+
+<script src="${request.contextPath}/statics/js/modules/community/community_dept.js?_${.now?long}"></script>
+
+</body>
+</html>

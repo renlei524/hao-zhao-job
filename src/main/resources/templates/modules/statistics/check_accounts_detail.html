@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>财务核账详情</title>
+    <#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <#if shiro.hasPermission("statistics:checkAccountsDetail:list")>
+        <div class="grid-btn">
+            <div class="form-group col-sm-2">
+                <input type="text" class="form-control" v-model="" @keyup.enter="query" placeholder="">
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
+        </div>
+        </#if>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+</div>
+<script src="${request.contextPath}/statics/js/modules/statistics/check_accounts_detail.js?_${.now?long}"></script>
+</body>
+</html>

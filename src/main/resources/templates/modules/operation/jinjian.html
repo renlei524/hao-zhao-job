@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <#include "/header.html">
+        <title>商户进件</title>
+        <link rel="stylesheet" href="${request.contextPath}/statics/css/element.css">
+        <script src="${request.contextPath}/statics/libs/element.js"></script>
+
+</head>
+
+<body>
+    <div id="rrapp" v-cloak>
+        <el-form :model="form" :rules="rules" ref="form" style="width: 60%;">
+            <el-form-item label="商户性质" prop="merchClass">
+                <el-radio v-model="form.merchClass" label="1">企业商户</el-radio>
+                <el-radio v-model="form.merchClass" label="2">个体商户</el-radio>
+            </el-form-item>
+            <el-form-item label="商户类型" prop="merchType">
+                <el-radio v-model="form.merchType" label="1">连锁商店</el-radio>
+                <el-radio v-model="form.merchType" label="2">单店</el-radio>
+            </el-form-item>
+            <el-form-item prop="relatedMerchName" v-show="form.merchType=='1'" label="关联商户号">
+                <el-input v-model="form.relatedMerchName"></el-input>
+            </el-form-item>
+            <el-form-item prop="merchName" label="商户注册名称">
+                <el-input v-model="form.merchName" placeholder="企业商户填写营业执照上面的商户名称，个体商户填写商户简称"></el-input>
+            </el-form-item>
+            <el-form-item prop="merchShortName" label="商户简称">
+                <el-input v-model="form.merchShortName" placeholder="地区+商户名称+行业"></el-input>
+            </el-form-item>
+            <el-form-item prop="userDefinedName" label="小票名称">
+                <el-input v-model="form.userDefinedName"></el-input>
+            </el-form-item>
+            <el-form-item prop="regProvId" label="注册地址所在省">
+                <el-select @change="(value) => handleAddrChange(value,'regProvinces', 'getCities', 1)" v-model="form.regProvId" placeholder="请选择"
+                    ref="regProvince">
+                    <el-option v-for="province in regProvinces" :key="province.id" :label="province.name" :value="province.name">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="regCityId" label="注册地址所在市">
+                <el-select @change="(value) => handleAddrChange(value,'regCities', 'getArea',1)" v-model="form.regCityId" placeholder="请选择">
+                    <el-option v-for="city in regCities" :key="city.id" :label="city.name" :value="city.name">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="regAreaId" label="注册地址所在区">
+                <el-select v-model="form.regAreaId" placeholder="请选择">
+                    <el-option v-for="area in regAreas" :key="area.id" :label="area.name" :value="area.name">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="regAddr" label="商户注册详细地址">
+                <el-input v-model="form.regAddr"></el-input>
+            </el-form-item>
+
+            <el-form-item prop="provId" label="经营地址所在省">
+                <el-select @change="(value) => handleAddrChange(value,'provinces', 'getCities',2)" v-model="form.provId" placeholder="请选择">
+                    <el-option v-for="province in provinces" :key="province.id" :label="province.name" :value="province.name">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="cityId" label="经营地址所在市">
+                <el-select @change="(value) => handleAddrChange(value,'cities', 'getArea',2)" v-model="form.cityId" placeholder="请选择">
+                    <el-option v-for="city in cities" :key="city.id" :label="city.name" :value="city.name">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="areaId" label="经营地址所在区">
+                <el-select v-model="form.areaId" placeholder="请选择">
+                    <el-option v-for="area in areas" :key="area.id" :label="area.name" :value="area.name">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="merchAddr" label="商户经营详细地址">
+                <el-input v-model="form.merchAddr"></el-input>
+            </el-form-item>
+            <el-form-item prop="businessShours" label="营业开始时间">
+                <el-time-select v-model="form.businessShours">
+                </el-time-select>
+            </el-form-item>
+            <el-form-item prop="businessEhours" label="营业结束时间">
+                <el-time-select v-model="form.businessEhours">
+                </el-time-select>
+            </el-form-item>
+            <el-form-item prop="merHeader" label="商户所属总部">
+                <el-input v-model="form.merHeader" placeholder="连锁商户如果有自定义组织架构的填写"></el-input>
+            </el-form-item>
+            <el-form-item prop="isCreditCode" label="是否三证合一">
+                <el-radio v-model="form.isCreditCode" label="1">是</el-radio>
+                <el-radio v-model="form.isCreditCode" label="0">否</el-radio>
+            </el-form-item>
+            <el-form-item prop="creditCode" v-show="form.isCreditCode=='1'" label="统一社会信用代码证">
+                <el-input v-model="form.creditCode"></el-input>
+            </el-form-item>
+            <el-form-item prop="regCode" v-show="form.isCreditCode=='0'" label="营业执照编码">
+                <el-input v-model="form.regCode"></el-input>
+            </el-form-item>
+            <el-form-item prop="licType" label="证照有效期">
+                <el-radio v-model="form.licType" label="1">非长期</el-radio>
+                <el-radio v-model="form.licType" label="2">长期</el-radio>
+            </el-form-item>
+            <el-form-item prop="licSdate" label="证照开始日期">
+                <el-date-picker v-model="form.licSdate" value-format="yyyyMMdd" type="date" placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item prop="licEdate" label="证照结束日期">
+                <el-date-picker v-model="form.licEdate" value-format="yyyyMMdd" type="date" placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item prop="orgCode" v-show="form.isCreditCode=='0'" label="组织机构代码证">
+                <el-input v-model="form.orgCode"></el-input>
+            </el-form-item>
+            <el-form-item prop="cateType" label="商户经营类型">
+                <el-radio v-model="form.cateType" label="1">实体</el-radio>
+                <el-radio v-model="form.cateType" label="2">虚拟</el-radio>
+            </el-form-item>
+            <el-form-item prop="legalName" v-show="form.merchClass=='1'" label="法人">
+                <el-input maxlength=15 v-model="form.legalName"></el-input>
+            </el-form-item>
+            <el-form-item prop="idType" label="法人证件类型">
+                <el-select v-model="form.idType" placeholder="请选择">
+                    <el-option v-for="type in IDCardTypes" :key="type.typeId" :label="type.label" :value="type.typeId">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="idNo" v-show="form.merchClass=='1'" label="法人证件号码">
+                <el-input v-model="form.idNo"></el-input>
+            </el-form-item>
+            <el-form-item prop="idValidType" v-show="form.merchClass=='1'" label="法人证件有效期">
+                <el-radio v-model="form.idValidType" label="1">非长期</el-radio>
+                <el-radio v-model="form.idValidType" label="2">长期</el-radio>
+            </el-form-item>
+            <el-form-item prop="idSdate" v-show="form.merchClass=='1'" label="法人证件有效期开始日期">
+                <el-date-picker v-model="form.idSdate" value-format="yyyyMMdd" type="date" placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item prop="idEdate" v-show="form.idValidType=='1'" label="法人证件有效期证件结束日期">
+                <el-date-picker v-model="form.idEdate" value-format="yyyyMMdd" type="date" placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item prop="contactName" label="商户联系人">
+                <el-input maxlength=15 v-model="form.contactName"></el-input>
+            </el-form-item>
+            <el-form-item prop="contactIdType" label="联系人证件类型">
+                <el-select v-model="form.contactIdType" placeholder="请选择">
+                    <el-option v-for="type in IDCardTypes" :key="type.typeId" :label="type.label" :value="type.typeId">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="contactIdNo" label="联系人证件号码">
+                <el-input v-model="form.contactIdNo"></el-input>
+            </el-form-item>
+            <el-form-item prop="contactIdValidType" label="联系人证件有效期">
+                <el-radio v-model="form.contactIdValidType" label="1">非长期</el-radio>
+                <el-radio v-model="form.contactIdValidType" label="2">长期</el-radio>
+            </el-form-item>
+            <el-form-item prop="contactIdSdate" v-show="form.merchClass=='1'" label="联系人证件有效期开始日期">
+                <el-date-picker v-model="form.contactIdSdate" value-format="yyyyMMdd" type="date" placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item prop="contactIdEdate" v-show="form.contactIdValidType=='1'" label="联系人证件有效期结束日期">
+                <el-date-picker v-model="form.contactIdEdate" value-format="yyyyMMdd" type="date" placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item prop="contactTelno" label="联系人手机">
+                <el-input v-model="form.contactTelno"></el-input>
+            </el-form-item>
+            <el-form-item prop="contactEmail" label="联系人邮箱">
+                <el-input v-model="form.contactEmail"></el-input>
+            </el-form-item>
+            <el-form-item prop="contractNum" label="合同编号" placeholder="填写协议上的实际合同编号（个体商户默认代理商统一的合同编号）">
+                <el-input v-model="form.contractNum"></el-input>
+            </el-form-item>
+            <el-form-item prop="signName" label="签约业务经理" placeholder="实际签约的业务经理">
+                <el-input v-model="form.signName"></el-input>
+            </el-form-item>
+            <el-form-item prop="signDate" label="签约日期">
+                <el-date-picker v-model="form.signDate" value-format="yyyyMMdd" type="date" placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item prop="signSdate" label="合同有效期开始日期">
+                <el-date-picker v-model="form.signSdate" value-format="yyyyMMdd" type="date" placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item prop="signEdate" label="合同有效期结束日期">
+                <el-date-picker v-model="form.signEdate" value-format="yyyyMMdd" type="date" placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item prop="tellerId" label="管理员账号">
+                <el-input v-model="form.tellerId" placeholder="建议使用手机号或联系人姓名拼音+生日，避免重复"></el-input>
+            </el-form-item>
+            <el-form-item prop="isSendMes" label="是否发送短信通知商户">
+                <el-radio v-model="form.isSendMes" label="1">是</el-radio>
+                <el-radio v-model="form.isSendMes" label="2">否</el-radio>
+            </el-form-item>
+            <el-form-item prop="isPrivate" label="结算账户类型">
+                <el-radio v-model="form.isPrivate" label="0">对公</el-radio>
+                <el-radio v-model="form.isPrivate" label="1">对私</el-radio>
+            </el-form-item>
+            <el-form-item prop="bankActName" label="结算账户名称 对公结算时，结算账户名称需与商户注册名称一致" placeholder="结算账户名称，对公结算时，结算账户名称需与商户注册名称一致">
+                <el-input v-model="form.bankActName"></el-input>
+            </el-form-item>
+            <el-form-item prop="bankActId" label="结算账号" placeholder="结账账号">
+                <el-input v-model="form.bankActId"></el-input>
+            </el-form-item>
+
+            <el-form-item prop="bankProvId" label="银行所在省">
+                <el-select @change="(value) => handleAddrChange(value,'bankProvinces', 'getCities',3)" v-model="form.bankProvId" placeholder="请选择">
+                    <el-option v-for="province in bankProvinces" :key="province.id" :label="province.name" :value="province.name">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="bankCityId" label="银行所在市">
+                <el-select @change="(value) => handleAddrChange(value,'bankCities', 'getArea',3)" v-model="form.bankCityId" placeholder="请选择">
+                    <el-option v-for="city in bankCities" :key="city.id" :label="city.name" :value="city.name">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="bankAreaId" label="银行所在区县">
+                <el-select v-model="form.bankAreaId" placeholder="请选择">
+                    <el-option v-for="area in bankAreas" :key="area.id" :label="area.name" :value="area.name">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="bankName" label="银行名称">
+                <el-input v-model="form.bankName"></el-input>
+            </el-form-item>
+            <el-form-item prop="settleTerm" label="结算周期">
+                <el-radio v-model="form.settleTerm" label="1">T+1</el-radio>
+                <el-radio v-model="form.settleTerm" label="2">D+1</el-radio>
+            </el-form-item>
+            <el-form-item prop="fee01" v-show="form.settleTerm=='2'" label="D+1结算手续费(%)">
+                <el-input type="number" v-model.number="form.fee01"></el-input>
+            </el-form-item>
+
+            <el-form-item prop="accountIdType" label="持卡人证件类型">
+                <el-select v-model="form.accountIdType" placeholder="请选择">
+                    <el-option v-for="type in IDCardTypes" :key="type.typeId" :label="type.label" :value="type.typeId">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="accountIdNo" label="持卡人证件号码">
+                <el-input v-model="form.accountIdNo"></el-input>
+            </el-form-item>
+            <el-form-item prop="accountIdValidType" label="证件有效期">
+                <el-radio v-model="form.accountIdValidType" label="1">非长期</el-radio>
+                <el-radio v-model="form.accountIdValidType" label="2">长期</el-radio>
+            </el-form-item>
+
+            <el-form-item prop="accountIdSdate" label="证件有效期开始日期">
+                <el-date-picker v-model="form.accountIdSdate" value-format="yyyyMMdd" type="date" placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item prop="accountIdEdate" v-show="form.accountIdValidType=='1'" label="证件有效期结束日期">
+                <el-date-picker v-model="form.accountIdEdate" value-format="yyyyMMdd" type="date" placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item prop="auth24" label="是否开通TS业务">
+                <el-radio v-model="form.auth24" label="0">否</el-radio>
+                <el-radio v-model="form.auth24" label="1">是</el-radio>
+            </el-form-item>
+            <el-form-item prop="feedType" v-show="form.auth24=='1'" label="TS结算手续费类型">
+                <el-radio v-model="feedType" label="0">固定</el-radio>
+                <el-radio v-model="feedType" label="1">百分百</el-radio>
+            </el-form-item>
+            <el-form-item prop="fee20" v-show="feedType=='0' && form.auth24=='1'" label="TS结算手续费(固定)">
+                <el-input type="number" v-model.number="form.fee20"></el-input>
+            </el-form-item>
+            <el-form-item prop="fee21" v-show="feedType=='1' && form.auth24=='1'" label="TS结算手续费(百分百)">
+                <el-input type="number" v-model.number="form.fee21"></el-input>
+            </el-form-item>
+            <el-form-item prop="fee22" v-show="feedType==1 && form.auth24=='1'" label="封顶值">
+                <el-input type="number" v-model.number="form.fee22"></el-input>
+            </el-form-item>
+            <el-form-item prop="tsCashLimit" v-show="form.auth24==1 && form.auth24=='1'" label="TS起结金额（元）">
+                <el-input type="number" v-model.number="form.tsCashLimit"></el-input>
+            </el-form-item>
+            <el-form-item prop="auth23" label="是否开通银行卡支付">
+                <el-radio v-model="form.auth23" label="0">否</el-radio>
+                <el-radio v-model="form.auth23" label="1">是</el-radio>
+            </el-form-item>
+            <el-form-item prop="chargeCateCode" v-show="form.auth23=='1'" label="手续费类型">
+                <el-radio v-model="form.chargeCateCode" label="01">减免类</el-radio>
+                <el-radio v-model="form.chargeCateCode" label="02">优惠类</el-radio>
+                <el-radio v-model="form.chargeCateCode" label="03">标准类</el-radio>
+            </el-form-item>
+            <el-form-item prop="fee02" v-show="form.auth23=='1' && form.chargeCateCode != '01' " label="借记卡手续费（%）保留4位小数">
+                <el-input v-on:blur="fixFee('fee02',4)" type="number" v-model.number="form.fee02" ref="fee02"></el-input>
+            </el-form-item>
+            <el-form-item prop="fee04" v-show="form.auth23=='1' && form.chargeCateCode != '01' " label="封顶 保留2位小数">
+                <el-input v-on:blur="fixFee('fee04',2)" type="number" v-model.number="form.fee04" ref="fee04"></el-input>
+            </el-form-item>
+            <el-form-item prop="fee03" v-show="form.auth23=='1' && form.chargeCateCode != '01' " label="贷记卡手续费（%）保留4位小数">
+                <el-input v-on:blur="fixFee('fee03',4)" type="number" v-model.number="form.fee03" ref="fee03"></el-input>
+            </el-form-item>
+            <el-form-item prop="unionRegCode" label="银联现场注册码 银联现场注册商户填写">
+                <el-input v-model="form.unionRegCode"></el-input>
+            </el-form-item>
+            <el-form-item prop="fee05" v-show="form.auth23=='1' && form.chargeCateCode != '01' " label="云闪付借记卡手续费（%）">
+                <el-input v-on:blur="fixFee('fee05',4)" type="number" v-model.number="form.fee05" ref="fee05"></el-input>
+            </el-form-item>
+            <el-form-item prop="fee07" v-show="form.auth23=='1' && form.chargeCateCode != '01' " label="封顶(元)">
+                <el-input v-on:blur="fixFee('fee07',2)" type="number" v-model.number="form.fee07" ref="fee07"></el-input>
+            </el-form-item>
+            <el-form-item prop="fee06" v-show="form.auth23=='1' && form.chargeCateCode != '01' " label="云闪付贷记卡手续费（%）">
+                <el-input v-on:blur="fixFee('fee06',4)" type="number" v-model.number="form.fee06" ref="fee06"></el-input>
+            </el-form-item>
+            <el-form-item prop="auth20" label="开通银联二维码">
+                <el-radio v-model="form.auth20" label="0">否</el-radio>
+                <el-radio v-model="form.auth20" label="1">是</el-radio>
+            </el-form-item>
+            <el-form-item prop="fee23" v-show="form.auth20=='1'" label="借记卡手续费（%）">
+                <<el-input v-on:blur="fixFee('fee23',4)" type="number" v-model.number="form.fee23" ref="fee23"></el-input>
+            </el-form-item>
+            <el-form-item prop="fee24" v-show="form.auth20=='1'" label="封顶(元">
+                <el-input v-on:blur="fixFee('fee24',2)" type="number" v-model.number="form.fee24" ref="fee24"></el-input>
+            </el-form-item>
+            <el-form-item prop="fee25" v-show="form.auth20=='1'" label="贷记卡手续费（%）">
+                <el-input v-on:blur="fixFee('fee25',4)" type="number" v-model.number="form.fee25" ref="fee25"></el-input>
+            </el-form-item>
+            <el-form-item prop="auth18" label="是否开通微信支付">
+                <el-radio v-model="form.auth18" label="0">否</el-radio>
+                <el-radio v-model="form.auth18" label="1">是</el-radio>
+            </el-form-item>
+            <el-form-item prop="wechatCateCode" v-show="form.auth18=='1'" label="商户经营类目（微信）">
+                <el-input v-model="form.wechatCateCode"></el-input>
+            </el-form-item>
+            <el-form-item prop="fee08" v-show="form.auth18=='1'" label="微信支付手续费">
+                <el-input v-model.number="form.fee08"></el-input>
+            </el-form-item>
+            <el-form-item prop="wechatPubNum" label="关注公众号">
+                <el-input v-model="form.wechatPubNum"></el-input>
+            </el-form-item>
+            <el-form-item prop="wechatPubNumAppid" label="公众号支付appid">
+                <el-input v-model="form.wechatPubNumAppid"></el-input>
+            </el-form-item>
+            <el-form-item prop="wechatPubNumAuth" label="公众号支付授权目录">
+                <el-input v-model="form.wechatPubNumAuth"></el-input>
+            </el-form-item>
+
+            <el-form-item prop="isMerWechat" label="是否为商户的公众号">
+                <el-radio v-model="form.isMerWechat" label="1">是</el-radio>
+                <el-radio v-model="form.isMerWechat" label="0">否</el-radio>
+            </el-form-item>
+            <el-form-item prop="auth19" label="是否开通支付宝支付">
+                <el-radio v-model="form.auth19" label="1">是</el-radio>
+                <el-radio v-model="form.auth19" label="0">否</el-radio>
+            </el-form-item>
+            <el-form-item prop="alipayCateCode" v-show="form.auth19=='1'" label="商户经营类目（支付宝）">
+                <el-input v-model="form.alipayCateCode"></el-input>
+            </el-form-item>
+            <el-form-item prop="fee12" v-show="form.auth19=='1'" label="支付宝手续费">
+                <el-input v-on:blur="fixFee('fee12',4)" type="number" v-model.number="form.fee12" ref="fee12"></el-input>
+            </el-form-item>
+
+            <el-form-item prop="memberId" label="代理商会员号 18位">
+                <el-input v-model="form.memberId"></el-input>
+            </el-form-item>
+            <el-form-item prop="opTellerId" label="代理商操作员">
+                <el-input v-model="form.opTellerId"></el-input>
+            </el-form-item>
+            <el-form-item prop="pnrpayMerType" label="商户种类">
+                <el-select v-model="form.pnrpayMerType" placeholder="请选择">
+                    <el-option v-for="type in pnrpayMerTypes" :key="type.typeId" :label="type.label" :value="type.typeId">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="submitForm('form')">提交</el-button>
+                <el-button @click="resetForm('form')">重置</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+    <script src="${request.contextPath}/statics/libs/axios.min.js"></script>
+    <script src="${request.contextPath}/statics/js/modules/operation/jinjian.js?_${.now?long}"></script>
+</body>
+
+</html>

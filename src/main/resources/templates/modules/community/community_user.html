@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>账号列表</title>
+<#include "/header.html">
+	<style>
+		.ui-jqgrid .ui-jqgrid-btable tbody tr.jqgrow td{
+
+			text-overflow:ellipsis!important;
+
+		}
+		.span{
+			color: #FF5722;
+		}
+		#communityPager_left{
+			width:55px;
+		}
+	</style>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.userName"  placeholder="账号名">
+			</div>
+			<a class="btn btn-default" @click="query">查询</a>
+			<#if shiro.hasPermission("sys:user:save")>
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("sys:user:update")>
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("sys:user:delete")>
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+
+	<div v-show="!showList" class="panel panel-default">
+		<!--↓↓↓所属社区查询弹出框 d↓↓↓-->
+		<div class="modal modal.fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  style="z-index: 1041">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel">社区名称查询</h4>
+					</div>
+					<div class="modal-body">
+									<div class="col-sm-2">社区名称</div>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" v-model="q.communityName"  placeholder="请输入社区名称"/>
+						</div>
+									<button type="button" class="btn btn-default" id="communityNameSearch">查询</button>
+
+					</div>
+					<!--显示弹窗table-->
+							<div class="form-group">
+								<table id="community"></table>
+								<div id="communityPager"></div>
+							</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="button" class="btn btn-primary" id="community-window-close-button">确定</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--↑↑↑所属社区社区查询弹出框 d↑↑↑-->
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-2 control-label">用户名<span class="span"> *</span></div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="user.userName" placeholder="登录账号"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">所属社区<span class="span"> *</span></div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" style="cursor:pointer;" v-model="user.deptName"  readonly="readonly" placeholder="所属社区" data-toggle="modal" data-target="#myModal" id="communityName"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">密码<span class="span"> *</span></div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="user.password" placeholder="密码"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">邮箱<span class="span"> *</span></div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="user.email" placeholder="邮箱"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">手机号<span class="span"> *</span></div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="user.mobile" placeholder="手机号"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">角色<span class="span"> *</span></div>
+				<div class="col-sm-10">
+					<div v-for="role in roleList">
+						<label class="checkbox-inline">
+							<input type="checkbox" :value="role.roleId" v-model="user.roleIdList">{{role.roleName}}
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">状态<span class="span"> *</span></div>
+				<label class="radio-inline">
+					<input type="radio" name="status" value="0" v-model="user.status"/> 禁用
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="status" value="1" v-model="user.status"/> 正常
+				</label>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<input type="button"  id="text1" onclick="$(this).blur();" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- 选择社区 -->
+<div id="deptLayer" style="display: none;padding:10px;">
+	<ul id="deptTree" class="ztree"></ul>
+</div>
+
+
+<script src="${request.contextPath}/statics/js/modules/community/community_user.js?_${.now?long}"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.scxxwb.net.admin.modules.statistics.dao.SalesmanKPIDao">
+
+    <resultMap type="com.scxxwb.net.admin.modules.statistics.entity.SalesmanKPIEntity" id="SalesmanKPIMap">
+        <result property="sysUsetName" column="sysUsetName"/>
+        <result property="numBers" column="numBers"/>
+    </resultMap>
+
+    <select id="getSalesmanKPI" resultMap="SalesmanKPIMap">
+        SELECT t_sys_user.user_name AS sysUsetName,COUNT(1) AS numBers
+        FROM t_merchant INNER JOIN t_sys_user ON t_merchant.sys_user_id = t_sys_user.user_id WHERE 1=1
+        <if test="province != null and province > 0">
+            AND t_merchant.province = #{province}
+        </if>
+        <if test="city != null and city > 0">
+            AND t_merchant.city = #{city}
+        </if>
+        <if test="area != null and area > 0">
+            AND t_merchant.area = #{area}
+        </if>
+        <if test="town != null and town > 0">
+            AND t_merchant.town = #{town}
+        </if>
+        <if test="sysUserName != null and sysUserName != ''">
+            AND t_sys_user.user_name LIKE CONCAT('%',#{sysUserName},'%')
+        </if>
+        <if test="startTime != null and endTime != null">
+            AND t_merchant.create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        GROUP BY t_merchant.sys_user_id
+    </select>
+
+</mapper>

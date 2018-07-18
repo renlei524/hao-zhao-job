@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>商户日交易</title>
+    <#include "/header.html">
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/plugins/cover/css/reset.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
+    <script src="${request.contextPath}/statics/plugins/layui/layui.all.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <#if shiro.hasPermission("statistics:merchantDayIncome:list")>
+        <div class="grid-btn">
+            <div class="form-group form-more-style">
+                <!--<input type="date" class="form-control" name="startTime" v-model="q.startTime" />-->
+                <input type="text" id="startTime-endTime" class="form-control"  placeholder="选择时间段">
+            </div>
+            <div class="form-group form-more-style" >
+                <input type="text" name="merchantName" class="form-control" v-model="q.agentName"placeholder="公司名称">
+            </div>
+            <div class="form-group form-more-style">
+                <input type="text" name="merchantName" class="form-control" v-model="q.merchantName" placeholder="商户名称">
+            </div>
+            <div class="form-group form-more-style">
+                <input type="text" name="sysUserName" class="form-control" v-model="q.salesman" placeholder="业务员">
+            </div>
+            <a class="btn btn-primary" @click="query">查询</a>
+        </div>
+    </#if>
+    <table id="jqGrid"></table>
+    <div id="jqGridPager"></div>
+
+    <!--↓↓↓订单查询弹出框 d↓↓↓-->
+    <div class="modal modal.fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  style="z-index: 1041;">
+        <div class="modal-dialog modal-lg" style="width: 1030px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">用户名字查询</h4>
+                </div>
+                <div class="modal-body">
+                                <div class="col-sm-2">用户名称</div>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" v-model="q.merchantNames"  placeholder="请输入用户名称"/>
+                    </div>
+                    <button type="button" class="btn btn-default" id="commercialNameReload">查询</button>
+                </div>
+                        <!--显示弹窗table-->
+                        <div class="form-group">
+                            <table id="commercialName"></table>
+                            <div id="commercialNamePager"></div>
+                        </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--↑↑↑订单查询弹出框 d↑↑↑-->
+</div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/statistics/merchant_day_income.js?_${.now?long}"></script>
+</body>
+</html>

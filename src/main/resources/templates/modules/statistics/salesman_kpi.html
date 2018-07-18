@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>业务员KPI</title>
+    <#include "/header.html">
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/plugins/cover/css/ycbootstrap.css"/>
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/plugins/cover/css/reset.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
+    <script src="${request.contextPath}/statics/js/echarts.js"></script>
+    <script src="${request.contextPath}/statics/plugins/layui/layui.all.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <#if shiro.hasPermission("statistics:salesmanKPI:list")>
+        <div class="grid-btn">
+            <div class="form-group col-sm-2">
+                <input type="text" id="startTime-endTime" class="form-control"  placeholder="选择时间段">
+            </div>
+            <div class="form-group col-sm-1">
+                <select name="areaProvince" v-model="q.province"  class="form-control" placeholder="省"  id="areaProvince" >
+                    <option value="0" selected="selected">请选择省</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-1">
+                <select name="areaCity" v-model="q.city" class="form-control" placeholder="市"  id="areaCity">
+                    <option value="0" selected="selected">请选择市</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-1">
+                <select name="areaArea" v-model="q.area" class="form-control" placeholder="区"  id="areaArea">
+                    <option value="0" selected="selected">请选择区</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-1">
+                <select name="areaTown" v-model="q.town" class="form-control" placeholder="乡镇"  id="areaTown">
+                    <option value="0" selected="selected">请选择乡镇</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-1">
+                <input type="text" name="sysUserName" class="form-control" v-model="q.sysUserName" @keyup.enter="query" placeholder="业务员">
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
+        </div>
+        </#if>
+        <div style="display : none">
+            <table id="jqGrid" ></table>
+            <div id="jqGridPager"></div>
+        </div>
+    <br />
+
+        <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+        <div id="barGraph" style="width: 1200px;height:600px; margin: auto; margin-top: 50px"></div>
+    </div>
+</div>
+<script src="${request.contextPath}/statics/js/modules/statistics/salesman_kpi.js?_${.now?long}"></script>
+</body>
+</html>

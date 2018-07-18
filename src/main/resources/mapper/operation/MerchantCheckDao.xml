@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.scxxwb.net.admin.modules.operation.dao.MerchantCheckDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.scxxwb.net.admin.modules.operation.entity.MerchantCheckEntity" id="merchantCheckMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="loginUsername" column="login_username"/>
+        <result property="loginPwd" column="login_pwd"/>
+        <result property="agentId" column="agent_id"/>
+        <result property="merchantName" column="merchant_name"/>
+        <result property="avatar" column="avatar"/>
+        <result property="photos" column="photos"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="contacts" column="contacts"/>
+        <result property="telphone" column="telphone"/>
+        <result property="status" column="status"/>
+        <result property="recommend" column="recommend"/>
+        <result property="typeId" column="type_id"/>
+        <result property="typeName" column="type_name"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="area" column="area"/>
+        <result property="town" column="town"/>
+        <result property="address" column="address"/>
+        <result property="simpleAddress" column="simple_address"/>
+        <result property="communityId" column="community_id"/>
+        <result property="score" column="score"/>
+        <result property="pushDeviceId" column="push_device_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="merchantCode" column="merchant_code"/>
+        <result property="sysUserId" column="sys_user_id"/>
+        <result property="supportDispatching" column="support_dispatching"/>
+        <result property="payChannel" column="pay_channel"/>
+        <result property="isVoiceFunction" column="is_voice_function"/>
+        <result property="remark" column="remark"/>
+        <result property="merchantId" column="merchant_id"/>
+        <result property="salesman" column="salesman"/>
+
+
+    </resultMap>
+
+    <delete id="deleteByMerchantIds" parameterType="java.util.List">
+        delete from t_merchant_check where merchant_id in
+        <foreach collection="array" item="merchantId" open="(" close=")" separator=",">
+            #{merchantId}
+        </foreach>
+    </delete>
+
+    <select id="selectByMerchantId" parameterType="java.util.Map" resultMap="merchantCheckMap">
+        select * from t_merchant_check
+        where merchant_id = #{merchantId} and status in (1,3)
+    </select>
+</mapper>

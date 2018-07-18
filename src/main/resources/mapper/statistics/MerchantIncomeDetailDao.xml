@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.scxxwb.net.admin.modules.statistics.dao.MerchantIncomeDetailDao">
+
+    <resultMap type="com.scxxwb.net.admin.modules.statistics.entity.MerchantIncomeDetailEntity" id="MerchantIncomeDetailMap">
+        <result property="merchantName" column="merchant_name"/>
+        <result property="sysUserName" column="sysUserName"/>
+        <result property="typeName" column="typeName"/>
+        <result property="createTime" column="create_time"/>
+        <result property="totalIncome" column="totalIncome"/>
+        <result property="incomePen" column="incomePen"/>
+        <result property="totalExpenditure" column="totalExpenditure"/>
+        <result property="expenditurePens" column="expenditurePens"/>
+        <result property="balance" column="balance"/>
+    </resultMap>
+
+    <select id="getMerchantIncomeDetailBymerchantId" resultType="MerchantIncomeDetailEntity">
+        <if test="merchantId != null and merchantId > 0">
+            select
+                    (SELECT SUM(F.transaction_amount) FROM t_merchant_finance_flow AS F WHERE F.transaction_way_value in (1,2) AND merchant_finance_id = #{merchantId}
+                    <if test="startTime != null and endTime != null">
+                        AND F.transaction_time BETWEEN #{startTime} AND #{endTime}
+                    </if>) AS totalIncome,
+                    (SELECT COUNT(1) FROM t_merchant_finance_flow AS F WHERE F.transaction_way_value in (1,2) AND merchant_finance_id = #{merchantId}
+                    <if test="startTime != null and endTime != null">
+                        AND F.transaction_time BETWEEN #{startTime} AND #{endTime}
+                    </if>) AS incomePen,
+                    (SELECT SUM(F.transaction_amount) FROM t_merchant_finance_flow AS F WHERE F.transaction_way_value in (3) AND merchant_finance_id = #{merchantId}
+                    <if test="startTime != null and endTime != null">
+                        AND F.transaction_time BETWEEN #{startTime} AND #{endTime}
+                    </if>) AS totalExpenditure,
+                    (SELECT COUNT(1) FROM t_merchant_finance_flow AS F WHERE F.transaction_way_value in (3) AND merchant_finance_id = #{merchantId}
+                    <if test="startTime != null and endTime != null">
+                        AND F.transaction_time BETWEEN #{startTime} AND #{endTime}
+                    </if>) AS expenditurePens,
+                    (SELECT F.balance FROM t_merchant_finance_flow AS F WHERE F.merchant_finance_id = #{merchantId} ORDER BY F.transaction_time DESC LIMIT 0,1) AS balance
+            from t_merchant_finance_flow
+            where merchant_finance_id = #{merchantId} GROUP BY merchant_finance_id
+        </if>
+    </select>
+
+</mapper>

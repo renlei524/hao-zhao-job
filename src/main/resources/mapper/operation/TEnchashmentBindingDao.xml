@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.scxxwb.net.admin.modules.operation.dao.TEnchashmentBindingDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.scxxwb.net.admin.modules.operation.entity.TEnchashmentBindingEntity" id="tEnchashmentBindingMap">
+        <result property="id" column="id"/>
+        <result property="objectType" column="object_type"/>
+        <result property="objectId" column="object_id"/>
+        <result property="isDefault" column="is_default"/>
+        <result property="enchashmentType" column="enchashment_type"/>
+        <result property="account" column="account"/>
+        <result property="bank" column="bank"/>
+        <result property="realName" column="real_name"/>
+        <result property="subbranch" column="subbranch"/>
+        <result property="accountName" column="account_name"/>
+        <result property="bankUnionId" column="bank_union_id"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+
+</mapper>

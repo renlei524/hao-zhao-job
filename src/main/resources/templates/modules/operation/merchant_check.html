@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>商户信息表</title>
+		<#include "/header.html">
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/plugins/cover/css/ycbootstrap.css"/>
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/plugins/cover/css/reset.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/merchant.css">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList" class="hide-div">
+        <div class="grid-btn">
+            <#if shiro.hasPermission("operation:check:list")>
+                <div class="form-group col-sm-3" style="padding-left:0;width:18%">
+                    <input type="text"  class="form-control" v-model="q.merchantName" @keyup.enter="query" placeholder="公司名称、商户名、登录手机号、收款码">
+                </div>
+                <div class="form-group col-sm-2" style="padding-left:0;width:12%">
+                    <select name="status" v-model="q.status"  class="form-control" placeholder="状态选择"  id="status" >
+                        <option value="0" selected="selected">--状态选择--</option>
+                        <option value="1">创建审核中</option>
+                        <option value="3">修改审核中</option>
+                    </select>
+                </div>
+                <a class="btn btn-default" @click="query">查询</a>
+            </#if>
+            <#if shiro.hasPermission("operation:check:check")>
+                <a class="btn btn-primary" @click="check"><i class="fa fa-pencil-square-o"></i>&nbsp;审核</a>
+            </#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <form class="form-horizontal col-sm-12">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">商户名字<span class="span"> *</span></div>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control form-active" v-model="merchant.commercialName" data-toggle="modal" data-target="#myModal" id="userName" placeholder="请选择商户名称" readonly="readonly" style="cursor:pointer;" />
+                    </div>
+            </div>
+			<div class="form-group">
+                <div class="col-sm-2 control-label">商户登录名<span class="span"> *</span></div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-active" v-model="merchant.loginUsername" placeholder="商户登录名" disabled/>
+                </div>
+            </div>
+			<div class="form-group">
+                <div class="col-sm-2 control-label">分公司<span class="span"> *</span></div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-active" style="cursor:pointer;" v-model="merchant.agentName" @click="deptTree" readonly="readonly" placeholder="分公司"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">店铺分类<span class="span"> *</span></div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-active" style="cursor:pointer;" v-model="merchant.typeName" @click="merchantTypeTree" readonly="readonly" placeholder="商户分类"/>
+                </div>
+            </div>
+			<div class="form-group">
+                <div class="col-sm-2 control-label">店铺名称<span class="span"> *</span></div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-active" v-model="merchant.merchantName" placeholder="商户名称(店铺名称)" disabled/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">店铺头像<span class="span"> *</span></div>
+                <div class="col-sm-10">
+                    <div class="yc-upload-wrap">
+                        <div class="yc-upload-box">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+
+                                        <div class="ycupload-mainbox">
+                                            <div class="ycupload-line"></div>
+
+                                            <div  style="min-height:1px;">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+                                                            <div style="min-height:1px;line-height:160px;text-align:center;position:relative;" ontouchstart="">
+                                                                <div class="cover-wrap3 cover" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background: rgba(0, 0, 0, 0.4);z-index: 10000000;text-align:center;">
+                                                                    <div class="phone-max-box">
+                                                                        <div id="clipArea3" style="margin:10px;height: 370px;"></div>
+                                                                        <div class="" style="height:56px;line-height:36px;text-align: center;padding-top:8px;">
+                                                                            <button id="clipBtn3" type="button" style="width:120px;height: 36px;border-radius: 4px;background-color:#ff8a00;color: #FFFFFF;font-size: 14px;text-align: center;line-height: 36px;outline: none;">保存封面</button>
+                                                                        </div>
+                                                                        <div class="close-btn"><img src="${request.contextPath}/statics/img/close.png" alt=""></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="view3"  class="view" style="width:92px;height:92px;" title="请上传 240*151 的封面图片"></div>
+                                                                <div style="height:10px;"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div style="height:25px;"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">店铺展示图<span class="span"> *</span></div>
+                <div class="col-sm-10">
+                    <div class="box2 box2-none">
+                        <div class="imgFileUploade">
+                            <div class="imgAll">
+                                <ul></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">营业执照<span class="span"> *</span></div>
+                <div class="col-sm-10">
+                    <div class="yc-upload-wrap">
+                        <div class="yc-upload-box">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+
+                                        <div class="ycupload-mainbox">
+                                            <div class="ycupload-line"></div>
+
+                                            <div  style="min-height:1px;">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+                                                            <div style="min-height:1px;line-height:160px;text-align:center;position:relative;" ontouchstart="">
+                                                                <div class="cover-wrap cover" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background: rgba(0, 0, 0, 0.4);z-index: 10000000;text-align:center;">
+                                                                    <div class="phone-max-box">
+                                                                        <div id="clipArea" style="margin:10px;height: 370px;"></div>
+                                                                        <div class="" style="height:56px;line-height:36px;text-align: center;padding-top:8px;">
+                                                                            <button id="clipBtn" type="button" style="width:120px;height: 36px;border-radius: 4px;background-color:#ff8a00;color: #FFFFFF;font-size: 14px;text-align: center;line-height: 36px;outline: none;">保存封面</button>
+                                                                        </div>
+                                                                        <div class="close-btn"><img src="${request.contextPath}/statics/img/close.png" alt=""></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="view"  class="view" style="width:214px;height:160.5px;" title="请上传 240*151 的封面图片"></div>
+                                                                <div style="height:10px;"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div style="height:25px;"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">商户地址<span class="span"> *</span></div>
+                <div class="col-sm-2">
+                    <select name="province" class="form-control" v-model="merchant.province" placeholder="省"  id="province">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select name="city" class="form-control" v-model="merchant.city" placeholder="市"  id="city">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select name="area" class="form-control" v-model="merchant.area" placeholder="区"  id="area">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select name="town" class="form-control" v-model="merchant.town" placeholder="乡镇"  id="town">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">详细地址<span class="span"> *</span></div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-active" v-model="merchant.simpleAddress" placeholder="详细地址包含省市区信息" disabled/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="layui-form-item" id="layerDemo">
+                    <div class="col-sm-2 control-label">
+                        GPS定位<span class="span"> *</span>
+                    </div>
+                    <div class="col-sm-10">
+                        <div class="layui-input-inline" style="width: 110px;">
+                            <input type="text" class="form-control form-active" id="lngX" v-model="merchant.latitude" placeholder="经度" readonly="readonly"/>
+                        </div>
+                        <!-- <div class="layui-form-mid">-</div>-->
+                        <div class="layui-input-inline" style="width: 110px;">
+                            <input type="text" class="form-control form-active" id="latY" v-model="merchant.longitude" placeholder="纬度" readonly="readonly"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">联系人<span class="span"> *</span></div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-active" v-model="merchant.contacts" placeholder="联系人" disabled/>
+                </div>
+            </div>
+			<div class="form-group">
+            <div class="col-sm-2 control-label">本店联系电话<span class="span"> *</span></div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-active" v-model="merchant.telphone" placeholder="本店联系电话" disabled/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">身份证号码<span class="span"> *</span></div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-active" v-model="merchant.idCard" placeholder="身份证号码" disabled/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">身份证正面照片<span class="span"> *</span></div>
+                <div class="col-sm-10">
+                    <div class="yc-upload-wrap">
+                        <div class="yc-upload-box">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+
+                                        <div class="ycupload-mainbox">
+                                            <div class="ycupload-line"></div>
+
+                                            <div  style="min-height:1px;">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+                                                            <div style="min-height:1px;line-height:160px;text-align:center;position:relative;" ontouchstart="">
+                                                                <div class="cover-wrap1 cover" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background: rgba(0, 0, 0, 0.4);z-index: 10000000;text-align:center;">
+                                                                    <div class="phone-max-box">
+                                                                        <div id="clipArea1" style="margin:10px;height: 370px;"></div>
+                                                                        <div class="" style="height:56px;line-height:36px;text-align: center;padding-top:8px;">
+                                                                            <button id="clipBtn1" type="button" style="width:120px;height: 36px;border-radius: 4px;background-color:#ff8a00;color: #FFFFFF;font-size: 14px;text-align: center;line-height: 36px;outline: none;">保存封面</button>
+                                                                        </div>
+                                                                        <div class="close-btn"><img src="${request.contextPath}/statics/img/close.png" alt=""></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="view1"  class="view" style="width:214px;height:160.5px;" title="请上传 240*151 的封面图片"></div>
+                                                                <div style="height:10px;"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div style="height:25px;"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">身份证背面照片<span class="span"> *</span></div>
+                        <div class="col-sm-10">
+                            <div class="yc-upload-wrap">
+                                <div class="yc-upload-box">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+
+                                                <div class="ycupload-mainbox">
+                                                    <div class="ycupload-line"></div>
+
+                                                    <div  style="min-height:1px;">
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                <div class="col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+                                                                    <div style="min-height:1px;line-height:160px;text-align:center;position:relative;" ontouchstart="">
+                                                                        <div class="cover-wrap2 cover" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background: rgba(0, 0, 0, 0.4);z-index: 10000000;text-align:center;">
+                                                                            <div class="phone-max-box">
+                                                                                <div id="clipArea2" style="margin:10px;height: 370px;"></div>
+                                                                                <div class="" style="height:56px;line-height:36px;text-align: center;padding-top:8px;">
+                                                                                    <button id="clipBtn2" type="button" style="width:120px;height: 36px;border-radius: 4px;background-color:#ff8a00;color: #FFFFFF;font-size: 14px;text-align: center;line-height: 36px;outline: none;">保存封面</button>
+                                                                                </div>
+                                                                                <div class="close-btn"><img src="${request.contextPath}/statics/img/close.png" alt=""></div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div id="view2"  class="view" style="width:214px;height:160.5px;" title="请上传 240*151 的封面图片"></div>
+                                                                        <div style="height:10px;"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div style="height:25px;"></div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">是否推荐<span class="span"> *</span></div>
+                        <label class="radio-inline">
+                            <input type="radio" name="recommend" value="true" v-model="merchant.recommend" disabled/> 未推荐
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="recommend" value="false" v-model="merchant.recommend" disabled/> 推荐
+                        </label>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">社区<span class="span"> *</span></div>
+                        <div class="col-sm-4">
+                                <input type="text" class="form-control form-active" v-model="merchant.communityName" placeholder="社区" readonly="readonly" data-toggle="modal" data-target="#communityModal" style="cursor:pointer;" id="communityName">
+                                </input>
+                        </div>
+                    </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">收款码<span class="span"> *</span></div>
+                <div class="col-sm-4">
+                <input type="text" class="form-control form-active" v-model="merchant.merchantCode" placeholder="收款码" disabled/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">商户限额<span class="span"> *</span></div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-active" v-model="merchant.merchantLimit" placeholder="商户限额" disabled/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">服务费<span class="span"> *</span></div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-active" v-model="merchant.serviceCharge" placeholder="服务费,千分比：如 1 等同于0.1%" disabled/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">是否开启配送<span class="span"> *</span></div>
+                <label class="radio-inline">
+                    <input type="radio" name="supportDispatching" value="0" v-model="merchant.supportDispatching" disabled/> 是
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="supportDispatching" value="1" v-model="merchant.supportDispatching" disabled/> 否
+                </label>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">支付通道<span class="span">*</span></div>
+                <label class="radio-inline">
+                    <input type="radio" name="payChannel" value="1" v-model="merchant.payChannel" disabled/> 原生通道
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="payChannel" value="2" v-model="merchant.payChannel" disabled/> 微易客
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="payChannel" value="3" v-model="merchant.payChannel" disabled/> 点点客
+                </label>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">客户经理<span class="span"> *</span></div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-active" v-model="merchant.salesManName" data-toggle="modal" data-target="#salesManModal" id="salesManName" placeholder="请选择" readonly="readonly" style="cursor:pointer;" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">审核<span class="span">*</span></div>
+                <label class="radio-inline radio-inline-hide">
+                    <input type="radio" name="status" value="5" v-model="merchant.status"/> 通过
+                </label>
+                <label class="radio-inline radio-inline-show">
+                    <input type="radio" id="checkStatus" name="status" v-model="merchant.status"/> 不通过
+                </label>
+            </div>
+            <div class="form-group audit-state">
+                <div class="col-sm-2 control-label">审核意见</div>
+                <div class="col-sm-4">
+                    <textarea name="remark" id="" cols="30" rows="10" class="form-control" v-model="merchant.remark" placeholder="审核意见"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary"  id="text1" onclick="$(this).blur()" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+<script src="${request.contextPath}/statics/js/modules/operation/merchant_check.js?_${.now?long}"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/modules/operation/merchant_check_photo.js?_${.now?long}"></script>
