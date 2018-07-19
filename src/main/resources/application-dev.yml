@@ -72,7 +72,7 @@ scxxwb:
         user-name: root
         password: xxwb1234
         imagePath: /static/image
-        appPath: /static/app
+        appPath: /static/appPkg
     nginx:
         imagePath: http://192.168.10.245:8686
         appPath: http://192.168.10.245:8686
