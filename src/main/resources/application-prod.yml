@@ -71,8 +71,8 @@ scxxwb:
         port: 21
         user-name: xxwb
         password: xxwb5674
-        imagePath: /opt/webRoot/uploads/image
-        appPath: /opt/webRoot/uploads/appPkg
+        imagePath:
+        appPath:
     nginx:
         imagePath: http://img.scxxwb.com
         appPath: http://img.scxxwb.com
