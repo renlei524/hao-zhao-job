@@ -157,15 +157,12 @@ function routerList(router, menuList){
 			    //导航菜单展开
 			    $(".treeview-menu li").removeClass("active");
 			    $("a[href='"+url+"']").parents("li").addClass("active");
+			    $("a[href='"+url+"']").unbind("click").click(function() {
+			        window.location.reload();
+			    });
 			    
 			    vm.navTitle = $("a[href='"+url+"']").text();
 			});
 		}
 	}
 }
-
-//document.onkeydown = function () {
-//    if (window.event && window.event.keyCode == 13) {
-//        window.event.returnValue = false;
-//    }
-/*}*/
