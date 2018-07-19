@@ -55,7 +55,7 @@ mybatis-plus:
 
 
 logging:
-  level: debug
-  level.io.scxxwb: debug
+  level: info
+  level.io.scxxwb: info
   path: logs/
   file: admin.log

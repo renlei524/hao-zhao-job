@@ -15,8 +15,10 @@
         </rollingPolicy>
     </appender>
 
-    <root level="DEBUG">
-        <appender-ref ref="CONSOLE"/>
+    <logger name="debug" level="DEBUG">
         <appender-ref ref="FILE"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>
