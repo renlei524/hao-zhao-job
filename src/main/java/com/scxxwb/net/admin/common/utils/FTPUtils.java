@@ -267,7 +267,7 @@ public class FTPUtils {
     public static void main(String[] args) throws FileNotFoundException {
 		try {
 			FileInputStream fis = new FileInputStream(new File("D:/files/back.jpg"));
-			System.out.println(storeFile("120.79.12.142", 21, "xxwb", "xxwb5674", "/opt/webRoot/images/image",  "back.png", fis));
+			System.out.println(storeFile("120.79.12.142", 21, "xxwb", "xxwb5674", "",  "back.png", fis));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

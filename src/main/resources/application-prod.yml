@@ -4,11 +4,11 @@ spring:
         driverClassName: com.mysql.jdbc.Driver
         druid:
             first:  #数据源1
-                url: jdbc:mysql://172.18.119.65:3306/xxwb3?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+                url: jdbc:mysql://172.18.119.65:3306/xxwb3?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
                 username: xxwb3Dev
                 password: MGj5dbS29Wsfx
             second:  #数据源2
-                url: jdbc:mysql://172.18.119.65:3306/xxwb3?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+                url: jdbc:mysql://172.18.119.65:3306/xxwb3?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
                 username: xxwb3Dev
                 password: MGj5dbS29Wsfx
             initial-size: 10
@@ -71,8 +71,8 @@ scxxwb:
         port: 21
         user-name: xxwb
         password: xxwb5674
-        imagePath: /opt/webRoot/uploads/image
-        appPath: /opt/webRoot/uploads/appPkg
+        imagePath: image
+        appPath: appPkg
     nginx:
         imagePath: http://img.scxxwb.com
         appPath: http://img.scxxwb.com
