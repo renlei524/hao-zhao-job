@@ -13,7 +13,7 @@
     </resultMap>
 
     <select id="queryMerchantCategoryIdList" resultType="Integer">
-		select category_id from merchant_category where parent_id = #{value}
+		select category_id from t_merchant_category where parent_id = #{value}
 	</select>
 
 
