@@ -30,3 +30,6 @@ out/
 
 # gitignore
 #.gitignore
+
+# logs
+logs
