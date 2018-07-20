@@ -1,6 +1,7 @@
 package com.scxxwb.net.admin.modules.operation.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
@@ -35,58 +36,13 @@ public class TVyicooAreaController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping("/list/{areaCode}")
     @RequiresPermissions("operation:tvyicooarea:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = tVyicooAreaService.queryPage(params);
+    public R list(@PathVariable("areaCode") Integer areaCode){
+        List<TVyicooAreaEntity> areaList = tVyicooAreaService.queryPage(areaCode);
 
-        return R.ok().put("page", page);
+        return R.ok().put("areaList", areaList);
     }
 
-
-    /**
-     * 信息
-     */
-    @RequestMapping("/info/{areaCode}")
-    @RequiresPermissions("operation:tvyicooarea:info")
-    public R info(@PathVariable("areaCode") Integer areaCode){
-        TVyicooAreaEntity tVyicooArea = tVyicooAreaService.selectById(areaCode);
-
-        return R.ok().put("tVyicooArea", tVyicooArea);
-    }
-
-    /**
-     * 保存
-     */
-    @RequestMapping("/save")
-    @RequiresPermissions("operation:tvyicooarea:save")
-    public R save(@RequestBody TVyicooAreaEntity tVyicooArea){
-        tVyicooAreaService.insert(tVyicooArea);
-
-        return R.ok();
-    }
-
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    @RequiresPermissions("operation:tvyicooarea:update")
-    public R update(@RequestBody TVyicooAreaEntity tVyicooArea){
-        ValidatorUtils.validateEntity(tVyicooArea);
-        tVyicooAreaService.updateAllColumnById(tVyicooArea);//全部更新
-        
-        return R.ok();
-    }
-
-    /**
-     * 删除
-     */
-    @RequestMapping("/delete")
-    @RequiresPermissions("operation:tvyicooarea:delete")
-    public R delete(@RequestBody Integer[] areaCodes){
-        tVyicooAreaService.deleteBatchIds(Arrays.asList(areaCodes));
-
-        return R.ok();
-    }
 
 }

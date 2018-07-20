@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.scxxwb.net.admin.common.utils.PageUtils;
 import com.scxxwb.net.admin.modules.operation.entity.TVyicooAreaEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,6 +16,6 @@ import java.util.Map;
  */
 public interface TVyicooAreaService extends IService<TVyicooAreaEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
+    List<TVyicooAreaEntity> queryPage(Integer areaCode);
 }
 

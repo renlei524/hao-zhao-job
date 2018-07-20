@@ -1,6 +1,9 @@
 package com.scxxwb.net.admin.modules.operation.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -17,13 +20,11 @@ import com.scxxwb.net.admin.modules.operation.service.TVyicooAreaService;
 public class TVyicooAreaServiceImpl extends ServiceImpl<TVyicooAreaDao, TVyicooAreaEntity> implements TVyicooAreaService {
 
     @Override
-    public PageUtils queryPage(Map<String, Object> params) {
-        Page<TVyicooAreaEntity> page = this.selectPage(
-                new Query<TVyicooAreaEntity>(params).getPage(),
-                new EntityWrapper<TVyicooAreaEntity>()
-        );
-
-        return new PageUtils(page);
+    public List<TVyicooAreaEntity> queryPage(Integer areaCode) {
+        List<TVyicooAreaEntity> page =
+                this.selectList(new EntityWrapper<TVyicooAreaEntity>()
+                        .eq(StringUtils.isNotBlank(areaCode.toString()),"area_parent_id", areaCode));
+        return page;
     }
 
 }
