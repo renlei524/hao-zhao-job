@@ -3,7 +3,7 @@ $(function () {
         url: baseURL + 'operation/tvyicoojinjian/list',
         datatype: "json",
         colModel: [			
-			{ label: 'type', name: 'type', index: 'type', width: 50, key: true },
+			{ label: '商户类型', name: 'type', index: 'type', width: 50 },
 			{ label: '商户名称', name: 'name', index: 'name', width: 80 }, 			
 			{ label: '商户简称（4-15字）', name: 'shortname', index: 'shortname', width: 80 }, 			
 			{ label: '商户真实姓名', name: 'realname', index: 'realname', width: 80 }, 			
@@ -74,7 +74,15 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
-		tVyicooJinjian: {}
+		tVyicooJinjian: {
+		    province:"",//省
+            city:"",//市
+            area:""//区
+		},
+        //新增时联动菜单重置用省、市、区、街道 d
+        selectedProvince: -1,
+        selectedCity: -1,
+        selectedArea: -1
 	},
 	methods: {
 		query: function () {
@@ -83,7 +91,12 @@ var vm = new Vue({
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
-			vm.tVyicooJinjian = {};
+			vm.tVyicooJinjian = {
+
+			};
+			 vm.getProvince();
+			 vm.getCity(-1);
+             vm.getArea(-1);
 		},
 		update: function (event) {
 			var type = getSelectedRow();
@@ -140,8 +153,88 @@ var vm = new Vue({
 		getInfo: function(type){
 			$.get(baseURL + "operation/tvyicoojinjian/info/"+type, function(r){
                 vm.tVyicooJinjian = r.tVyicooJinjian;
+                //加载省市区数据
+                vm.getProvince();
+                vm.getCity(vm.tVyicooJinjian.province);
+                vm.getArea(vm.tVyicooJinjian.city);
             });
 		},
+		//加载省下拉框 d
+        getProvince: function(){
+            var parentCode=0;
+            var group = $("#province");
+            group.empty();
+            var url = "sys/twbarea/infoList/"+parentCode;
+            $.ajax({
+                type: "POST",
+                url: baseURL + url,
+                contentType: "application/json",
+                success: function(r){
+                    group.append("<option value='-1'>--请选择省--</option>");
+                    for(var i=0;i<r.length;i++) {
+                        if(vm.tVyicooJinjian.province == r[i].areaCode) {
+                            group.append("<option value='"+r[i].areaCode+"' selected>"+r[i].name+"</option>");
+                        } else {
+                            group.append("<option value='"+r[i].areaCode+"'>"+r[i].name+"</option>");
+                        }
+                    }
+                }
+            });
+        },
+        //加载市下拉框 d
+        getCity: function(parentCode){
+            var group = $("#city");
+            if (parentCode <=0 || parentCode == null) {
+                group.empty();
+                group.append("<option value='-1'>--请选择市--</option>");
+            }else {
+                group.empty();
+                var url = "sys/twbarea/infoList/"+parentCode;
+                $.ajax({
+                    type: "POST",
+                    url: baseURL + url,
+                    contentType: "application/json",
+                    success: function(r){
+                        group.empty();
+                        group.append("<option value='-1'>--请选择市--</option>");
+                        for(var i=0;i<r.length;i++) {
+                            if(vm.tVyicooJinjian.city == r[i].areaCode) {
+                                group.append("<option value='"+r[i].areaCode+"' selected>"+r[i].name+"</option>");
+                            } else {
+                                group.append("<option value='"+r[i].areaCode+"'>"+r[i].name+"</option>");
+                            }
+                        }
+                    }
+                });
+            }
+        },
+        //加载区下拉菜单 d
+        getArea: function(parentCode){
+            var group = $("#area");
+            if (parentCode <=0 || parentCode == null) {
+                group.empty();
+                group.append("<option value='-1'>--请选择区--</option>");
+            }else {
+                group.empty();
+                var url = "sys/twbarea/infoList/"+parentCode;
+                $.ajax({
+                    type: "POST",
+                    url: baseURL + url,
+                    contentType: "application/json",
+                    success: function(r){
+                        group.empty();
+                        group.append("<option value='-1'>--请选择区--</option>");
+                        for(var i=0;i<r.length;i++) {
+                            if(vm.tVyicooJinjian.area == r[i].areaCode) {
+                                group.append("<option value='"+r[i].areaCode+"' selected>"+r[i].name+"</option>");
+                            } else {
+                                group.append("<option value='"+r[i].areaCode+"'>"+r[i].name+"</option>");
+                             }
+                        }
+                    }
+                });
+            }
+        },
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
@@ -151,3 +244,34 @@ var vm = new Vue({
 		}
 	}
 });
+	//省选择触发事件 d
+    $("#province").change(function(){
+        vm.selectedProvince = -1;
+        vm.selectedCity = -1;
+        vm.selectedArea = -1;
+        vm.selectedTown = -1;
+        vm.selectedProvince =  $("#province").val();
+        vm.getCity(vm.selectedProvince);
+        vm.getArea(vm.selectedCity);
+        vm.tVyicooJinjian.province = vm.selectedProvince;
+        vm.tVyicooJinjian.city = vm.selectedCity;
+        vm.tVyicooJinjian.area = vm.selectedArea;
+    });
+
+    //市 选择触发事件 d
+    $("#city").change(function(){
+        vm.selectedArea = -1;
+        vm.selectedTown = -1;
+        vm.selectedCity = $("#city").val();
+        vm.getArea(vm.selectedCity);
+        vm.tVyicooJinjian.city = vm.selectedCity;
+        vm.tVyicooJinjian.area = vm.selectedArea;
+
+    });
+
+    //区选择触发事件 d
+    $("#area").change(function(){
+        vm.selectedTown = -1;
+        vm.selectedArea = $("#area").val();
+        vm.tVyicooJinjian.area = vm.selectedArea;
+    });
