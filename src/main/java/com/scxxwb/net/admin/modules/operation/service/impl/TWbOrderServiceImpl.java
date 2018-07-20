@@ -95,7 +95,7 @@ public class TWbOrderServiceImpl extends ServiceImpl<TWbOrderDao, TWbOrderEntity
         //根据id获取name值
         for(TWbOrderEntity twbOrderEntity : page.getRecords()){
             twbOrderEntity.setTotalAmount((twbOrderEntity.getTotalAmount() / 100.00));
-            if (twbOrderEntity.getType() != null && twbOrderEntity.getType() == 1){
+            if (twbOrderEntity.getWbDeductible() != null){
                 twbOrderEntity.setWbDeductible((twbOrderEntity.getWbDeductible() / 100.00));
             }else {
                 twbOrderEntity.setWbDeductible(0.00);
