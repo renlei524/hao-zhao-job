@@ -38,7 +38,7 @@ public class TWbUserServiceImpl extends ServiceImpl<TWbUserDao, TWbUserEntity> i
         Page<TWbUserEntity> page = this.selectPage(
                 new Query<TWbUserEntity>(params).getPage(),
                 new EntityWrapper<TWbUserEntity>()
-                        .like(StringUtils.isNotBlank(realName),"real_name", realName)
+                        .addFilterIfNeed(StringUtils.isNotBlank(realName),"(real_name like '%" + realName + "%' or mobile like '%" + realName + "%')")
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
         );
 
