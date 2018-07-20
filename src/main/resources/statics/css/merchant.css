@@ -186,4 +186,9 @@ img{
 .box2-none{
     border:none;
 }
+/*商户进件*/
+.form-more{
+    width:29%;
+    display:inline-block;
+}
 
