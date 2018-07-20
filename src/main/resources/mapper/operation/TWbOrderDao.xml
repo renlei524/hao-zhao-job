@@ -85,7 +85,7 @@
     </select>
 
     <select id="selectByMerchantId" resultMap="tWbOrderMap">
-        SELECT t_wb_order.*, t_wb_order_bill.total_fee,t_wb_order_bill.type, SUM(t_wb_user.mobile) AS mobile FROM t_wb_order LEFT JOIN t_wb_user ON t_wb_order.user_id = t_wb_user.id
+        SELECT t_wb_order.*, SUM(t_wb_order_bill.total_fee) as total_fee,t_wb_order_bill.type, t_wb_user.mobile AS mobile FROM t_wb_order LEFT JOIN t_wb_user ON t_wb_order.user_id = t_wb_user.id
         LEFT JOIN t_wb_order_bill ON t_wb_order.order_id= t_wb_order_bill.order_id
         WHERE t_wb_order.status >= 1
         <if test="merchantId  != null and merchantId  != ''">
