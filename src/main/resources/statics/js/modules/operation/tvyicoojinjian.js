@@ -2,45 +2,16 @@ $(function () {
     $("#jqGrid").jqGrid({
         url: baseURL + 'operation/tvyicoojinjian/list',
         datatype: "json",
-        colModel: [			
-			{ label: '商户类型', name: 'type', index: 'type', width: 50 },
-			{ label: '商户名称', name: 'name', index: 'name', width: 80 }, 			
-			{ label: '商户简称（4-15字）', name: 'shortname', index: 'shortname', width: 80 }, 			
-			{ label: '商户真实姓名', name: 'realname', index: 'realname', width: 80 }, 			
-			{ label: '联系人手机号', name: 'mobile', index: 'mobile', width: 80 }, 			
-			{ label: '身份证号', name: 'idNo', index: 'id_no', width: 80 }, 			
-			{ label: '省', name: 'gbProvinceNo', index: 'gb_province_no', width: 80 }, 			
-			{ label: '市', name: 'gbCityNo', index: 'gb_city_no', width: 80 }, 			
-			{ label: '区', name: 'gbDistrictNo', index: 'gb_district_no', width: 80 }, 			
-			{ label: '经营地址', name: 'address', index: 'address', width: 80 }, 			
-			{ label: '联系邮箱', name: 'email', index: 'email', width: 80 }, 			
-			{ label: '经营类别', name: 'category', index: 'category', width: 80 }, 			
-			{ label: '营业执照类型', name: 'licenseType', index: 'license_type', width: 80 }, 			
-			{ label: '营业执照编号', name: 'licenseNo', index: 'license_no', width: 80 }, 			
-			{ label: '营业执照地址', name: 'licenseAddress', index: 'license_address', width: 80 }, 			
-			{ label: '注册号开始日期 （例：2017-12-01）', name: 'licenseStartDate', index: 'license_start_date', width: 80 }, 			
-			{ label: '注册号结束日期 （例：2029-12-01 永久为-1）', name: 'licenseEndDate', index: 'license_end_date', width: 80 }, 			
-			{ label: '开户支行ID', name: 'bankId', index: 'bank_id', width: 80 }, 			
-			{ label: '开户支行所在城市编码', name: 'accountCity', index: 'account_city', width: 80 }, 			
-			{ label: '开户支行行号', name: 'bankNo', index: 'bank_no', width: 80 }, 			
-			{ label: '帐户类型 0：对私 1：对公', name: 'accountType', index: 'account_type', width: 80 }, 			
-			{ label: '开户名称', name: 'accountName', index: 'account_name', width: 80 }, 			
-			{ label: '银行预留手机号', name: 'accountMobile', index: 'account_mobile', width: 80 }, 			
-			{ label: '有无公众号 1：有公众号 2：无公众号', name: 'selfAppid', index: 'self_appid', width: 80 }, 			
-			{ label: '有公众号必填（公众号主体需同营业执照名称一致）', name: 'wxAppid', index: 'wx_appid', width: 80 }, 			
-			{ label: '商户微信号', name: 'wechatId', index: 'wechat_id', width: 80 }, 			
-			{ label: '法人银行卡号', name: 'bankcardNo', index: 'bankcard_no', width: 80 }, 			
-			{ label: '营业执照照片', name: 'licensePic', index: 'license_pic', width: 80 }, 			
-			{ label: '法人身份证正面照片', name: 'idFrontPic', index: 'id_front_pic', width: 80 }, 			
-			{ label: '法人身份证反面照片', name: 'idBackPic', index: 'id_back_pic', width: 80 }, 			
-			{ label: '对私：法人结算银行卡照片 对公：开户许可证', name: 'bankcardPic', index: 'bankcard_pic', width: 80 }, 			
-			{ label: '店铺门头照片', name: 'shopPic', index: 'shop_pic', width: 80 }, 			
-			{ label: '经营场所内照片', name: 'extraPic1', index: 'extra_pic1', width: 80 }, 			
-			{ label: '收银台招牌照片', name: 'extraPic2', index: 'extra_pic2', width: 80 }, 			
-			{ label: '支付方式配置json串', name: 'payment', index: 'payment', width: 80 }, 			
-			{ label: '返回结果状态。0：成功', name: 'status', index: 'status', width: 80 }, 			
-			{ label: '返回信息', name: 'msg', index: 'msg', width: 80 }, 			
-			{ label: '商户id', name: 'merchantId', index: 'merchant_id', width: 80 }			
+        colModel: [
+            { label: '商户id', name: 'merchantId', width: 80 , hidden:true},
+            { label: '商户名称', name: 'name',index: 'name',width: 80 },
+            { label: '真实姓名', name: 'realname', index: 'realname', width: 80 },
+            { label: '联系人手机号', name: 'mobile', index: 'mobile', width: 80 },
+            { label: '身份证号', name: 'idNo', index: 'idNo', width: 80 },
+            { label: '经营地址', name: 'address', index: 'address', width: 80 },
+            { label: '联系邮箱', name: 'email', index: 'email', width: 80 },
+            { label: '经营类别', name: 'category', index: 'category', width: 80 },
+            { label: '营业执照类型', name: 'licenseType',index: 'licenseType',width: 80 }
         ],
 		viewrecords: true,
         height: 385,
@@ -90,13 +61,20 @@ var vm = new Vue({
 		},
 		add: function(){
 			vm.showList = false;
-			vm.title = "新增";
-			vm.tVyicooJinjian = {
+            vm.title = "新增";
+            vm.merchant = {agentId: null,status:0,agentName:null,recommend:true,typeId:null,typeName:null,supportDispatching:0,
+                payChannel:1,address:null,simpleAddress:null, province: -1, city: -1, area: -1, town: -1,
+                commercialName:null, communityName:null, isVoiceFunction: 0};
+            vm.twbuser = {id: null,realName:null};
 
-			};
-			 vm.getProvince();
-			 vm.getCity(-1);
-             vm.getArea(-1);
+            $('#view,#view1,#view2,#view3').css('background', '').css("background", "url(/statics/img/default.png)");
+            window.onload = function (){
+              document.body.onkeydown=function(event){
+                if(event.keyCode==13){
+                    event.keyCod=0; return false;
+                }
+              }
+            }
 		},
 		update: function (event) {
 			var type = getSelectedRow();
