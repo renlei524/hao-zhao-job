@@ -173,13 +173,13 @@ public class TVyicooJinjianEntity implements Serializable {
 	 */
 	private String payment;
 	/**
-	 * 返回结果状态。0：成功
+	 * 易客付商户号
 	 */
-	private Integer status;
+	private String mchId;
 	/**
-	 * 返回信息
+	 * 商户进件状态 0：申请中， 1：启用 2 : 认证中 3：失败 4：处理中
 	 */
-	private String msg;
+	private Integer verifyStatus;
 	/**
 	 * 商户id
 	 */
@@ -606,28 +606,28 @@ public class TVyicooJinjianEntity implements Serializable {
 		return payment;
 	}
 	/**
-	 * 设置：返回结果状态。0：成功
+	 * 设置：易客付商户号
 	 */
-	public void setStatus(Integer status) {
-		this.status = status;
+	public void setMchId(String mchId) {
+		this.mchId = mchId;
 	}
 	/**
-	 * 获取：返回结果状态。0：成功
+	 * 获取：易客付商户号
 	 */
-	public Integer getStatus() {
-		return status;
+	public String getMchId() {
+		return mchId;
 	}
 	/**
-	 * 设置：返回信息
+	 * 设置：商户进件状态 0：申请中， 1：启用 2 : 认证中 3：失败 4：处理中
 	 */
-	public void setMsg(String msg) {
-		this.msg = msg;
+	public void setVerifyStatus(Integer verifyStatus) {
+		this.verifyStatus = verifyStatus;
 	}
 	/**
-	 * 获取：返回信息
+	 * 获取：商户进件状态 0：申请中， 1：启用 2 : 认证中 3：失败 4：处理中
 	 */
-	public String getMsg() {
-		return msg;
+	public Integer getVerifyStatus() {
+		return verifyStatus;
 	}
 	/**
 	 * 设置：商户id
