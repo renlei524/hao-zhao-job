@@ -3,11 +3,13 @@ package com.scxxwb.net.admin.modules.operation.controller;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Wrapper;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.scxxwb.net.admin.common.utils.DateUtils;
 import com.scxxwb.net.admin.common.utils.FTPUtils;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
@@ -74,7 +76,6 @@ public class TVyicooJinjianController {
         return R.ok().put("page", page);
     }
 
-
     /**
      * 信息
      */
@@ -87,11 +88,41 @@ public class TVyicooJinjianController {
     }
 
     /**
+     * 审核回调
+     */
+    @RequestMapping("/callback")
+    @CrossOrigin
+    public R check(@RequestParam Map<String, Object> params){
+        tVyicooJinjianService.updateStatus(params);
+        return R.ok();
+    }
+
+    /**
      * 保存
      */
     @RequestMapping("/save")
     @RequiresPermissions("operation:tvyicoojinjian:save")
     public R save(@RequestBody TVyicooJinjianEntity tVyicooJinjian){
+        String payment =
+                "{" +
+                    "'T1': 38, " +
+                    "'weixin': {" +
+                                "'mp': {" +
+                                    "'appid': '公众号appid'," +
+                                    "'pay_dir': 'https://abc.com/pay/|https://test.com/user/pay/'" +
+                                "}" +
+                            "}" +
+                "}";
+        tVyicooJinjian.setPayment(payment);
+        ValidatorUtils.validateEntity(tVyicooJinjian);
+
+        ResponseEntity<Map> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/create", tVyicooJinjian, Map.class);
+        Map map = mapResponseEntity.getBody();
+        Integer status = Integer.parseInt(map.get("status").toString());
+        if(status != 0) {
+            return R.error("进件资料上传失败！");
+        }
+        tVyicooJinjian.setStatus(1); // 创建审核中
         tVyicooJinjianService.insert(tVyicooJinjian);
 
         return R.ok();
@@ -104,8 +135,16 @@ public class TVyicooJinjianController {
     @RequiresPermissions("operation:tvyicoojinjian:update")
     public R update(@RequestBody TVyicooJinjianEntity tVyicooJinjian){
         ValidatorUtils.validateEntity(tVyicooJinjian);
+
+        ResponseEntity<Map> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/update", tVyicooJinjian, Map.class);
+        Map map = mapResponseEntity.getBody();
+        Integer status = Integer.parseInt(map.get("status").toString());
+        if(status != 0) {
+            return R.error("进件资料修改失败！");
+        }
+        tVyicooJinjian.setStatus(3); // 修改审核中
         tVyicooJinjianService.updateAllColumnById(tVyicooJinjian);//全部更新
-        
+
         return R.ok();
     }
 

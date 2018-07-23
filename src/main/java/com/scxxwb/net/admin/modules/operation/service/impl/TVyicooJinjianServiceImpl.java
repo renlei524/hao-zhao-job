@@ -1,5 +1,6 @@
 package com.scxxwb.net.admin.modules.operation.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -11,10 +12,13 @@ import com.scxxwb.net.admin.common.utils.Query;
 import com.scxxwb.net.admin.modules.operation.dao.TVyicooJinjianDao;
 import com.scxxwb.net.admin.modules.operation.entity.TVyicooJinjianEntity;
 import com.scxxwb.net.admin.modules.operation.service.TVyicooJinjianService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service("tVyicooJinjianService")
 public class TVyicooJinjianServiceImpl extends ServiceImpl<TVyicooJinjianDao, TVyicooJinjianEntity> implements TVyicooJinjianService {
+    @Autowired
+    TVyicooJinjianDao tVyicooJinjianDao;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -26,4 +30,10 @@ public class TVyicooJinjianServiceImpl extends ServiceImpl<TVyicooJinjianDao, TV
         return new PageUtils(page);
     }
 
+    @Override
+    @Transactional
+    public void updateStatus(Map map) {
+        map.put("mchId", map.get("mch_id"));
+        tVyicooJinjianDao.updatestatus(map);
+    }
 }
