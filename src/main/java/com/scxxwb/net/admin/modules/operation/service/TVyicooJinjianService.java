@@ -16,5 +16,7 @@ import java.util.Map;
 public interface TVyicooJinjianService extends IService<TVyicooJinjianEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void updateStatus(Map map);
 }
 
