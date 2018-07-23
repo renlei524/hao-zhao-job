@@ -39,7 +39,7 @@ public class TVyicooAreaController {
     @RequestMapping(value = "/list/{areaCode}")
     @RequiresPermissions("operation:tvyicooarea:list")
     @ApiOperation(value = "根据地区编号显示起下级地区", httpMethod = POST)
-    public R list(@ApiParam(value = "地区编码" , required = true) @RequestParam("areaCode") Integer areaCode){
+    public R list(@ApiParam(value = "地区编码" , required = true) @PathVariable("areaCode") Integer areaCode){
         List<TVyicooAreaEntity> areaList = tVyicooAreaService.queryPage(areaCode);
 
         return R.ok().put("areaList", areaList);
