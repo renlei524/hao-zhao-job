@@ -249,7 +249,7 @@ public class TVyicooJinjianEntity implements Serializable {
 	public void setGbProvinceNo(String gbProvinceNo) {
 		this.gbProvinceNo = gbProvinceNo;
 	}
-	/**
+	/**git
 	 * 获取：省
 	 */
 	public String getGbProvinceNo() {
