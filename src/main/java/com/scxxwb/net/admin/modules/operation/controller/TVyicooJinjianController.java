@@ -13,7 +13,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.scxxwb.net.admin.common.utils.DateUtils;
 import com.scxxwb.net.admin.common.utils.FTPUtils;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +32,8 @@ import sun.misc.BASE64Decoder;
 
 import javax.annotation.Resource;
 
+import static com.qcloud.cos.http.RequestHeaderValue.Method.POST;
+
 
 /**
  *  微易客进件
@@ -40,7 +42,7 @@ import javax.annotation.Resource;
  * @email liyun@scxxwb.com
  * @date 2018-07-20 09:58:13
  */
-@Api(value = "operation/tvyicoojinjian", description = "微易客进件")
+@Api(value = "operation/tvyicoojinjian", tags = "微易客进件")
 @RestController
 @RequestMapping("operation/tvyicoojinjian")
 public class TVyicooJinjianController {
@@ -70,6 +72,7 @@ public class TVyicooJinjianController {
      */
     @RequestMapping("/list")
     @RequiresPermissions("operation:tvyicoojinjian:list")
+    @ApiOperation(value = "列表", httpMethod = POST)
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = tVyicooJinjianService.queryPage(params);
 
@@ -81,7 +84,11 @@ public class TVyicooJinjianController {
      */
     @RequestMapping("/info/{type}")
     @RequiresPermissions("operation:tvyicoojinjian:info")
-    public R info(@PathVariable("type") String type){
+    @ApiOperation(value = "根据type查询信息", httpMethod = POST)
+    public R info(
+//            @PathVariable("type") String type
+            @ApiParam(value = "type", required = true) @RequestParam String type
+        ){
         TVyicooJinjianEntity tVyicooJinjian = tVyicooJinjianService.selectById(type);
 
         return R.ok().put("tVyicooJinjian", tVyicooJinjian);
@@ -102,7 +109,8 @@ public class TVyicooJinjianController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("operation:tvyicoojinjian:save")
-    public R save(@RequestBody TVyicooJinjianEntity tVyicooJinjian){
+    @ApiOperation(value = "新增微易客进件", httpMethod = POST)
+    public R save(@RequestBody  @ApiParam( name = "进件对象", value = "传入json格式", required = true) TVyicooJinjianEntity tVyicooJinjian){
         String payment =
                 "{" +
                     "'T1': 38, " +

@@ -2,6 +2,8 @@ package com.scxxwb.net.admin.modules.operation.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,6 +15,7 @@ import java.util.Date;
  * @email liyun@scxxwb.com
  * @date 2018-07-20 09:58:13
  */
+@ApiModel(description = "微易客进件实体类", value = "进件对象")
 @TableName("t_vyicoo_jinjian")
 public class TVyicooJinjianEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,46 +24,57 @@ public class TVyicooJinjianEntity implements Serializable {
 	 * 商户类型 1：企业 2：个体工商户
 	 */
 	@TableId
+	@ApiModelProperty(value = "商户类型", name = "type", required = true)
 	private String type;
 	/**
 	 * 商户名称
 	 */
+	@ApiModelProperty(value = "商户名称", name = "name", required = true)
 	private String name;
 	/**
 	 * 商户简称（4-15字）
 	 */
+	@ApiModelProperty(value = "商户简称（4-15）个字", required = true)
 	private String shortname;
 	/**
 	 * 商户真实姓名
 	 */
+	@ApiModelProperty(value = "商户真实姓名", required = true)
 	private String realname;
 	/**
 	 * 联系人手机号
 	 */
+	@ApiModelProperty(value = "联系人手机号", required = true)
 	private String mobile;
 	/**
 	 * 身份证号
 	 */
+	@ApiModelProperty(value = "身份证号", required = true)
 	private String idNo;
 	/**
 	 * 省
 	 */
+	@ApiModelProperty(value = "省", required = true)
 	private String gbProvinceNo;
 	/**
 	 * 市
 	 */
+	@ApiModelProperty(value = "市", required = true)
 	private String gbCityNo;
 	/**
 	 * 区
 	 */
+	@ApiModelProperty(value = "区", required = true)
 	private String gbDistrictNo;
 	/**
 	 * 经营地址
 	 */
+	@ApiModelProperty(value = "经营地址", required = true)
 	private String address;
 	/**
 	 * 联系邮箱
 	 */
+	@ApiModelProperty(value = "联系邮箱", required = true)
 	private String email;
 	/**
 	 * 经营类别
