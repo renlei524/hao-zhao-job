@@ -73,7 +73,9 @@ scxxwb:
         password: xxwb5674
         imagePath: image
         appPath: appPkg
+        vyicooPath: image
     nginx:
         imagePath: http://img.scxxwb.com
         appPath: http://img.scxxwb.com
     payPath: http://wx.scxxwb.com/Markets/QrCode/Index?sn=
+    vyicooUploadPath:
