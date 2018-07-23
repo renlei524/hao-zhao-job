@@ -3,17 +3,20 @@ package com.scxxwb.net.admin.modules.operation.controller;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.sql.Wrapper;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.google.gson.JsonObject;
 import com.scxxwb.net.admin.common.utils.DateUtils;
 import com.scxxwb.net.admin.common.utils.FTPUtils;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +35,8 @@ import sun.misc.BASE64Decoder;
 
 import javax.annotation.Resource;
 
+import static com.qcloud.cos.http.RequestHeaderValue.Method.POST;
+
 
 /**
  *  微易客进件
@@ -40,7 +45,7 @@ import javax.annotation.Resource;
  * @email liyun@scxxwb.com
  * @date 2018-07-20 09:58:13
  */
-@Api(value = "operation/tvyicoojinjian", description = "微易客进件")
+@Api(value = "operation/tvyicoojinjian", tags = "微易客进件")
 @RestController
 @RequestMapping("operation/tvyicoojinjian")
 public class TVyicooJinjianController {
@@ -70,6 +75,7 @@ public class TVyicooJinjianController {
      */
     @RequestMapping("/list")
     @RequiresPermissions("operation:tvyicoojinjian:list")
+    @ApiOperation(value = "列表", httpMethod = POST)
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = tVyicooJinjianService.queryPage(params);
 
@@ -81,7 +87,11 @@ public class TVyicooJinjianController {
      */
     @RequestMapping("/info/{type}")
     @RequiresPermissions("operation:tvyicoojinjian:info")
-    public R info(@PathVariable("type") String type){
+    @ApiOperation(value = "根据type查询信息", httpMethod = POST)
+    public R info(
+//            @PathVariable("type") String type
+            @ApiParam(value = "type", required = true) @PathVariable String type
+        ){
         TVyicooJinjianEntity tVyicooJinjian = tVyicooJinjianService.selectById(type);
 
         return R.ok().put("tVyicooJinjian", tVyicooJinjian);
@@ -92,6 +102,7 @@ public class TVyicooJinjianController {
      */
     @RequestMapping("/callback")
     @CrossOrigin
+    @ApiOperation(value = "审核回调", httpMethod = POST)
     public R check(@RequestParam Map<String, Object> params){
         tVyicooJinjianService.updateStatus(params);
         return R.ok();
@@ -102,7 +113,8 @@ public class TVyicooJinjianController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("operation:tvyicoojinjian:save")
-    public R save(@RequestBody TVyicooJinjianEntity tVyicooJinjian){
+    @ApiOperation(value = "新增微易客进件", httpMethod = POST)
+    public R save(@RequestBody  @ApiParam( name = "进件对象", value = "传入json格式", required = true) TVyicooJinjianEntity tVyicooJinjian){
         String payment =
                 "{" +
                     "'T1': 38, " +
@@ -116,8 +128,8 @@ public class TVyicooJinjianController {
         tVyicooJinjian.setPayment(payment);
         ValidatorUtils.validateEntity(tVyicooJinjian);
 
-        ResponseEntity<Map> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/create", tVyicooJinjian, Map.class);
-        Map map = mapResponseEntity.getBody();
+        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/create", tVyicooJinjian, String.class);
+        Map map = JSONObject.parseObject(mapResponseEntity.getBody());
         Integer status = Integer.parseInt(map.get("status").toString());
         if(status != 0) {
             return R.error("进件资料上传失败！");
@@ -133,11 +145,12 @@ public class TVyicooJinjianController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("operation:tvyicoojinjian:update")
-    public R update(@RequestBody TVyicooJinjianEntity tVyicooJinjian){
+    @ApiOperation(value = "修改微易客进件", httpMethod = POST)
+    public R update(@RequestBody @ApiParam( name = "进件对象", value = "传入json格式", required = true)TVyicooJinjianEntity tVyicooJinjian){
         ValidatorUtils.validateEntity(tVyicooJinjian);
 
-        ResponseEntity<Map> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/update", tVyicooJinjian, Map.class);
-        Map map = mapResponseEntity.getBody();
+        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/update", tVyicooJinjian, String.class);
+        Map map = JSONObject.parseObject(mapResponseEntity.getBody());
         Integer status = Integer.parseInt(map.get("status").toString());
         if(status != 0) {
             return R.error("进件资料修改失败！");
@@ -153,7 +166,8 @@ public class TVyicooJinjianController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("operation:tvyicoojinjian:delete")
-    public R delete(@RequestBody String[] types){
+    @ApiOperation(value = "删除微易客进件", httpMethod = POST)
+    public R delete(@RequestBody @ApiParam(name = "进件id数组", value = "typess") String[] types){
         tVyicooJinjianService.deleteBatchIds(Arrays.asList(types));
 
         return R.ok();
@@ -184,8 +198,8 @@ public class TVyicooJinjianController {
         MultiValueMap<String, InputStream> postParameters = new LinkedMultiValueMap();
         postParameters.add("file", inputStream);
         HttpEntity<MultiValueMap<String, InputStream>> requestEntity = new HttpEntity(postParameters, null);
-        ResponseEntity<Map> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/common/upload", requestEntity, Map.class);
-        Map map = mapResponseEntity.getBody();
+        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/common/upload", requestEntity, String.class);
+        Map map = JSONObject.parseObject(mapResponseEntity.getBody());
         Integer status = Integer.parseInt(map.get("status").toString());
         if(status != 0){
             return R.error("微易客上传失败！");
