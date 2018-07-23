@@ -63,11 +63,12 @@ var vm = new Vue({
 			vm.showList = false;
             vm.title = "新增";
             vm.merchant = {agentId: null,status:0,agentName:null,recommend:true,typeId:null,typeName:null,supportDispatching:0,
-                payChannel:1,address:null,simpleAddress:null, province: -1, city: -1, area: -1, town: -1,
+                payChannel:1,address:null,simpleAddress:null, province: 1, city: 0, area: 0, town:0,
                 commercialName:null, communityName:null, isVoiceFunction: 0};
             vm.twbuser = {id: null,realName:null};
 
             $('#view,#view1,#view2,#view3').css('background', '').css("background", "url(/statics/img/default.png)");
+            vm.getProvince();
             window.onload = function (){
               document.body.onkeydown=function(event){
                 if(event.keyCode==13){
@@ -139,74 +140,74 @@ var vm = new Vue({
 		},
 		//加载省下拉框 d
         getProvince: function(){
-            var parentCode=0;
+            var areaCode=1;
             var group = $("#province");
             group.empty();
-            var url = "sys/twbarea/infoList/"+parentCode;
+            var url = "operation/tvyicooarea/list/"+areaCode;
             $.ajax({
                 type: "POST",
                 url: baseURL + url,
                 contentType: "application/json",
                 success: function(r){
-                    group.append("<option value='-1'>--请选择省--</option>");
-                    for(var i=0;i<r.length;i++) {
-                        if(vm.tVyicooJinjian.province == r[i].areaCode) {
-                            group.append("<option value='"+r[i].areaCode+"' selected>"+r[i].name+"</option>");
+                    group.append("<option value='1'>--请选择省--</option>");
+                    for(var i=0;i<r.areaList.length;i++) {
+                        if(vm.tVyicooJinjian.province == r.areaList[i].areaCode) {
+                            group.append("<option value='"+r.areaList[i].areaCode+"' selected>"+r.areaList[i].areaName+"</option>");
                         } else {
-                            group.append("<option value='"+r[i].areaCode+"'>"+r[i].name+"</option>");
+                            group.append("<option value='"+r.areaList[i].areaCode+"'>"+r.areaList[i].areaName+"</option>");
                         }
                     }
                 }
             });
         },
         //加载市下拉框 d
-        getCity: function(parentCode){
+        getCity: function(areaCode){
             var group = $("#city");
-            if (parentCode <=0 || parentCode == null) {
+            if (areaCode <=1 || areaCode == null) {
                 group.empty();
-                group.append("<option value='-1'>--请选择市--</option>");
+                group.append("<option value='0'>--请选择市--</option>");
             }else {
                 group.empty();
-                var url = "sys/twbarea/infoList/"+parentCode;
+                var url = "operation/tvyicooarea/list/"+areaCode;
                 $.ajax({
                     type: "POST",
                     url: baseURL + url,
                     contentType: "application/json",
                     success: function(r){
                         group.empty();
-                        group.append("<option value='-1'>--请选择市--</option>");
-                        for(var i=0;i<r.length;i++) {
-                            if(vm.tVyicooJinjian.city == r[i].areaCode) {
-                                group.append("<option value='"+r[i].areaCode+"' selected>"+r[i].name+"</option>");
+                        group.append("<option value='0'>--请选择市--</option>");
+                        for(var i=0;i<r.areaList.length;i++) {
+                            if(vm.tVyicooJinjian.city == r.areaList[i].areaCode) {
+                                group.append("<option value='"+r.areaList[i].areaCode+"' selected>"+r.areaList[i].areaName+"</option>");
                             } else {
-                                group.append("<option value='"+r[i].areaCode+"'>"+r[i].name+"</option>");
+                                group.append("<option value='"+r.areaList[i].areaCode+"'>"+r.areaList[i].areaName+"</option>");
                             }
                         }
                     }
                 });
             }
         },
-        //加载区下拉菜单 d
-        getArea: function(parentCode){
+        //加载区下拉菜单
+        getArea: function(areaCode){
             var group = $("#area");
-            if (parentCode <=0 || parentCode == null) {
+            if (areaCode <=1 || areaCode == null) {
                 group.empty();
-                group.append("<option value='-1'>--请选择区--</option>");
+                group.append("<option value='0'>--请选择区--</option>");
             }else {
                 group.empty();
-                var url = "sys/twbarea/infoList/"+parentCode;
+                var url = "operation/tvyicooarea/list/"+areaCode;
                 $.ajax({
                     type: "POST",
                     url: baseURL + url,
                     contentType: "application/json",
                     success: function(r){
                         group.empty();
-                        group.append("<option value='-1'>--请选择区--</option>");
-                        for(var i=0;i<r.length;i++) {
-                            if(vm.tVyicooJinjian.area == r[i].areaCode) {
-                                group.append("<option value='"+r[i].areaCode+"' selected>"+r[i].name+"</option>");
+                        group.append("<option value='0'>--请选择区--</option>");
+                        for(var i=0;i<r.areaList.length;i++) {
+                            if(vm.tVyicooJinjian.area == r.areaList[i].areaCode) {
+                                group.append("<option value='"+r.areaList[i].areaCode+"' selected>"+r.areaList[i].areaName+"</option>");
                             } else {
-                                group.append("<option value='"+r[i].areaCode+"'>"+r[i].name+"</option>");
+                                group.append("<option value='"+r.areaList[i].areaCode+"'>"+r.areaList[i].areaName+"</option>");
                              }
                         }
                     }
@@ -224,10 +225,10 @@ var vm = new Vue({
 });
 	//省选择触发事件 d
     $("#province").change(function(){
-        vm.selectedProvince = -1;
-        vm.selectedCity = -1;
-        vm.selectedArea = -1;
-        vm.selectedTown = -1;
+        vm.selectedProvince = 1;
+        vm.selectedCity = 0;
+        vm.selectedArea = 0;
+        vm.selectedTown = 0;
         vm.selectedProvince =  $("#province").val();
         vm.getCity(vm.selectedProvince);
         vm.getArea(vm.selectedCity);
@@ -238,8 +239,8 @@ var vm = new Vue({
 
     //市 选择触发事件 d
     $("#city").change(function(){
-        vm.selectedArea = -1;
-        vm.selectedTown = -1;
+        vm.selectedArea = 0;
+        vm.selectedTown = 0;
         vm.selectedCity = $("#city").val();
         vm.getArea(vm.selectedCity);
         vm.tVyicooJinjian.city = vm.selectedCity;
@@ -249,7 +250,7 @@ var vm = new Vue({
 
     //区选择触发事件 d
     $("#area").change(function(){
-        vm.selectedTown = -1;
+        vm.selectedTown = 0;
         vm.selectedArea = $("#area").val();
         vm.tVyicooJinjian.area = vm.selectedArea;
     });
