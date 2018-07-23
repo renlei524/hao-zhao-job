@@ -50,7 +50,7 @@ public class TVYiCooCategoryController extends AbstractController {
     @RequiresPermissions("operation:tvyicoocategory:info")
     @ApiOperation(value = "根据id查询微易客经营类目信息", httpMethod = POST)
         public R info(
-            @ApiParam(value = "经营类目id", required=true) @RequestParam Integer id
+            @ApiParam(value = "经营类目id", required=true) @PathVariable Integer id
         ){
          TVYiCooCategoryEntity tvYiCooCategoryEntity = tViYiCooCategoryService.selectById(id);
 

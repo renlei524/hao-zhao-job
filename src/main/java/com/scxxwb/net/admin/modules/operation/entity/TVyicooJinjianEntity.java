@@ -79,110 +79,138 @@ public class TVyicooJinjianEntity implements Serializable {
 	/**
 	 * 经营类别
 	 */
+	@ApiModelProperty(value = "经营类别", required = true)
 	private String category;
 	/**
 	 * 营业执照类型
 	 */
+	@ApiModelProperty(value = "营业执照类型", required = true)
 	private String licenseType;
 	/**
 	 * 营业执照编号
 	 */
+	@ApiModelProperty(value = "营业执照编号", required = true)
 	private String licenseNo;
 	/**
 	 * 营业执照地址
 	 */
+	@ApiModelProperty(value = "营业执照地址", required = true)
 	private String licenseAddress;
 	/**
 	 * 注册号开始日期 （例：2017-12-01）
 	 */
+	@ApiModelProperty(value = "注册号开始日期", required = true)
 	private String licenseStartDate;
 	/**
 	 * 注册号结束日期 （例：2029-12-01 永久为-1）
 	 */
+	@ApiModelProperty(value = "注册号结束日期", required = true)
 	private String licenseEndDate;
 	/**
 	 * 开户支行ID
 	 */
+	@ApiModelProperty(value = "开户支行id", required = true)
 	private String bankId;
 	/**
 	 * 开户支行所在城市编码
 	 */
+	@ApiModelProperty(value = "开户支行所在城市编码", required = true)
 	private String accountCity;
 	/**
 	 * 开户支行行号
 	 */
+	@ApiModelProperty(value = "开户支行行号", required = true)
 	private String bankNo;
 	/**
 	 * 帐户类型 0：对私 1：对公
 	 */
+	@ApiModelProperty(value = "账户类型 0：对私 1：对公", required = true)
 	private String accountType;
 	/**
 	 * 开户名称
 	 */
+	@ApiModelProperty(value = "开户名称", required = true)
 	private String accountName;
 	/**
 	 * 银行预留手机号
 	 */
+	@ApiModelProperty(value = "银行预留手机号", required = true)
 	private String accountMobile;
 	/**
 	 * 有无公众号 1：有公众号 2：无公众号
 	 */
+
+	@ApiModelProperty(value = "有无公众号 1：有 2：无", required = true)
 	private String selfAppid;
 	/**
 	 * 有公众号必填（公众号主体需同营业执照名称一致）
 	 */
+	@ApiModelProperty(value = "有公众号必填")
 	private String wxAppid;
 	/**
 	 * 商户微信号
 	 */
+	@ApiModelProperty(value = "商户微信号", required = true)
 	private String wechatId;
 	/**
 	 * 法人银行卡号
 	 */
+	@ApiModelProperty(value = "法人银行卡号", required = true)
 	private String bankcardNo;
 	/**
 	 * 营业执照照片
 	 */
+	@ApiModelProperty(value = "营业执照照片", required = true)
 	private String licensePic;
 	/**
 	 * 法人身份证正面照片
 	 */
+	@ApiModelProperty(value = "法人身份证正面照片", required = true)
 	private String idFrontPic;
 	/**
 	 * 法人身份证反面照片
 	 */
+	@ApiModelProperty(value = "法人身份证反面照片", required = true)
 	private String idBackPic;
 	/**
 	 * 对私：法人结算银行卡照片 对公：开户许可证
 	 */
+	@ApiModelProperty(value = "对私：法人结算银行卡照片 对公： 开户许可证", required = true)
 	private String bankcardPic;
 	/**
 	 * 店铺门头照片
 	 */
+	@ApiModelProperty(value = "店铺门头照片", required = true)
 	private String shopPic;
 	/**
 	 * 经营场所内照片
 	 */
+	@ApiModelProperty(value = "经营场所内照片", required = true)
 	private String extraPic1;
 	/**
 	 * 收银台招牌照片
 	 */
+	@ApiModelProperty(value = "收银台招牌照片", required = true)
 	private String extraPic2;
 	/**
 	 * 支付方式配置json串
 	 */
+	@ApiModelProperty(value = "支付方式配置json串")
 	private String payment;
 	/**
 	 * 易客付商户号
 	 */
+	@ApiModelProperty(value = "易客付商户号", required = true)
 	private String mchId;
 	/**
 	 * 商户进件状态 0：申请中， 1：启用 2 : 认证中 3：失败 4：处理中
 	 */
+	@ApiModelProperty(value = "商户进件状态 0：申请中， 1：启用 2 : 认证中 3：失败 4：处理中")
 	private Integer verifyStatus;
 	/**
 	 * 商户id
 	 */
+	@ApiModelProperty(value = "商户id", required = true)
 	private Integer merchantId;
 
 	/**
