@@ -79,6 +79,7 @@ public class MerchantController extends AbstractController {
     @RequiresPermissions("operation:merchant:info")
     public R info(@PathVariable("id") Integer id){
         MerchantEntity merchant = merchantService.selectById(id);
+        merchant.setMerchantLimit(merchant.getMerchantLimit() / 100);
         SysDeptEntity sysDeptEntity = sysDeptService.selectById(merchant.getAgentId());
         merchant.setAgentName(sysDeptEntity.getName());
         return R.ok().put("merchant", merchant).put("imageNginxPath", imageNginxPath);
@@ -98,6 +99,7 @@ public class MerchantController extends AbstractController {
         // 创建待审核
         merchant.setStatus(1);
         merchant.setIsVoiceFunction(1);
+        merchant.setMerchantLimit(merchant.getMerchantLimit() * 100);
         ValidatorUtils.validateEntity(merchant,AddGroup.class);
         Map map = new HashMap<String, Object>();
         map.put("loginUserName", merchant.getLoginUsername());
@@ -131,6 +133,7 @@ public class MerchantController extends AbstractController {
         Map map = new HashMap<String, Object>();
         map.put("merchantCode", merchant.getMerchantCode());
         map.put("merchantName", merchant.getMerchantName());
+        merchant.setMerchantLimit(merchant.getMerchantLimit() * 100);
         MerchantEntity merchantName = merchantService.getMerchantByMerchantName(map);
         if(merchantName != null && !merchantName.getId().equals(merchant.getId()) && merchantName.getMerchantName().equals(merchant.getMerchantName())) {
             return R.error("当前商户名称（店铺名称）已存在！");
