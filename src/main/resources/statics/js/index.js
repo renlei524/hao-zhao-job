@@ -141,7 +141,7 @@ var vm = new Vue({
 });
 
 
-
+var preUrl = null;
 function routerList(router, menuList){
 	for(var key in menuList){
 		var menu = menuList[key];
@@ -150,17 +150,20 @@ function routerList(router, menuList){
 		}else if(menu.type == 1){
 			router.add('#'+menu.url, function() {
 				var url = window.location.hash;
-				
+
 				//替换iframe的url
 			    vm.main = url.replace('#', '');
-			    
+
 			    //导航菜单展开
 			    $(".treeview-menu li").removeClass("active");
 			    $("a[href='"+url+"']").parents("li").addClass("active");
 			    $("a[href='"+url+"']").unbind("click").click(function() {
-			        window.location.reload();
+			        if(url == preUrl) {
+			            window.location.reload();
+			        }
 			    });
-			    
+                preUrl = url;
+
 			    vm.navTitle = $("a[href='"+url+"']").text();
 			});
 		}

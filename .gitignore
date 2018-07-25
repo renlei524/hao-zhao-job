@@ -33,3 +33,8 @@ out/
 
 # logs
 logs
+
+# config
+src/main/resources/*.yml
+src/main/resources/*.xml
+src/main/resources/*.txt
