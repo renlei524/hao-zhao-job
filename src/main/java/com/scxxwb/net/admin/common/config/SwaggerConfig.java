@@ -30,7 +30,7 @@ public class SwaggerConfig{
             //加了ApiOperation注解的类，生成接口文档
             .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
             //包下的类，生成接口文档
-            .apis(RequestHandlerSelectors.basePackage("com.scxxwb.net.admin.modules.*.controller"))
+            .apis(RequestHandlerSelectors.basePackage("com.scxxwb.net.admin.modules"))
             .paths(PathSelectors.any())
             .build();
     }

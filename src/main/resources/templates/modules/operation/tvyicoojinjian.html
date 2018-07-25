@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+		<#include "/header.html">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/merchant.css">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+			<#if shiro.hasPermission("operation:tvyicoojinjian:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("operation:tvyicoojinjian:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("operation:tvyicoojinjian:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商户类型</div>
+                        <div class="col-sm-10">
+                            <label class="radio-inline radio-inline-hide">
+                                <input type="radio" name="status1" value="5" v-model="tVyicooJinjian.status1"/> 企业
+                            </label>
+                            <label class="radio-inline radio-inline-show">
+                                <input type="radio" name="status1" v-model="tVyicooJinjian.status1"/> 个体工商户
+                            </label>
+                        </div>
+                    </div>
+
+
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">商户名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.name" placeholder="商户名称"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">商户简称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.shortname" placeholder="商户简称（4-15字）"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">商户真实姓名</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.realname" placeholder="商户真实姓名"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">联系人手机号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.mobile" placeholder="联系人手机号"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">身份证号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.idNo" placeholder="身份证号"/>
+                        </div>
+                    </div>
+
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">省</div>
+                        <div class="col-sm-10">
+                            <select name="province"  v-model="tVyicooJinjian.province"  class=" form-control form-more" id="province" ></select>
+                            &nbsp;市&nbsp;
+                            <select name="city" v-model="tVyicooJinjian.city"  class="form-control form-more" id="city" ></select>
+                            &nbsp;区&nbsp;
+                            <select name="area"  v-model="tVyicooJinjian.area"  class="form-control form-more"  id="area" ></select>
+
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">经营地址</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.address" placeholder="经营地址"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">联系邮箱</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.email" placeholder="联系邮箱"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">经营类别</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.category" placeholder="经营类别"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">营业执照类型</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.licenseType" placeholder="营业执照类型"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">营业执照编号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.licenseNo" placeholder="营业执照编号"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">营业执照地址</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.licenseAddress" placeholder="营业执照地址"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">注册号开始日期</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.licenseStartDate" placeholder="注册号开始日期 （例：2017-12-01）"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">注册号结束日期</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.licenseEndDate" placeholder="注册号结束日期 （例：2029-12-01 永久为-1）"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">开户支行ID</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.bankId" placeholder="开户支行ID"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">开户支行所在城市编码</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.accountCity" placeholder="开户支行所在城市编码"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">开户支行行号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.bankNo" placeholder="开户支行行号"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">帐户类型</div>
+                        <div class="col-sm-10">
+                            <label class="radio-inline radio-inline-hide">
+                                <input type="radio" name="status2" value="2" v-model="tVyicooJinjian.status2"/> 对私
+                            </label>
+                            <label class="radio-inline radio-inline-show">
+                                <input type="radio" name="status2" v-model="tVyicooJinjian.status2"/> 对公
+                            </label>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">开户名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.accountName" placeholder="开户名称"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">银行预留手机号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.accountMobile" placeholder="银行预留手机号"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">有无公众号</div>
+                        <div class="col-sm-10">
+                            <label class="radio-inline radio-inline-hide">
+                                <input type="radio" name="status" value="3" v-model="tVyicooJinjian.status"/> 有公众号
+                            </label>
+                            <label class="radio-inline radio-inline-show">
+                                <input type="radio" name="status" v-model="tVyicooJinjian.status"/> 无公众号
+                            </label>
+                        </div>
+                    </div>
+
+					<div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.wxAppid" placeholder="有公众号必填（公众号主体需同营业执照名称一致）"/>
+                        </div>
+                    </div>
+
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">商户微信号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.wechatId" placeholder="商户微信号"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">法人银行卡号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.bankcardNo" placeholder="法人银行卡号"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">营业执照照片</div>
+                        <div class="col-sm-10">
+                            <div class="yc-upload-wrap">
+                                <div class="yc-upload-box">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+                                                <div class="ycupload-mainbox">
+                                                    <div class="ycupload-line"></div>
+
+                                                    <div  style="min-height:1px;">
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                <div class="col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+                                                                    <div style="min-height:1px;line-height:160px;text-align:center;position:relative;" ontouchstart="">
+                                                                        <div class="cover-wrap1 cover" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background: rgba(0, 0, 0, 0.5);z-index: 10000000;text-align:center;">
+                                                                            <div class="phone-max-box">
+                                                                                <div id="clipArea1" style="margin:10px;height: 370px;"></div>
+                                                                                <div class="" style="height:56px;line-height:36px;text-align: center;padding-top:8px;">
+                                                                                    <button id="clipBtn1" type="button" style="width:120px;height: 36px;border-radius: 4px;background-color:#ff8a00;color: #FFFFFF;font-size: 14px;text-align: center;line-height: 36px;outline: none;">保存封面</button>
+                                                                                </div>
+                                                                                <div class="close-btn"><img src="${request.contextPath}/statics/img/close.png" alt=""></div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div id="view1"  class="view" style="width:214px;height:160.5px;" title="请上传 240*151 的封面图片"></div>
+                                                                        <div style="height:10px;"></div>
+                                                                        <div class="" style="width:214px;height:38px;border-radius: 2px;background-color:#009688;color: #FFFFFF;font-size: 14px;text-align:center;line-height:38px;outline:none;position:relative;">
+                                                                            上传营业执照
+                                                                            <input type="file" id="file_new1" style="cursor:pointer;opacity:0;filter:alpha(opacity=0);width:100%;height:100%;position:absolute;top:0;left:0;">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div style="height:25px;"></div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">法人身份证正面照片</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.idFrontPic" placeholder="法人身份证正面照片"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">法人身份证反面照片</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.idBackPic" placeholder="法人身份证反面照片"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">结算银行卡照片</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.bankcardPic" placeholder="对私：法人结算银行卡照片 对公：开户许可证"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">店铺门头照片</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.shopPic" placeholder="店铺门头照片"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">经营场所内照片</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.extraPic1" placeholder="经营场所内照片"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">收银台招牌照片</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tVyicooJinjian.extraPic2" placeholder="收银台招牌照片"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                        &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+                    </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/cover/js/iscroll-zoom.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/cover/js/lrz.all.bundle.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/cover/js/jquery.photoClip.min.js" charset="utf-8"></script>
+
+<script src="${request.contextPath}/statics/js/modules/operation/tvyicoojinjian.js?_${.now?long}"></script>
+<script src="${request.contextPath}/statics/js/modules/operation/tvyicoojinjian_photo.js?_${.now?long}"></script>
+</body>
+</html>

@@ -18,7 +18,7 @@
         <div class="grid-btn">
             <#if shiro.hasPermission("operation:tenchashmentbinding:list")>
             <div class="form-group col-sm-2">
-                <input type="text"  class="form-control" v-model="q.objectName" placeholder="商户名称">
+                <input type="text"  class="form-control" v-model="q.objectName" @keyup.enter="query" placeholder="商户名称">
             </div>
             <a class="btn btn-default" @click="query">查询</a>
             </#if>
@@ -49,7 +49,7 @@
                     <div class="modal-body col-sm-12">
                                     <div class="col-sm-2">商户名称</div>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" v-model="q.merchantName"  placeholder="请输入商户名字,手机号"/>
+                            <input type="text" class="form-control" v-model="q.merchantName" @keyup.enter="commercialNameReload()" placeholder="请输入商户名字,手机号"/>
                         </div>
                         <button type="button" class="btn btn-default" id="commercialNameReload">查询</button>
 
