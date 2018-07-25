@@ -58,6 +58,7 @@ public class MerchantCheckController extends AbstractController {
     @RequiresPermissions("operation:check:info")
     public R info(@PathVariable("id") Integer id){
         MerchantCheckEntity merchantCheckEntity = merchantCheckService.selectById(id);
+        merchantCheckEntity.setMerchantLimit(merchantCheckEntity.getMerchantLimit() / 100);
         SysDeptEntity sysDeptEntity = sysDeptService.selectById(merchantCheckEntity.getAgentId());
         merchantCheckEntity.setAgentName(sysDeptEntity.getName());
         return R.ok().put("merchant", merchantCheckEntity).put("imageNginxPath", imageNginxPath);
@@ -71,7 +72,7 @@ public class MerchantCheckController extends AbstractController {
     @RequiresPermissions("operation:check:check")
     public R check(@RequestBody MerchantCheckEntity merchantCheckEntity){
         ValidatorUtils.validateEntity(merchantCheckEntity);
-
+        merchantCheckEntity.setMerchantLimit(merchantCheckEntity.getMerchantLimit() * 100);
         if(merchantCheckEntity.getStatus() == 5) {
             Map map = new HashMap<String, Object>();
             map.put("merchantCode", merchantCheckEntity.getMerchantCode());

@@ -73,7 +73,7 @@ scxxwb:
         password: xxwb1234
         imagePath: /static/image
         appPath: /static/appPkg
-        vyicooPath: image
+        vyicooPath: /static/image
     nginx:
         imagePath: http://192.168.10.245:8686
         appPath: http://192.168.10.245:8686
