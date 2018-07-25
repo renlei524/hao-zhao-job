@@ -85,6 +85,20 @@ public class MerchantController extends AbstractController {
     }
 
     /**
+     * 根据收款码查询信息
+     * @param code
+     * @return
+     */
+    @RequestMapping("/infoByCode/{merchantCode}")
+    @RequiresPermissions("operation:merchant:info")
+    public R getMerchantByCode(@PathVariable("merchantCode") String code){
+        Map map = new HashMap<String, Object>();
+        map.put("merchantCode", code);
+        MerchantEntity merchantCode = merchantService.getMerchantByCode(map);
+        return R.ok().put("merchantCode", merchantCode);
+    }
+
+    /**
      * 保存
      */
     @RequestMapping("/save")
