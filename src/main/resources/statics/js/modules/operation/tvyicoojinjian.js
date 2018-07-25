@@ -2,45 +2,16 @@ $(function () {
     $("#jqGrid").jqGrid({
         url: baseURL + 'operation/tvyicoojinjian/list',
         datatype: "json",
-        colModel: [			
-			{ label: 'type', name: 'type', index: 'type', width: 50, key: true },
-			{ label: '商户名称', name: 'name', index: 'name', width: 80 }, 			
-			{ label: '商户简称（4-15字）', name: 'shortname', index: 'shortname', width: 80 }, 			
-			{ label: '商户真实姓名', name: 'realname', index: 'realname', width: 80 }, 			
-			{ label: '联系人手机号', name: 'mobile', index: 'mobile', width: 80 }, 			
-			{ label: '身份证号', name: 'idNo', index: 'id_no', width: 80 }, 			
-			{ label: '省', name: 'gbProvinceNo', index: 'gb_province_no', width: 80 }, 			
-			{ label: '市', name: 'gbCityNo', index: 'gb_city_no', width: 80 }, 			
-			{ label: '区', name: 'gbDistrictNo', index: 'gb_district_no', width: 80 }, 			
-			{ label: '经营地址', name: 'address', index: 'address', width: 80 }, 			
-			{ label: '联系邮箱', name: 'email', index: 'email', width: 80 }, 			
-			{ label: '经营类别', name: 'category', index: 'category', width: 80 }, 			
-			{ label: '营业执照类型', name: 'licenseType', index: 'license_type', width: 80 }, 			
-			{ label: '营业执照编号', name: 'licenseNo', index: 'license_no', width: 80 }, 			
-			{ label: '营业执照地址', name: 'licenseAddress', index: 'license_address', width: 80 }, 			
-			{ label: '注册号开始日期 （例：2017-12-01）', name: 'licenseStartDate', index: 'license_start_date', width: 80 }, 			
-			{ label: '注册号结束日期 （例：2029-12-01 永久为-1）', name: 'licenseEndDate', index: 'license_end_date', width: 80 }, 			
-			{ label: '开户支行ID', name: 'bankId', index: 'bank_id', width: 80 }, 			
-			{ label: '开户支行所在城市编码', name: 'accountCity', index: 'account_city', width: 80 }, 			
-			{ label: '开户支行行号', name: 'bankNo', index: 'bank_no', width: 80 }, 			
-			{ label: '帐户类型 0：对私 1：对公', name: 'accountType', index: 'account_type', width: 80 }, 			
-			{ label: '开户名称', name: 'accountName', index: 'account_name', width: 80 }, 			
-			{ label: '银行预留手机号', name: 'accountMobile', index: 'account_mobile', width: 80 }, 			
-			{ label: '有无公众号 1：有公众号 2：无公众号', name: 'selfAppid', index: 'self_appid', width: 80 }, 			
-			{ label: '有公众号必填（公众号主体需同营业执照名称一致）', name: 'wxAppid', index: 'wx_appid', width: 80 }, 			
-			{ label: '商户微信号', name: 'wechatId', index: 'wechat_id', width: 80 }, 			
-			{ label: '法人银行卡号', name: 'bankcardNo', index: 'bankcard_no', width: 80 }, 			
-			{ label: '营业执照照片', name: 'licensePic', index: 'license_pic', width: 80 }, 			
-			{ label: '法人身份证正面照片', name: 'idFrontPic', index: 'id_front_pic', width: 80 }, 			
-			{ label: '法人身份证反面照片', name: 'idBackPic', index: 'id_back_pic', width: 80 }, 			
-			{ label: '对私：法人结算银行卡照片 对公：开户许可证', name: 'bankcardPic', index: 'bankcard_pic', width: 80 }, 			
-			{ label: '店铺门头照片', name: 'shopPic', index: 'shop_pic', width: 80 }, 			
-			{ label: '经营场所内照片', name: 'extraPic1', index: 'extra_pic1', width: 80 }, 			
-			{ label: '收银台招牌照片', name: 'extraPic2', index: 'extra_pic2', width: 80 }, 			
-			{ label: '支付方式配置json串', name: 'payment', index: 'payment', width: 80 }, 			
-			{ label: '返回结果状态。0：成功', name: 'status', index: 'status', width: 80 }, 			
-			{ label: '返回信息', name: 'msg', index: 'msg', width: 80 }, 			
-			{ label: '商户id', name: 'merchantId', index: 'merchant_id', width: 80 }			
+        colModel: [
+            { label: '商户id', name: 'merchantId', width: 80 , hidden:true},
+            { label: '商户名称', name: 'name',index: 'name',width: 80 },
+            { label: '真实姓名', name: 'realname', index: 'realname', width: 80 },
+            { label: '联系人手机号', name: 'mobile', index: 'mobile', width: 80 },
+            { label: '身份证号', name: 'idNo', index: 'idNo', width: 80 },
+            { label: '经营地址', name: 'address', index: 'address', width: 80 },
+            { label: '联系邮箱', name: 'email', index: 'email', width: 80 },
+            { label: '经营类别', name: 'category', index: 'category', width: 80 },
+            { label: '营业执照类型', name: 'licenseType',index: 'licenseType',width: 80 }
         ],
 		viewrecords: true,
         height: 385,
@@ -74,7 +45,15 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
-		tVyicooJinjian: {}
+		tVyicooJinjian: {
+		    province:"",//省
+            city:"",//市
+            area:""//区
+		},
+        //新增时联动菜单重置用省、市、区、街道 d
+        selectedProvince: -1,
+        selectedCity: -1,
+        selectedArea: -1
 	},
 	methods: {
 		query: function () {
@@ -82,8 +61,21 @@ var vm = new Vue({
 		},
 		add: function(){
 			vm.showList = false;
-			vm.title = "新增";
-			vm.tVyicooJinjian = {};
+            vm.title = "新增";
+            vm.merchant = {agentId: null,status:0,agentName:null,recommend:true,typeId:null,typeName:null,supportDispatching:0,
+                payChannel:1,address:null,simpleAddress:null, province: 1, city: 0, area: 0, town:0,
+                commercialName:null, communityName:null, isVoiceFunction: 0};
+            vm.twbuser = {id: null,realName:null};
+
+            $('#view,#view1,#view2,#view3').css('background', '').css("background", "url(/statics/img/default.png)");
+            vm.getProvince();
+            window.onload = function (){
+              document.body.onkeydown=function(event){
+                if(event.keyCode==13){
+                    event.keyCod=0; return false;
+                }
+              }
+            }
 		},
 		update: function (event) {
 			var type = getSelectedRow();
@@ -140,8 +132,88 @@ var vm = new Vue({
 		getInfo: function(type){
 			$.get(baseURL + "operation/tvyicoojinjian/info/"+type, function(r){
                 vm.tVyicooJinjian = r.tVyicooJinjian;
+                //加载省市区数据
+                vm.getProvince();
+                vm.getCity(vm.tVyicooJinjian.province);
+                vm.getArea(vm.tVyicooJinjian.city);
             });
 		},
+		//加载省下拉框 d
+        getProvince: function(){
+            var areaCode=1;
+            var group = $("#province");
+            group.empty();
+            var url = "operation/tvyicooarea/list/"+areaCode;
+            $.ajax({
+                type: "POST",
+                url: baseURL + url,
+                contentType: "application/json",
+                success: function(r){
+                    group.append("<option value='1'>--请选择省--</option>");
+                    for(var i=0;i<r.areaList.length;i++) {
+                        if(vm.tVyicooJinjian.province == r.areaList[i].areaCode) {
+                            group.append("<option value='"+r.areaList[i].areaCode+"' selected>"+r.areaList[i].areaName+"</option>");
+                        } else {
+                            group.append("<option value='"+r.areaList[i].areaCode+"'>"+r.areaList[i].areaName+"</option>");
+                        }
+                    }
+                }
+            });
+        },
+        //加载市下拉框 d
+        getCity: function(areaCode){
+            var group = $("#city");
+            if (areaCode <=1 || areaCode == null) {
+                group.empty();
+                group.append("<option value='0'>--请选择市--</option>");
+            }else {
+                group.empty();
+                var url = "operation/tvyicooarea/list/"+areaCode;
+                $.ajax({
+                    type: "POST",
+                    url: baseURL + url,
+                    contentType: "application/json",
+                    success: function(r){
+                        group.empty();
+                        group.append("<option value='0'>--请选择市--</option>");
+                        for(var i=0;i<r.areaList.length;i++) {
+                            if(vm.tVyicooJinjian.city == r.areaList[i].areaCode) {
+                                group.append("<option value='"+r.areaList[i].areaCode+"' selected>"+r.areaList[i].areaName+"</option>");
+                            } else {
+                                group.append("<option value='"+r.areaList[i].areaCode+"'>"+r.areaList[i].areaName+"</option>");
+                            }
+                        }
+                    }
+                });
+            }
+        },
+        //加载区下拉菜单
+        getArea: function(areaCode){
+            var group = $("#area");
+            if (areaCode <=1 || areaCode == null) {
+                group.empty();
+                group.append("<option value='0'>--请选择区--</option>");
+            }else {
+                group.empty();
+                var url = "operation/tvyicooarea/list/"+areaCode;
+                $.ajax({
+                    type: "POST",
+                    url: baseURL + url,
+                    contentType: "application/json",
+                    success: function(r){
+                        group.empty();
+                        group.append("<option value='0'>--请选择区--</option>");
+                        for(var i=0;i<r.areaList.length;i++) {
+                            if(vm.tVyicooJinjian.area == r.areaList[i].areaCode) {
+                                group.append("<option value='"+r.areaList[i].areaCode+"' selected>"+r.areaList[i].areaName+"</option>");
+                            } else {
+                                group.append("<option value='"+r.areaList[i].areaCode+"'>"+r.areaList[i].areaName+"</option>");
+                             }
+                        }
+                    }
+                });
+            }
+        },
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
@@ -151,3 +223,34 @@ var vm = new Vue({
 		}
 	}
 });
+	//省选择触发事件 d
+    $("#province").change(function(){
+        vm.selectedProvince = 1;
+        vm.selectedCity = 0;
+        vm.selectedArea = 0;
+        vm.selectedTown = 0;
+        vm.selectedProvince =  $("#province").val();
+        vm.getCity(vm.selectedProvince);
+        vm.getArea(vm.selectedCity);
+        vm.tVyicooJinjian.province = vm.selectedProvince;
+        vm.tVyicooJinjian.city = vm.selectedCity;
+        vm.tVyicooJinjian.area = vm.selectedArea;
+    });
+
+    //市 选择触发事件 d
+    $("#city").change(function(){
+        vm.selectedArea = 0;
+        vm.selectedTown = 0;
+        vm.selectedCity = $("#city").val();
+        vm.getArea(vm.selectedCity);
+        vm.tVyicooJinjian.city = vm.selectedCity;
+        vm.tVyicooJinjian.area = vm.selectedArea;
+
+    });
+
+    //区选择触发事件 d
+    $("#area").change(function(){
+        vm.selectedTown = 0;
+        vm.selectedArea = $("#area").val();
+        vm.tVyicooJinjian.area = vm.selectedArea;
+    });
