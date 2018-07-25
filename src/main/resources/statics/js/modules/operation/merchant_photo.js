@@ -1,5 +1,5 @@
 // 营业执照
-updeta_img("#clipArea",428,321,"#file_new","#view","#clipBtn",$('.cover-wrap'));
+updeta_img("#clipArea",350,500,"#file_new","#view","#clipBtn",$('.cover-wrap'));
 // 身份证正面
 updeta_img("#clipArea1",428,321,"#file_new1","#view1","#clipBtn1",$('.cover-wrap1'));
 // 身份证背面
