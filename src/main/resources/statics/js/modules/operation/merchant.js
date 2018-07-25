@@ -1169,7 +1169,23 @@ function checkmerchantCode(){
     }else if(!( /^\d{8}$/.test(merchantCode))){
         return document.getElementById('uidt5').innerHTML = '*输入8位收款码';
     }else{
-        return document.getElementById('uidt5').innerHTML = '';
+        var url = "operation/merchant/infoByCode/"+merchantCode;
+        $.ajax({
+            type: "POST",
+            url: baseURL + url,
+            contentType: "application/json",
+            success: function(r){
+                if (r.merchantCode != null){
+                    if(vm.merchant.id != r.merchantCode.id){
+                        return document.getElementById('uidt5').innerHTML = '当前收款码已存在！';
+                    }else {
+                        return document.getElementById('uidt5').innerHTML = '';
+                    }
+                }else {
+                    return document.getElementById('uidt5').innerHTML = '';
+                }
+            }
+        });
     }
 }
 //判断商户限额
@@ -1194,3 +1210,7 @@ function checkserviceCharge(){
         return document.getElementById('uidt7').innerHTML = '';
     }
 }
+
+$("#merchantCode").blur(function(){
+    checkmerchantCode();
+});

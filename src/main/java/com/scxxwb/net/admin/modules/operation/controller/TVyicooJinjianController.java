@@ -108,8 +108,8 @@ public class TVyicooJinjianController {
                     "'T1': 38, " +
                     "'weixin': {" +
                                 "'mp': {" +
-                                    "'appid': '公众号appid'," +
-                                    "'pay_dir': 'https://abc.com/pay/|https://test.com/user/pay/'" +
+                                    "'appid': 'wx4a2530ee65d5f186'," +
+                                    "'pay_dir': 'http://wx.scxxwb.com/Pay/Trade/'" +
                                 "}" +
                             "}" +
                 "}";
@@ -122,7 +122,7 @@ public class TVyicooJinjianController {
         if(status != 0) {
             return R.error("进件资料上传失败！");
         }
-        tVyicooJinjian.setStatus(1); // 创建审核中
+        tVyicooJinjian.setVerifyStatus(1); // 创建审核中
         tVyicooJinjianService.insert(tVyicooJinjian);
 
         return R.ok();
@@ -142,7 +142,7 @@ public class TVyicooJinjianController {
         if(status != 0) {
             return R.error("进件资料修改失败！");
         }
-        tVyicooJinjian.setStatus(3); // 修改审核中
+        tVyicooJinjian.setVerifyStatus(3); // 修改审核中
         tVyicooJinjianService.updateAllColumnById(tVyicooJinjian);//全部更新
 
         return R.ok();

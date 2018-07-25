@@ -124,6 +124,7 @@ public class TEnchashmentBindingController {
 
         //判断商户默认银行卡号
         List<TEnchashmentBindingEntity> tEnchashmentBindingEntityList = infoByMerchantId(tEnchashmentBinding.getObjectId());
+        tEnchashmentBinding.setRealName(tEnchashmentBinding.getAccountName());
         if (tEnchashmentBinding.getIsDefault() == 0 && tEnchashmentBindingService.selectById(tEnchashmentBinding.getId()).getIsDefault() == 1){
             return R.error(1,"该商户还没有默认提现账号，请将“是否是默认提现账号”修改为“是”");
         }else if(tEnchashmentBinding.getIsDefault() == 1){
