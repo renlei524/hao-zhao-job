@@ -16,5 +16,5 @@ test_job:
   stage: test
   script:
   - echo "Tests run..."
-  - cd /ci/test.sh
-  - gradle test
+  - cd /ci
+  - gradle test.sh

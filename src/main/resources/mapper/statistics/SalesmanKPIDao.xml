@@ -9,8 +9,8 @@
     </resultMap>
 
     <select id="getSalesmanKPI" resultMap="SalesmanKPIMap">
-        SELECT t_sys_user.user_name AS sysUsetName,COUNT(1) AS numBers
-        FROM t_merchant INNER JOIN t_sys_user ON t_merchant.sys_user_id = t_sys_user.user_id WHERE 1=1
+        SELECT t_sys_user.real_name AS sysUsetName,COUNT(1) AS numBers
+        FROM t_merchant LEFT JOIN t_sys_user ON t_merchant.salesman = t_sys_user.user_id WHERE t_sys_user.real_name != ''
         <if test="province != null and province > 0">
             AND t_merchant.province = #{province}
         </if>
@@ -24,12 +24,12 @@
             AND t_merchant.town = #{town}
         </if>
         <if test="sysUserName != null and sysUserName != ''">
-            AND t_sys_user.user_name LIKE CONCAT('%',#{sysUserName},'%')
+            AND t_sys_user.real_name LIKE CONCAT('%',#{sysUserName},'%')
         </if>
         <if test="startTime != null and endTime != null">
             AND t_merchant.create_time BETWEEN #{startTime} AND #{endTime}
         </if>
-        GROUP BY t_merchant.sys_user_id
+        GROUP BY t_merchant.salesman
     </select>
 
 </mapper>

@@ -39,6 +39,7 @@
         <result property="isVoiceFunction" column="is_voice_function"/>
         <result property="remark" column="remark"/>
         <result property="salesman" column="salesman"/>
+        <result property="contractNumber" column="contract_number"/>
 
     </resultMap>
 
@@ -68,7 +69,7 @@
     </select>
 
     <select id="getMerchantByArea" resultMap="merchantMap">
-        select * from t_merchant inner join t_sys_user on t_sys_user.user_id = t_merchant.sys_user_id  where 1=1
+        select * from t_merchant left join t_sys_user on t_merchant.salesman = t_sys_user.user_id  where 1=1
         <if test="province != null and province > 0">
             and province = #{province}
         </if>
@@ -85,7 +86,7 @@
             and merchant_name like CONCAT('%',#{merchantName},'%')
         </if>
         <if test="sysUserName != null and sysUserName != ''">
-            and t_sys_user.user_name like CONCAT('%',#{sysUserName},'%')
+            and t_sys_user.real_name like CONCAT('%',#{sysUserName},'%')
         </if>
         <if test="size != null and size != 0">
             limit #{current},#{size}
@@ -93,7 +94,7 @@
     </select>
 
     <select id="getMerchantByAreaTotal" resultType="Integer">
-        select count(1) from t_merchant inner join t_sys_user on t_sys_user.user_id = t_merchant.sys_user_id  where 1=1
+        select count(1) from t_merchant left join t_sys_user on t_merchant.salesman = t_sys_user.user_id  where 1=1
         <if test="province != null and province > 0">
             and province = #{province}
         </if>
@@ -110,7 +111,7 @@
             and merchant_name like CONCAT('%',#{merchantName},'%')
         </if>
         <if test="sysUserName != null and sysUserName != ''">
-            and t_sys_user.user_name like CONCAT('%',#{sysUserName},'%')
+            and t_sys_user.real_name like CONCAT('%',#{sysUserName},'%')
         </if>
     </select>
 

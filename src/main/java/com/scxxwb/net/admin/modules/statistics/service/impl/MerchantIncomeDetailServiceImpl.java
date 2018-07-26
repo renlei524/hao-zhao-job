@@ -47,15 +47,23 @@ public class MerchantIncomeDetailServiceImpl extends ServiceImpl<MerchantIncomeD
         for (MerchantEntity merchantEntity : merchantEntityList) {
             params.put("merchantId",merchantEntity.getId());
             MerchantIncomeDetailEntity merchantIncomeDetailEntity =baseMapper.getMerchantIncomeDetailBymerchantId(params);
-            if(merchantIncomeDetailEntity != null)
+            if(merchantIncomeDetailEntity == null)
             {
-                merchantIncomeDetailEntity.setMerchantName(merchantEntity.getMerchantName());
-                merchantIncomeDetailEntity.setSysUserName(merchantEntity.getSysUserName());
-                merchantIncomeDetailEntity.setTypeName(merchantEntity.getTypeName());
-                if (merchantIncomeDetailEntity != null) {
-                    merchantIncomeDetailEntityList.add(merchantIncomeDetailEntity);
-                }
+                merchantIncomeDetailEntity = new MerchantIncomeDetailEntity();
+                merchantIncomeDetailEntity.setIncomePen(0);
+                merchantIncomeDetailEntity.setExpenditurePens(0);
             }
+            if (merchantIncomeDetailEntity.getTotalIncome() != null){
+                merchantIncomeDetailEntity.setTotalIncome(merchantIncomeDetailEntity.getTotalIncome() / 100);
+            }
+            if (merchantIncomeDetailEntity.getTotalExpenditure() != null){
+                merchantIncomeDetailEntity.setTotalExpenditure(merchantIncomeDetailEntity.getTotalExpenditure() / 100);
+            }
+            merchantIncomeDetailEntity.setMerchantName(merchantEntity.getMerchantName());
+            merchantIncomeDetailEntity.setSysUserName(merchantEntity.getSalesmanName());
+            merchantIncomeDetailEntity.setTypeName(merchantEntity.getTypeName());
+            merchantIncomeDetailEntity.setCreateTime(merchantEntity.getCreateTime());
+            merchantIncomeDetailEntityList.add(merchantIncomeDetailEntity);
         }
 
         //初始化对象
@@ -66,6 +74,8 @@ public class MerchantIncomeDetailServiceImpl extends ServiceImpl<MerchantIncomeD
         page.setSize(new Query<MerchantIncomeDetailEntity>(params).getPage().getSize());
         //获取页码
         page.setCurrent(new Query<MerchantIncomeDetailEntity>(params).getPage().getCurrent());
+        //获取总页数
+        page.setTotal(merchantService.getMerchantByAreaTotal(params));
 
         return new PageUtils(page);
     }

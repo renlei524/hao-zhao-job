@@ -117,7 +117,8 @@ var vm = new Vue({
             longitude:null,
             remark:null,
             salesman:null,
-            isVoiceFunction:1
+            isVoiceFunction:1,
+            contractNumber:null
         },
         merchantcategory:{
             categoryId:null,

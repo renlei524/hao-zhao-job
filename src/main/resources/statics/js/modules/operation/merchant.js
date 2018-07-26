@@ -190,7 +190,8 @@ var vm = new Vue({
             latitude:null,
             longitude:null,
             salesManName:null,
-            isVoiceFunction:1
+            isVoiceFunction:1,
+            contractNumber: null
         },
         merchantcategory:{
             categoryId:null,
@@ -216,7 +217,7 @@ var vm = new Vue({
 			vm.title = "新增";
 			vm.merchant = {agentId: null,status:0,agentName:null,recommend:true,typeId:null,typeName:null,supportDispatching:0,
                 payChannel:1,address:null,simpleAddress:null, province: -1, city: -1, area: -1, town: -1,
-                commercialName:null, communityName:null, isVoiceFunction: 0};
+                commercialName:null, communityName:null, isVoiceFunction: 0,contractNumber:null};
             vm.twbuser = {id: null,realName:null};
 
             $('#view,#view1,#view2,#view3').css('background', '').css("background", "url(/statics/img/default.png)");
@@ -267,6 +268,10 @@ var vm = new Vue({
             }
             if(vm.merchant.agentName == null || vm.merchant.agentName == ""){
                 alert("分公司不能为空");
+                return true;
+            }
+            if(vm.merchant.contractNumber == null || vm.merchant.contractNumber == ""){
+                alert("合同编号不能为空");
                 return true;
             }
             if(vm.merchant.typeName == null || vm.merchant.typeName == ""){

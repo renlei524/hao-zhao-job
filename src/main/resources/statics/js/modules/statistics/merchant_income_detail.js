@@ -9,11 +9,15 @@ $(function () {
             { label: '商户类型', name: 'typeName', index: 'typeName', width: 80 },
             { label: '注册时间', name: 'createTime', index: 'create_time', width: 80,formatter:function(value,options,row){
                     return new Date(value).Format('yyyy-MM-dd HH:mm:ss');} },
-            { label: '总收入', name: 'totalIncome', index: 'totalIncome', width: 80 },
+            { label: '总收入', name: 'totalIncome', index: 'totalIncome', width: 80 , formatter:'currency', formatoptions:{decimalSeparator:".", thousandsSeparator: ",",
+                    decimalPlaces: 2}},
             { label: '收入笔数', name: 'incomePen', index: 'incomePen', width: 80 },
-            { label: '总支出', name: 'totalExpenditure', index: 'totalExpenditure', width: 80 },
-            { label: '支出笔数', name: 'expenditurePens', index: 'expenditurePens', width: 80 },
-            { label: '余额', name: 'balance', index: 'balance', width: 80 }
+            { label: '总支出', name: 'totalExpenditure', index: 'totalExpenditure', width: 80, formatter:'currency', formatoptions:{decimalSeparator:".", thousandsSeparator: ",",
+                    decimalPlaces: 2}},
+            { label: '支出笔数', name: 'expenditurePens', index: 'expenditurePens', width: 80 }
+            // ,
+            // { label: '余额', name: 'balance', index: 'balance', width: 80 , formatter:'currency', formatoptions:{decimalSeparator:".", thousandsSeparator: ",",
+            //         decimalPlaces: 2}}
         ],
         viewrecords: true,
         height: 385,
@@ -84,7 +88,7 @@ var vm = new Vue({
             var time = $("#startTime-endTime").val().split(" - ");
             vm.q.startTime = time[0];
             vm.q.endTime = time[1];
-            var page = $("#jqGrid").jqGrid('getGridParam','page');
+            // var page = $("#jqGrid").jqGrid('getGridParam','page');
             $("#jqGrid").jqGrid('setGridParam',{
                 //添加传送数据
                 postData:{
@@ -96,7 +100,7 @@ var vm = new Vue({
                     "merchantName" :vm.q.merchantName,
                     "endTime" :vm.q.endTime,
                     "startTime" :vm.q.startTime},
-                page:page
+                page:1
             }).trigger("reloadGrid");
         },
         getProvince: function(){
@@ -222,5 +226,7 @@ layui.use('laydate', function(){
     laydate.render({
         elem: '#startTime-endTime' //指定元素
         ,range: true
+        ,min:"2018-07-24"
+        ,max: 0
     });
 });

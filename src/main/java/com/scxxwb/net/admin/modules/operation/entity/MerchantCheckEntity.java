@@ -235,6 +235,11 @@ public class MerchantCheckEntity implements Serializable {
 	private Integer salesman;
 
 	/**
+	 * 合同编号
+	 */
+	private String contractNumber;
+
+	/**
 	 * 设置：主键id,自动增长,订单表相关的后缀取此字段的最后一位
 	 */
 	public void setId(Integer id) {
@@ -678,5 +683,13 @@ public class MerchantCheckEntity implements Serializable {
 
 	public void setSalesman(Integer salesman) {
 		this.salesman = salesman;
+	}
+
+	public String getContractNumber() {
+		return contractNumber;
+	}
+
+	public void setContractNumber(String contractNumber) {
+		this.contractNumber = contractNumber;
 	}
 }
