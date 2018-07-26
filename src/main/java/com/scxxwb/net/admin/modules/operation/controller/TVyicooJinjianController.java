@@ -128,15 +128,15 @@ public class TVyicooJinjianController {
                 "}";
         tVyicooJinjian.setPayment(payment);
         ValidatorUtils.validateEntity(tVyicooJinjian);
-        Map paramMap = JSONObject.parseObject(JSONObject.toJSONString(tVyicooJinjian));
+//        Map paramMap = JSONObject.parseObject(JSONObject.toJSONString(tVyicooJinjian));
 
-        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/create", basicParam(paramMap), String.class);
-        Map map = JSONObject.parseObject(mapResponseEntity.getBody());
-        Integer status = Integer.parseInt(map.get("status").toString());
-        if(status != 0) {
-            return R.error("进件资料上传失败！");
-        }
-        tVyicooJinjian.setMchId(JSONObject.parseObject(map.get("data").toString()).get("mch_id").toString());
+//        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/create", basicParam(paramMap), String.class);
+//        Map map = JSONObject.parseObject(mapResponseEntity.getBody());
+//        Integer status = Integer.parseInt(map.get("status").toString());
+//        if(status != 0) {
+//            return R.error("进件资料上传失败！");
+//        }
+//        tVyicooJinjian.setMchId(JSONObject.parseObject(map.get("data").toString()).get("mch_id").toString());
         tVyicooJinjian.setVerifyStatus(1); // 创建审核中
         tVyicooJinjianService.insert(tVyicooJinjian);
 
@@ -199,15 +199,15 @@ public class TVyicooJinjianController {
         //转为流
         InputStream inputStream = new ByteArrayInputStream(b);
 
-        MultiValueMap<String, InputStream> postParameters = new LinkedMultiValueMap();
-        postParameters.add("file", inputStream);
-        HttpEntity<MultiValueMap<String, InputStream>> requestEntity = new HttpEntity(postParameters, null);
-        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/common/upload", requestEntity, String.class);
-        Map map = JSONObject.parseObject(mapResponseEntity.getBody());
-        Integer status = Integer.parseInt(map.get("status").toString());
-        if(status != 0){
-            return R.error("微易客上传失败！");
-        }
+//        MultiValueMap<String, InputStream> postParameters = new LinkedMultiValueMap();
+//        postParameters.add("file", inputStream);
+//        HttpEntity<MultiValueMap<String, InputStream>> requestEntity = new HttpEntity(postParameters, null);
+//        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/common/upload", requestEntity, String.class);
+//        Map map = JSONObject.parseObject(mapResponseEntity.getBody());
+//        Integer status = Integer.parseInt(map.get("status").toString());
+//        if(status != 0){
+//            return R.error("微易客上传失败！");
+//        }
 
         Boolean result = FTPUtils.storeFile(url, port, userName, password, vyicooPath, imageName, inputStream);
         if(!result) {

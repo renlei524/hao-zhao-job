@@ -1,5 +1,6 @@
 package com.scxxwb.net.admin.modules.operation.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
@@ -22,9 +23,15 @@ public class TVyicooJinjianServiceImpl extends ServiceImpl<TVyicooJinjianDao, TV
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        boolean flag = StringUtils.isNotBlank((String)params.get(""));
+        //获取查询过滤参数
+        String filter = StringUtils.trim((String)params.get(""));
         Page<TVyicooJinjianEntity> page = this.selectPage(
                 new Query<TVyicooJinjianEntity>(params).getPage(),
                 new EntityWrapper<TVyicooJinjianEntity>()
+                        .or(flag, "name", filter)
+                        .or(flag, "realname", filter)
+                        .or(flag, "mobile", filter)
         );
 
         return new PageUtils(page);

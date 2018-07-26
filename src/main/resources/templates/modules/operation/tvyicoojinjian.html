@@ -82,7 +82,7 @@
                     <div class="modal-body">
                         <div class="col-sm-2 mgtop popWidth">经营类别名称</div>
                         <div class="col-sm-4">
-                            <input type="text" id="bCategoryVal" class="form-control" v-model="q.category" @keyup.enter="bCategoryReload()" placeholder="请输入经营类别名称"/>
+                            <input type="text" id="bCategoryVal" class="form-control" v-model="q.categoryName" @keyup.enter="bCategoryReload()" placeholder="请输入经营类别名称"/>
                         </div>
                         <button type="button" class="btn btn-default" id="bCategoryReload">查询</button>
                     </div>
@@ -203,7 +203,7 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">经营类别</div>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" v-model="tVyicooJinjian.category" placeholder="经营类别" id="" data-toggle="modal" data-target="#bCategory" readonly="readonly" style="cursor:pointer;"/>
+                    <input type="text" id="categoryNameVal" class="form-control" v-model="tVyicooJinjian.category" placeholder="经营类别" id="" data-toggle="modal" data-target="#bCategory" readonly="readonly" style="cursor:pointer;"/>
                 </div>
             </div>
 

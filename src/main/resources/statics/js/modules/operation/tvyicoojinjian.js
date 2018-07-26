@@ -769,7 +769,7 @@ var vm = new Vue({
         });
     });
 
-    //社区 弹出 窗关闭按钮代码 d
+    //经营类型 弹出 窗关闭按钮代码 d
     $("#category-window-close-button").click(function () {
         var rowKey = getCategorySelecteRow();
         if(rowKey == null){
@@ -778,19 +778,19 @@ var vm = new Vue({
         var grid = $("#category");
         var rowKey = grid.getGridParam("selrow");
         var categoryDate =  $("#category").getRowData(rowKey);
-        vm.tVyicooJinjian.bCategoryId = categoryDat.bCateId;
-        vm.tVyicooJinjian.categoryName = categoryDat.name;
-        $("#categoryName").val(categoryDat.name);
+        vm.tVyicooJinjian.bCategoryId = categoryDate.id;
+        vm.tVyicooJinjian.categoryName = categoryDate.category;
+        $("#categoryNameVal").val(categoryDate.category);
         $('#bCategory').modal('hide');
 
     });
 
-    //社区 弹出 窗查询按钮代码 d
+    //经营类型 弹出 窗查询按钮代码 d
     $("#bCategoryReload").click(function () {
         bCategoryReload();
     });
 
-    //社区弹出框重加载代码 d
+    //经营类型 d
     function bCategoryReload() {
         var page = $("#category").jqGrid('getGridParam','page');
         $("#category").jqGrid('setGridParam',{
@@ -799,7 +799,7 @@ var vm = new Vue({
         }).trigger("reloadGrid");
     }
 
-    //社区  弹出窗查询选择条件为一条限制 d
+    //经营类型  弹出窗查询选择条件为一条限制 d
     function getCategorySelecteRow() {
         var grid = $("#category");
         var rowKey = grid.getGridParam("selrow");
@@ -815,7 +815,7 @@ var vm = new Vue({
         return selectedIDs[0];
     }
 
-    $("#categoryName").click(function () {
+    $("#categoryNameVal").click(function () {
         $("#bCategoryVal").val(null);
         bCategoryReload();
     });
