@@ -74,8 +74,6 @@ var vm = new Vue({
                 gbProvinceNo:"0",//省
                 gbCityNo:"0",//市
                 gbDistrictNo:"0",//区
-                photos:'',
-                avatar:null,
                 mchId:null
 
 		    },
@@ -177,7 +175,7 @@ var vm = new Vue({
 			vm.showList = false;
             vm.title = "新增";
             vm.tVyicooJinjian = {merchantId: null,name:null,realname:null,mobile:null,idNo:null,email:null,category:null,
-                licenseType:null, gbProvinceNo: 1, gbCityNo: 0, gbDistrictNo: 0, town:0, isVoiceFunction: 0};
+                licenseType:null, gbProvinceNo: 1, gbCityNo: 0, gbDistrictNo: 0, licenseType:0, isVoiceFunction: 0};
             vm.twbuser = {id: null,realName:null};
 
             $('#view,#view1,#view2,#view3,#view4,#view5').css('background', '').css("background", "url(/statics/img/default.png)");

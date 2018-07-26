@@ -154,7 +154,7 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">联系人手机号</div>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" v-model="tVyicooJinjian.mobile" placeholder="联系人手机号" id="Mobile" @blur="checkTelPhone"/>
+                    <input type="text" class="form-control" v-model="tVyicooJinjian.mobile" placeholder="联系人手机号" id="Mobile" @blur="checkTelPhone" maxlength="11">
                 </div>
                 <div class="col-sm-2 mgtop">
                     <span>{{msgTelPhone}}</span>
@@ -164,7 +164,7 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">身份证号</div>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" v-model="tVyicooJinjian.idNo" placeholder="身份证号" id="idCard" @blur="checkIdCard"/>
+                    <input type="text" class="form-control" v-model="tVyicooJinjian.idNo" placeholder="身份证号" id="idCard" @blur="checkIdCard" maxlength="18"/>
                 </div>
                 <div class="col-sm-2 mgtop">
                     <span>{{msgIdCard}}</span>
@@ -270,7 +270,7 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">开户支行行号</div>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" v-model="tVyicooJinjian.bankNo" placeholder="开户支行行号" id="BankNo" @blur="checkBankNo"/>
+                    <input type="text" class="form-control" v-model="tVyicooJinjian.bankNo" placeholder="开户支行行号" id="BankNo" @blur="checkBankNo" maxlength="19"/>
                 </div>
                 <div class="col-sm-2 mgtop">
                     <span>{{msgBankNo}}</span>
@@ -299,7 +299,7 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">银行预留手机号</div>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" v-model="tVyicooJinjian.accountMobile" placeholder="银行预留手机号" id="AccountMobile" @blur="checkAccountMobile"/>
+                    <input type="text" class="form-control" v-model="tVyicooJinjian.accountMobile" placeholder="银行预留手机号" id="AccountMobile" @blur="checkAccountMobile" maxlength="11"/>
                 </div>
                 <div class="col-sm-2 mgtop">
                     <span>{{msgAccountMobile}}</span>
@@ -335,7 +335,7 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">法人银行卡号</div>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" v-model="tVyicooJinjian.bankcardNo" placeholder="法人银行卡号" @blur="checkBankcardNo" id="BankcardNo"/>
+                    <input type="text" class="form-control" v-model="tVyicooJinjian.bankcardNo" placeholder="法人银行卡号" @blur="checkBankcardNo" id="BankcardNo" maxlength="19"/>
                 </div>
                 <div class="col-sm-2 mgtop">
                     <span>{{msgBankCardNo}}</span>
