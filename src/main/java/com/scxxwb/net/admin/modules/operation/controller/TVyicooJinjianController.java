@@ -96,7 +96,7 @@ public class TVyicooJinjianController {
             Map<String, Object> map = new HashMap<>();
             map.put("merchant_id", type);
             TVyicooJinjianEntity tVyicooJinjian = tVyicooJinjianService.selectByMap(map).get(0);
-            return R.ok().put("tVyicooJinjian", tVyicooJinjian);
+            return R.ok().put("tVyicooJinjian", tVyicooJinjian).put("imageNginxPath", imageNginxPath);
     }
 
     /**
