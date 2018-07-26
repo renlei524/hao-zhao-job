@@ -74,7 +74,13 @@ var vm = new Vue({
                 gbProvinceNo:"0",//省
                 gbCityNo:"0",//市
                 gbDistrictNo:"0",//区
-                mchId:null
+                mchId:null,
+                idFrontPic:null,
+                licencePic:null,
+                idBackPic:null,
+                bankCardPic:null,
+                extraPic1:null,
+                extraPic2:null
 
 		    },
 		    tWBUser:{

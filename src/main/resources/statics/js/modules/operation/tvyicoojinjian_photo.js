@@ -61,8 +61,8 @@ function updeta_img(clipArea,num_1,num_2,file, view, ok, class_name){
                     },
                     type: "post",
                     success: function(r) {
-                        vm.tVyicooJinjian.licence = r.path;
-                        $(view).css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.licence + ')');
+                        vm.tVyicooJinjian.licensePic = r.path;
+                        $(view).css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.licensePic + ')');
                     }
                });
             } else if(clipArea == "#clipArea1") {//身份证正面
@@ -73,8 +73,8 @@ function updeta_img(clipArea,num_1,num_2,file, view, ok, class_name){
                     },
                     type: "post",
                     success: function(r) {
-                        vm.tVyicooJinjian.idCardFontPic = r.path;
-                        $(view).css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.idCardFontPic + ')');
+                        vm.tVyicooJinjian.idFrontPic = r.path;
+                        $(view).css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.idFrontPic + ')');
                     }
               });
             }else if(clipArea == "#clipArea2") {//身份证背面
@@ -85,8 +85,8 @@ function updeta_img(clipArea,num_1,num_2,file, view, ok, class_name){
                      },
                      type: "post",
                      success: function(r) {
-                         vm.tVyicooJinjian.idCardBackPic = r.path;
-                         $(view).css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.idCardBackPic + ')');
+                         vm.tVyicooJinjian.idBackPic = r.path;
+                         $(view).css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.idBackPic + ')');
                      }
                });
              }else if(clipArea == "#clipArea3") {//结算银行卡
@@ -97,8 +97,8 @@ function updeta_img(clipArea,num_1,num_2,file, view, ok, class_name){
                      },
                      type: "post",
                      success: function(r) {
-                         vm.tVyicooJinjian.bankCardPic = r.path;
-                         $(view).css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.bankCardPic + ')');
+                         vm.tVyicooJinjian.bankcardPic = r.path;
+                         $(view).css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.bankcardPic + ')');
                      }
                });
           }else if(clipArea == "#clipArea4") {//结算银行卡
@@ -348,10 +348,10 @@ var imgFile1 = new ImgUploadeFiles('.box2',function(e){
                 },
                 type: "post",
                 success: function(r) {
-                    if(vm.tVyicooJinjian.photos != null && vm.tVyicooJinjian.photos != 'undefined' && vm.tVyicooJinjian.photos != '' && vm.tVyicooJinjian.photos != 'none') {
-                        vm.tVyicooJinjian.photos = vm.tVyicooJinjian.photos + ',' + r.path;
+                    if(vm.tVyicooJinjian.extraPic1 != null && vm.tVyicooJinjian.extraPic1 != 'undefined' && vm.tVyicooJinjian.extraPic1 != '' && vm.tVyicooJinjian.extraPic1 != 'none') {
+                        vm.tVyicooJinjian.extraPic1 = vm.tVyicooJinjian.photos + ',' + r.path;
                     } else {
-                        vm.tVyicooJinjian.photos = r.path;
+                        vm.tVyicooJinjian.extraPic1 = r.path;
                     }
                     $(".imgAll").find("li[data-delid="+ arr[0].delId +"]").find(".imsg").attr("src",  r.imageNginxPath + r.path);
                 }
@@ -361,8 +361,8 @@ var imgFile1 = new ImgUploadeFiles('.box2',function(e){
 });
 
 var deletePhotos = function(photo) {
-    var photos = vm.tVyicooJinjian.photos.split(',');
+    var photos = vm.tVyicooJinjian.extraPic1.split(',');
     var index = photos.indexOf(photo);
     photos.splice(index, 1);
-    vm.tVyicooJinjian.photos = photos.join(',');
+    vm.tVyicooJinjian.extraPic1 = photos.join(',');
 }
