@@ -3,12 +3,12 @@ package com.scxxwb.net.admin.modules.operation.controller;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Wrapper;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -18,6 +18,7 @@ import com.scxxwb.net.admin.common.utils.FTPUtils;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
 import io.swagger.annotations.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -127,13 +128,15 @@ public class TVyicooJinjianController {
                 "}";
         tVyicooJinjian.setPayment(payment);
         ValidatorUtils.validateEntity(tVyicooJinjian);
+        Map paramMap = JSONObject.parseObject(JSONObject.toJSONString(tVyicooJinjian));
 
-        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/create", tVyicooJinjian, String.class);
+        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/create", basicParam(paramMap), String.class);
         Map map = JSONObject.parseObject(mapResponseEntity.getBody());
         Integer status = Integer.parseInt(map.get("status").toString());
         if(status != 0) {
             return R.error("进件资料上传失败！");
         }
+        tVyicooJinjian.setMchId(JSONObject.parseObject(map.get("data").toString()).get("mch_id").toString());
         tVyicooJinjian.setVerifyStatus(1); // 创建审核中
         tVyicooJinjianService.insert(tVyicooJinjian);
 
@@ -148,8 +151,9 @@ public class TVyicooJinjianController {
     @ApiOperation(value = "修改微易客进件", httpMethod = POST)
     public R update(@RequestBody @ApiParam( name = "进件对象", value = "传入json格式", required = true)TVyicooJinjianEntity tVyicooJinjian){
         ValidatorUtils.validateEntity(tVyicooJinjian);
+        Map paramMap = JSONObject.parseObject(JSONObject.toJSONString(tVyicooJinjian));
 
-        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/update", tVyicooJinjian, String.class);
+        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/update", basicParam(paramMap), String.class);
         Map map = JSONObject.parseObject(mapResponseEntity.getBody());
         Integer status = Integer.parseInt(map.get("status").toString());
         if(status != 0) {
@@ -210,5 +214,55 @@ public class TVyicooJinjianController {
             return R.error("公司服务器上传失败！");
         }
         return R.ok().put("path", "/image/" + imageName).put("imageNginxPath", imageNginxPath);
+    }
+
+    public static Map<String,String> basicParam(Map<String,String> param) {
+        param.put("app_id", "1000000067");
+        param.put("nonce_str", UUID.randomUUID().toString().replaceAll("-",""));
+        param.put("version", "1.0");
+        param.put("timestamp", System.currentTimeMillis() + "");
+        param.put("sign", generateSignature(param,"9322948802806deea31a59edcdba31a38fd050dc"));
+        return param;
+    }
+
+    public static String generateSignature(final Map<String, String> data, String key) {
+        Set<String> keySet = data.keySet();
+        String[] keyArray = keySet.toArray(new String[keySet.size()]);
+        Arrays.sort(keyArray);
+        StringBuilder sb = new StringBuilder();
+        for (String k : keyArray) {
+            if (k.equals("sign")) {
+                continue;
+            }
+            if (data.get(k).trim().length() > 0) // 参数值为空，则不参与签名
+                sb.append(k).append("=").append(data.get(k).trim()).append("&");
+        }
+        sb.append("key=").append(key);
+        return MD5(sb.toString()).toUpperCase();
+    }
+    /**
+     * 生成 MD5
+     *
+     * @param data 待处理数据
+     * @return MD5结果
+     */
+    public static String MD5(String data) {
+        MessageDigest md;
+        byte[] array = null;
+        try {
+            md = MessageDigest.getInstance("MD5");
+            try {
+                md.digest(data.getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        StringBuilder sb = new StringBuilder();
+        for (byte item : array) {
+            sb.append(Integer.toHexString((item & 0xFF) | 0x100), 1, 3);
+        }
+        return sb.toString().toUpperCase();
     }
 }

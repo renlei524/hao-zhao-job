@@ -141,7 +141,7 @@ var vm = new Vue({
 });
 
 
-
+var preUrl = null;
 function routerList(router, menuList){
 	for(var key in menuList){
 		var menu = menuList[key];
@@ -158,9 +158,12 @@ function routerList(router, menuList){
 			    $(".treeview-menu li").removeClass("active");
 			    $("a[href='"+url+"']").parents("li").addClass("active");
 			    $("a[href='"+url+"']").unbind("click").click(function() {
-			        window.location.reload();
+			        if(url == preUrl) {
+			            window.location.reload();
+			        }
 			    });
-			    
+                preUrl = url;
+
 			    vm.navTitle = $("a[href='"+url+"']").text();
 			});
 		}

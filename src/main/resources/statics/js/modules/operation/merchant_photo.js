@@ -5,7 +5,7 @@ updeta_img("#clipArea1",428,321,"#file_new1","#view1","#clipBtn1",$('.cover-wrap
 // 身份证背面
 updeta_img("#clipArea2",428,321,"#file_new2","#view2","#clipBtn2",$('.cover-wrap2'));
 //店铺头像
-updeta_img("#clipArea3",92,92,"#file_new3","#view3","#clipBtn3",$('.cover-wrap3'));
+updeta_img("#clipArea3",280,200,"#file_new3","#view3","#clipBtn3",$('.cover-wrap3'));
 // 截图插件
 
 function updeta_img(clipArea,num_1,num_2,file, view, ok, class_name){
