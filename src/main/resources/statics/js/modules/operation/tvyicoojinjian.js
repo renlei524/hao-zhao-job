@@ -64,15 +64,16 @@ var vm = new Vue({
             msgAccountMobile:'',
             tVyicooJinjian: {
                 username:'',
+                type:'',
                 name:'',
                 mobile:'',
                 shortname:'',
                 realname:'',
                 status:0,
-                licenseType:"0",
-                province:"0",//省
-                city:"0",//市
-                area:"0",//区
+                licenseType:0,
+                gbProvinceNo:"0",//省
+                gbCityNo:"0",//市
+                gbDistrictNo:"0",//区
                 photos:'',
                 avatar:null
 
@@ -176,7 +177,7 @@ var vm = new Vue({
 			vm.showList = false;
             vm.title = "新增";
             vm.tVyicooJinjian = {merchantId: null,name:null,realname:null,mobile:null,idNo:null,email:null,category:null,
-                licenseType:null, province: 1, city: 0, area: 0, town:0, isVoiceFunction: 0};
+                licenseType:null, gbProvinceNo: 1, gbCityNo: 0, gbDistrictNo: 0, town:0, isVoiceFunction: 0};
             vm.twbuser = {id: null,realName:null};
 
             $('#view,#view1,#view2,#view3,#view4,#view5').css('background', '').css("background", "url(/statics/img/default.png)");
@@ -193,6 +194,7 @@ var vm = new Vue({
             vm.getInfo(type)
 		},
 		saveOrUpdate: function (event) {
+		    $("#salesMan-window-close-button").blur();
 		    vm.tVyicooJinjian.beginTime = $("#tVyicooJinjian-beginTime").val();
             vm.tVyicooJinjian.endTime = $("#tVyicooJinjian-endTime").val();
 			var url = vm.tVyicooJinjian.type == null ? "operation/tvyicoojinjian/save" : "operation/tvyicoojinjian/update";
@@ -237,6 +239,11 @@ var vm = new Vue({
 			});
 		},
 		verification : function(){
+		    //系统商户
+            /*if(vm.tVyicooJinjian.type == null || vm.tVyicooJinjian.type == ""){
+                alert("系统商户不能为空");
+                return true;
+            }*/
             //商户名称
             if(vm.tVyicooJinjian.name == null || vm.tVyicooJinjian.name == "" ){
                 alert("商户名称不能为空");
@@ -283,14 +290,14 @@ var vm = new Vue({
             }
 
             //省市区
-            if(vm.tVyicooJinjian.province == null || vm.tVyicooJinjian.province == ""){
+            if(vm.tVyicooJinjian.gbProvinceNo == null || vm.tVyicooJinjian.gbProvinceNo == ""){
                 alert("省不能为空");
                 return true;
-            }else if(vm.tVyicooJinjian.city == null || vm.tVyicooJinjian.city == ""){
+            }else if(vm.tVyicooJinjian.gbCityNo == null || vm.tVyicooJinjian.gbCityNo == ""){
                 alert("市不能为空");
                 return true;
             }
-            else if(vm.tVyicooJinjian.area == null || vm.tVyicooJinjian.area == ""){
+            else if(vm.tVyicooJinjian.gbDistrictNo == null || vm.tVyicooJinjian.gbDistrictNo == ""){
                 alert("区不能为空");
                 return true;
             }
@@ -380,7 +387,7 @@ var vm = new Vue({
 
             //公众号
 
-            if(vm.tVyicooJinjian.status){
+            if(vm.tVyicooJinjian.selfAppid == "1"){
                 if(vm.tVyicooJinjian.wxAppid == null || vm.tVyicooJinjian.wxAppid == ""){
                     alert("有公众号必填（公众号主体需同营业执照名称一致");
                     return true;
@@ -417,11 +424,11 @@ var vm = new Vue({
                 $("#userName").val(vm.tVyicooJinjian.username);
             });
         },
-        //加载社区信息
+        //加载经营类型信息
         getbCategory:function() {
             var id = vm.tVyicooJinjian.bCategoryId;
-            $.get(baseURL + "community/community/info/"+id, function(r){
-                vm.tVyicooJinjian.category = r.community.name;
+            $.get(baseURL + "operation/tvyicoojinjian/info/"+id, function(r){
+                vm.tVyicooJinjian.category = r.category.name;
                 $("#categoryName").val(vm.tVyicooJinjian.category);
             });
         },
@@ -431,8 +438,8 @@ var vm = new Vue({
                 vm.tVyicooJinjian = r.tVyicooJinjian;
                 //加载省市区数据
                 vm.getProvince();
-                vm.getCity(vm.tVyicooJinjian.province);
-                vm.getArea(vm.tVyicooJinjian.city);
+                vm.getCity(vm.tVyicooJinjian.gbProvinceNo);
+                vm.getArea(vm.tVyicooJinjian.gbCityNo);
 
                 $("#tVyicooJinjian-beginTime").val(r.tVyicooJinjian.beginTime);
                 $("#tVyicooJinjian-endTime").val(r.tVyicooJinjian.endTime);
@@ -454,7 +461,7 @@ var vm = new Vue({
                 success: function(r){
                     group.append("<option value='1'>--请选择省--</option>");
                     for(var i=0;i<r.areaList.length;i++) {
-                        if(vm.tVyicooJinjian.province == r.areaList[i].areaCode) {
+                        if(vm.tVyicooJinjian.gbProvinceNo == r.areaList[i].areaCode) {
                             group.append("<option value='"+r.areaList[i].areaCode+"' selected>"+r.areaList[i].areaName+"</option>");
                         } else {
                             group.append("<option value='"+r.areaList[i].areaCode+"'>"+r.areaList[i].areaName+"</option>");
@@ -480,7 +487,7 @@ var vm = new Vue({
                         group.empty();
                         group.append("<option value='0'>--请选择市--</option>");
                         for(var i=0;i<r.areaList.length;i++) {
-                            if(vm.tVyicooJinjian.city == r.areaList[i].areaCode) {
+                            if(vm.tVyicooJinjian.gbCityNo == r.areaList[i].areaCode) {
                                 group.append("<option value='"+r.areaList[i].areaCode+"' selected>"+r.areaList[i].areaName+"</option>");
                             } else {
                                 group.append("<option value='"+r.areaList[i].areaCode+"'>"+r.areaList[i].areaName+"</option>");
@@ -507,7 +514,7 @@ var vm = new Vue({
                         group.empty();
                         group.append("<option value='0'>--请选择区--</option>");
                         for(var i=0;i<r.areaList.length;i++) {
-                            if(vm.tVyicooJinjian.area == r.areaList[i].areaCode) {
+                            if(vm.tVyicooJinjian.gbDistrictNo == r.areaList[i].areaCode) {
                                 group.append("<option value='"+r.areaList[i].areaCode+"' selected>"+r.areaList[i].areaName+"</option>");
                             } else {
                                 group.append("<option value='"+r.areaList[i].areaCode+"'>"+r.areaList[i].areaName+"</option>");
@@ -581,9 +588,9 @@ var vm = new Vue({
         vm.selectedProvince =  $("#province").val();
         vm.getCity(vm.selectedProvince);
         vm.getArea(vm.selectedCity);
-        vm.tVyicooJinjian.province = vm.selectedProvince;
-        vm.tVyicooJinjian.city = vm.selectedCity;
-        vm.tVyicooJinjian.area = vm.selectedArea;
+        vm.tVyicooJinjian.gbProvinceNo = vm.selectedProvince;
+        vm.tVyicooJinjian.gbCityNo = vm.selectedCity;
+        vm.tVyicooJinjian.gbDistrictNo = vm.selectedArea;
     });
 
     //市 选择触发事件 d
@@ -592,8 +599,8 @@ var vm = new Vue({
         vm.selectedTown = 0;
         vm.selectedCity = $("#city").val();
         vm.getArea(vm.selectedCity);
-        vm.tVyicooJinjian.city = vm.selectedCity;
-        vm.tVyicooJinjian.area = vm.selectedArea;
+        vm.tVyicooJinjian.gbCityNo = vm.selectedCity;
+        vm.tVyicooJinjian.gbDistrictNo = vm.selectedArea;
 
     });
 
@@ -601,7 +608,7 @@ var vm = new Vue({
     $("#area").change(function(){
         vm.selectedTown = 0;
         vm.selectedArea = $("#area").val();
-        vm.tVyicooJinjian.area = vm.selectedArea;
+        vm.tVyicooJinjian.gbDistrictNo = vm.selectedArea;
     });
 
 
@@ -816,6 +823,7 @@ var vm = new Vue({
     }
 
     $("#categoryNameVal").click(function () {
-        $("#bCategoryVal").val(null);
         bCategoryReload();
+        $("#bCategoryVal").val(null);
+
     });
