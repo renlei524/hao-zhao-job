@@ -1,6 +1,6 @@
 stages:
   - build
-  #- test
+  - test
 
 before_script:
   - echo "Restoring Packages..."
@@ -16,5 +16,5 @@ test_job:
   stage: test
   script:
   - echo "Tests run..."
-  - cd /ci
-  - gradle build
+  #- cd /ci
+  #- gradle build
