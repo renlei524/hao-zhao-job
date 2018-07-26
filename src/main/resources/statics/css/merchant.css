@@ -188,7 +188,25 @@ img{
 }
 /*商户进件*/
 .form-more{
-    width:29%;
+    width:27%;
     display:inline-block;
 }
+.minWidth{
+    min-width:584px;
+}
+.mgtop{
+    margin-top:5px!important;
 
+}
+.mgtop span{
+    color:red!important;
+}
+#gbox_commercialName{
+    margin-left:15px;
+}
+#commercialNamePager_left,#categoryPager_left{
+    width:0!important;
+}
+.popWidth{
+    width:115px;
+}

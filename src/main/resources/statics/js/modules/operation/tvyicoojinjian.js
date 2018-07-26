@@ -43,24 +43,132 @@ $(function () {
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
-		showList: true,
-		title: null,
-		tVyicooJinjian: {
-		    name:'',
-		    shortname:'',
-		    realname:'',
-		    province:"0",//省
-            city:"0",//市
-            area:"0",//区
-            photos:'',
-            avatar:null
-		},
+	    q:{
+            name:'',
+            mobile:'',
+            realname:'',
+            category:'',
+            categoryName:'',
+            status:0
+            },
+		    showList: true,
+            title: null,
+            msgName:'',
+            msgShortName:'',
+            msgRealName:'',
+            msgTelPhone:'',
+            msgIdCard:'',
+            msgEmail:'',
+            msgBankNo:'',
+            msgBankCardNo:'',
+            msgAccountMobile:'',
+            tVyicooJinjian: {
+                username:'',
+                name:'',
+                mobile:'',
+                shortname:'',
+                realname:'',
+                status:0,
+                licenseType:"0",
+                province:"0",//省
+                city:"0",//市
+                area:"0",//区
+                photos:'',
+                avatar:null
+
+		    },
+		    tWBUser:{
+                userId:null,
+                realName:null
+            },
         //新增时联动菜单重置用省、市、区、街道 d
         selectedProvince: -1,
         selectedCity: -1,
         selectedArea: -1
 	},
 	methods: {
+	    checkName: function() {
+            if(vm.tVyicooJinjian.name == "" || vm.tVyicooJinjian.name == null){
+                this.msgName = "*商户名称不能为空";
+            }else if(!( /^[\u4E00-\u9FA5\a-zA-Z0-9_]{4,16}$/.test(document.getElementById('shopName').value))){
+                this.msgName = "*商户名称格式不正确";
+            }else{
+                return this.msgName ="";
+            }
+        },
+        checkShortName: function() {
+            if(vm.tVyicooJinjian.shortname == "" || vm.tVyicooJinjian.shortname == null){
+                this.msgShortName = "*商户简称不能为空";
+            }else if(!( /^[\u4E00-\u9FA5\a-zA-Z0-9_]{4,16}$/.test(document.getElementById('shortName').value))){
+                this.msgShortName = "*商户简称格式不正确";
+            }else{
+                return this.msgShortName ="";
+            }
+        },
+        checkRealName: function() {
+            if(vm.tVyicooJinjian.realname == "" || vm.tVyicooJinjian.realname == null){
+                this.msgRealName = "*商户真实姓名不能为空";
+            }else if(!( /^[\u4E00-\u9FA5\a-zA-Z0-9_]{4,16}$/.test(document.getElementById('realName').value))){
+                this.msgRealName = "*商户真实姓名格式不正确";
+            }else{
+                return this.msgRealName ="";
+            }
+        },
+        checkTelPhone: function() {
+            if(vm.tVyicooJinjian.mobile == "" || vm.tVyicooJinjian.mobile == null){
+                this.msgTelPhone = "*联系人手机号不能为空";
+            }else if(!( /^1[0-9]{10}$/.test(document.getElementById('Mobile').value))){
+                this.msgTelPhone = "*联系人手机号格式不正确";
+            }else{
+                return this.msgTelPhone ="";
+            }
+        },
+        checkIdCard: function() {
+            if(vm.tVyicooJinjian.idNo == "" || vm.tVyicooJinjian.idNo == null){
+                this.msgIdCard = "*身份证号不能为空";
+            }else if(!(/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/.test(document.getElementById('idCard').value))){
+                this.msgIdCard = "*身份证号格式不正确";
+            }else{
+                return this.msgIdCard ="";
+            }
+        },
+        checkEmail: function() {
+            if(vm.tVyicooJinjian.email == "" || vm.tVyicooJinjian.email == null){
+                this.msgEmail = "*联系邮箱不能为空";
+            }else if(!( /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(document.getElementById('Email').value))){
+                this.msgEmail = "*邮箱格式不正确";
+            }else{
+                return this.msgEmail ="";
+            }
+        },
+        checkBankNo: function() {
+            const checkBank = /^([1-9]{1})(\d{14}|\d{18})$/;
+            if(vm.tVyicooJinjian.bankNo == "" || vm.tVyicooJinjian.bankNo == null){
+                this.msgBankNo = "*开户支行行号不能为空";
+            }else if(!(/^([1-9]{1})(\d{14}|\d{18})$/.test(document.getElementById('BankNo').value))){
+                this.msgBankNo = "*开户支行行号格式不正确";
+            }else{
+                return this.msgBankNo ="";
+            }
+        },
+        checkBankcardNo: function() {
+            if(vm.tVyicooJinjian.bankcardNo == "" || vm.tVyicooJinjian.bankcardNo == null){
+                this.msgBankCardNo = "*开户支行行号不能为空";
+            }else if(!(/^([1-9]{1})(\d{14}|\d{18})$/.test(document.getElementById('BankcardNo').value))){
+                this.msgBankCardNo = "*开户支行行号格式不正确";
+            }else{
+                return this.msgBankCardNo ="";
+            }
+        },
+        checkAccountMobile: function() {
+            if(vm.tVyicooJinjian.accountMobile == "" || vm.tVyicooJinjian.accountMobile == null){
+                this.msgAccountMobile = "*银行预留手机号不能为空";
+            }else if(!( /^1[0-9]{10}$/.test(document.getElementById('AccountMobile').value))){
+                this.msgAccountMobile = "*银行预留手机号格式不正确";
+            }else{
+                return this.msgAccountMobile ="";
+            }
+        },
 		query: function () {
 			vm.reload();
 		},
@@ -82,7 +190,6 @@ var vm = new Vue({
 			}
 			vm.showList = false;
             vm.title = "修改";
-            
             vm.getInfo(type)
 		},
 		saveOrUpdate: function (event) {
@@ -204,10 +311,10 @@ var vm = new Vue({
             }
 
             //经营类别
-            if(vm.tVyicooJinjian.category == null || vm.tVyicooJinjian.category == ""){
+            /*if(vm.tVyicooJinjian.category == null || vm.tVyicooJinjian.category == ""){
                 alert("经营类别不能为空");
                 return true;
-            }
+            }*/
 
             //营业执照类型
             if(vm.tVyicooJinjian.licenseType == null || vm.tVyicooJinjian.licenseType == ""){
@@ -292,8 +399,31 @@ var vm = new Vue({
                 alert("法人银行卡号不能为空");
                 return true;
             }
+
+            //照片
+            /*if(src == null || src == ""){
+                alert("上传照片不能为空");
+                return true;
+            }*/
             return false;
 
+        },
+        //获取商户名字信息 d
+        getUserInfo:function(userId) {
+            var id = vm.tVyicooJinjian.userId;
+            $.get(baseURL + "operation/twbuser/info/"+id, function(r){
+                vm.tWBUser = r.tWbUser;
+                vm.tVyicooJinjian.username = r.tWbUser.realName;
+                $("#userName").val(vm.tVyicooJinjian.username);
+            });
+        },
+        //加载社区信息
+        getbCategory:function() {
+            var id = vm.tVyicooJinjian.bCategoryId;
+            $.get(baseURL + "community/community/info/"+id, function(r){
+                vm.tVyicooJinjian.category = r.community.name;
+                $("#categoryName").val(vm.tVyicooJinjian.category);
+            });
         },
 		getInfo: function(type){
 			$.get(baseURL + "operation/tvyicoojinjian/info/"+type, function(r){
@@ -306,6 +436,8 @@ var vm = new Vue({
 
                 $("#tVyicooJinjian-beginTime").val(r.tVyicooJinjian.beginTime);
                 $("#tVyicooJinjian-endTime").val(r.tVyicooJinjian.endTime);
+
+                BussinessCategoryReload();
 
             });
 		},
@@ -500,4 +632,190 @@ var vm = new Vue({
             ,/*type: 'datetime',*/
             value: '2029-12-01'
         });
+    });
+
+    //查询  商户名字  弹出窗代码 d
+    $('#myModal').on('show.bs.modal', function () {
+        $("#commercialName").jqGrid({
+                    url: baseURL + 'operation/twbuser/list',
+                    datatype: "json",
+                    colModel: [
+                        { label: '用户id', name: 'id', hidden:true,fixed:true},
+                        { label: '用户手机号码',fixed:true, name: 'mobile'},
+                        { label: '用户真实姓名',fixed:true, name: 'realName',width: 160},
+                        { label: '用户身份证号码',fixed:true, name: 'idCard' },
+                        { label: '状态', name: 'status',width: 80 ,formatter: function(item, index){
+                                if(item === 0){
+                                    return '<span class="label label-primary">正常</span>';
+                                }
+                                if(item === 1){
+                                    return '<span class="label label-success">异常</span>';
+                                } if(item === 2){
+                                    return '<span class="label label-success">冻结</span>';
+                                }}}
+                    ],
+                    viewrecords: true,
+                    height: 235,
+                    rowNum: 6,
+                    rowList : [6,10,15,20,30,50],
+                    rownumbers: false,
+                    rownumWidth: 45,
+                    autowidth:true,
+                    multiselect: true,
+                    pager: "#commercialNamePager",
+                    jsonReader : {
+                        root: "page.list",
+                        page: "page.currPage",
+                        total: "page.totalPage",
+                        records: "page.totalCount"
+                    },
+                    prmNames : {
+                        page:"page",
+                        rows:"limit",
+                        order: "order"
+                    },
+                    gridComplete:function(){
+                        //隐藏grid底部滚动条
+                        $("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+                    }
+                });
+    });
+
+    //商户弹出窗关闭按钮代码 d
+    $("#window-close-button").click(function () {
+        var rowKey = getSelecteRow();
+        if(rowKey == null){
+            return ;
+        }
+        var grid = $("#commercialName");
+        var rowKey = grid.getGridParam("selrow");
+        var tWBUserDate =  $("#commercialName").getRowData(rowKey);
+        vm.tVyicooJinjian.userId = tWBUserDate.id;
+        vm.tVyicooJinjian.commercialName = tWBUserDate.realName;
+        $("#userName").val(tWBUserDate.realName);
+        $('#myModal').modal('hide');
+    });
+
+    //商户弹出窗查询按钮代码 d
+    $("#commercialNameReload").click(function () {
+        commercialNameReload();
+    });
+
+    //商户弹出框重加载代码 d
+    function commercialNameReload() {
+        var page = $("#commercialName").jqGrid('getGridParam','page');
+        $("#commercialName").jqGrid('setGridParam',{
+            postData:{'realName':vm.q.tWBUserName},
+            page:1
+        }).trigger("reloadGrid");
+    }
+    //商户弹出窗查询选择条件为一条限制 d
+    function getSelecteRow() {
+        var grid = $("#commercialName");
+        var rowKey = grid.getGridParam("selrow");
+        if(!rowKey){
+            alert("请选择一条记录");
+            return ;
+        }
+        var selectedIDs = grid.getGridParam("selarrrow");
+        if(selectedIDs.length > 1){
+            alert("只能选择一条记录");
+            return ;
+        }
+        return selectedIDs[0];
+    }
+
+    $("#userName").click(function () {
+        $("#qTWBUserNameSearch").val(null);
+        commercialNameReload();
+    });
+
+
+    //经营类型  弹出窗代码
+    $('#bCategory').on('shown.bs.modal', function () {
+    // $(function () {
+        $("#category").jqGrid({
+            url: baseURL + 'operation/tvyicoocategory/list',
+            datatype: "json",
+            colModel: [
+                { label: '经营类别ID', name: 'bCateId', hidden:true},
+                { label: '经营类别', name: 'category' },
+
+            ],
+            viewrecords: true,
+            height: 235,
+            rowNum: 6,
+            rowList : [10,15,20,30,50],
+            rownumbers: false,
+            rownumWidth: 35,
+            autowidth:true,
+            multiselect: true,
+            pager: "#categoryPager",
+            jsonReader : {
+                root: "page.list",
+                page: "page.currPage",
+                total: "page.totalPage",
+                records: "page.totalCount"
+            },
+            prmNames : {
+                page:"page",
+                rows:"limit",
+                order: "order"
+            },
+            gridComplete:function(){
+                //隐藏grid底部滚动条
+                $("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+            }
+        });
+    });
+
+    //社区 弹出 窗关闭按钮代码 d
+    $("#category-window-close-button").click(function () {
+        var rowKey = getCategorySelecteRow();
+        if(rowKey == null){
+            return ;
+        }
+        var grid = $("#category");
+        var rowKey = grid.getGridParam("selrow");
+        var categoryDate =  $("#category").getRowData(rowKey);
+        vm.tVyicooJinjian.bCategoryId = categoryDat.bCateId;
+        vm.tVyicooJinjian.categoryName = categoryDat.name;
+        $("#categoryName").val(categoryDat.name);
+        $('#bCategory').modal('hide');
+
+    });
+
+    //社区 弹出 窗查询按钮代码 d
+    $("#bCategoryReload").click(function () {
+        bCategoryReload();
+    });
+
+    //社区弹出框重加载代码 d
+    function bCategoryReload() {
+        var page = $("#category").jqGrid('getGridParam','page');
+        $("#category").jqGrid('setGridParam',{
+            postData:{'categoryName':vm.q.categoryName},
+            page:1
+        }).trigger("reloadGrid");
+    }
+
+    //社区  弹出窗查询选择条件为一条限制 d
+    function getCategorySelecteRow() {
+        var grid = $("#category");
+        var rowKey = grid.getGridParam("selrow");
+        if(!rowKey){
+            alert("请选择一条记录");
+            return ;
+        }
+        var selectedIDs = grid.getGridParam("selarrrow");
+        if(selectedIDs.length > 1){
+            alert("只能选择一条记录");
+            return ;
+        }
+        return selectedIDs[0];
+    }
+
+    $("#categoryName").click(function () {
+        $("#bCategoryVal").val(null);
+        bCategoryReload();
     });
