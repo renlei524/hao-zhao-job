@@ -349,7 +349,7 @@ var imgFile1 = new ImgUploadeFiles('.box2',function(e){
                 type: "post",
                 success: function(r) {
                     if(vm.tVyicooJinjian.extraPic1 != null && vm.tVyicooJinjian.extraPic1 != 'undefined' && vm.tVyicooJinjian.extraPic1 != '' && vm.tVyicooJinjian.extraPic1 != 'none') {
-                        vm.tVyicooJinjian.extraPic1 = vm.tVyicooJinjian.photos + ',' + r.path;
+                        vm.tVyicooJinjian.extraPic1 = vm.tVyicooJinjian.extraPic1 + ',' + r.path;
                     } else {
                         vm.tVyicooJinjian.extraPic1 = r.path;
                     }

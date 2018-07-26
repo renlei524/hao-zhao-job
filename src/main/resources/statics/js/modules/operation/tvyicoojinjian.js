@@ -51,6 +51,7 @@ var vm = new Vue({
             categoryName:'',
             status:0
             },
+            roleList:{},
 		    showList: true,
             title: null,
             msgName:'',
@@ -63,6 +64,7 @@ var vm = new Vue({
             msgBankCardNo:'',
             msgAccountMobile:'',
             tVyicooJinjian: {
+                merchantId:'',
                 username:'',
                 type:'',
                 name:'',
@@ -71,9 +73,9 @@ var vm = new Vue({
                 realname:'',
                 status:0,
                 licenseType:0,
-                gbProvinceNo:"0",//省
-                gbCityNo:"0",//市
-                gbDistrictNo:"0",//区
+                gbProvinceNo:'',//省
+                gbCityNo:'',//市
+                gbDistrictNo:'',//区
                 mchId:null,
                 idFrontPic:null,
                 licencePic:null,
@@ -187,37 +189,21 @@ var vm = new Vue({
             $('#view,#view1,#view2,#view3,#view4,#view5').css('background', '').css("background", "url(/statics/img/default.png)");
             $('.imgAll>ul').empty();
             vm.getProvince();
+            vm.getCity(-1);
+            vm.getArea(-1);
 		},
 		update: function (event) {
-			var type = getSelectedRow();
-			if(type == null){
-				return ;
-			}
-			vm.showList = false;
-            vm.title = "修改";
-            vm.getInfo(type)
+			var merchantData = $("#jqGrid").getRowData();
+               if(merchantData == null){
+                  return ;
+               }
+             var merchantId = merchantData[0].merchantId;
+             vm.showList = false;
+             vm.title = "修改";
+             vm.getInfo(merchantId);
+
 		},
-		saveOrUpdate: function (event) {
-		    $("#salesMan-window-close-button").blur();
-		    vm.tVyicooJinjian.beginTime = $("#tVyicooJinjian-beginTime").val();
-            vm.tVyicooJinjian.endTime = $("#tVyicooJinjian-endTime").val();
-			var url = vm.tVyicooJinjian.mchId == null ? "operation/tvyicoojinjian/save" : "operation/tvyicoojinjian/update";
-			$.ajax({
-				type: "POST",
-			    url: baseURL + url,
-                contentType: "application/json",
-			    data: JSON.stringify(vm.tVyicooJinjian),
-			    success: function(r){
-			    	if(r.code === 0){
-						alert('操作成功', function(index){
-							vm.reload();
-						});
-					}else{
-						alert(r.msg);
-					}
-				}
-			});
-		},
+
 		del: function (event) {
 			var types = getSelectedRows();
 			if(types == null){
@@ -441,16 +427,48 @@ var vm = new Vue({
                 var imageNginxPath = r.imageNginxPath;
                 vm.tVyicooJinjian = r.tVyicooJinjian;
                 //加载省市区数据
-                vm.getProvince();
-                vm.getCity(vm.tVyicooJinjian.gbProvinceNo);
-                vm.getArea(vm.tVyicooJinjian.gbCityNo);
+
+                vm.getProvince(vm.tVyicooJinjian.gbProvinceNo);
+                vm.getCity(vm.tVyicooJinjian.gbCityNo);
+                vm.getArea(vm.tVyicooJinjian.gbDistrictNo);
 
                 $("#tVyicooJinjian-beginTime").val(r.tVyicooJinjian.beginTime);
                 $("#tVyicooJinjian-endTime").val(r.tVyicooJinjian.endTime);
 
-                BussinessCategoryReload();
+                /*BussinessCategoryReload();*/
 
-            });
+                if(vm.tVyicooJinjian.licensePic  != null && vm.tVyicooJinjian.licensePic  != 'undefined' && vm.tVyicooJinjian.licensePic  != '' && vm.tVyicooJinjian.licensePic  != 'none') {
+                    $('#view').css('background', 'url(' + imageNginxPath + vm.tVyicooJinjian.licensePic  + ')');
+                }
+                if(vm.tVyicooJinjian.idFrontPic  != null && vm.tVyicooJinjian.idFrontPic  != 'undefined' && vm.tVyicooJinjian.idFrontPic  != '' && vm.tVyicooJinjian.idFrontPic  != 'none') {
+                    $('#view1').css('background', 'url(' + imageNginxPath + vm.tVyicooJinjian.idFrontPic  + ')');
+                }
+                if(vm.tVyicooJinjian.idBackPic != null && vm.tVyicooJinjian.idBackPic != 'undefined' && vm.tVyicooJinjian.idBackPic != '' && vm.tVyicooJinjian.idBackPic != 'none') {
+                    $('#view2').css('background', 'url(' + imageNginxPath + vm.tVyicooJinjian.idBackPic + ')');
+                }
+                if(vm.tVyicooJinjian.bankcardPic != null && vm.tVyicooJinjian.bankcardPic != 'undefined' && vm.tVyicooJinjian.bankcardPic != '' && vm.tVyicooJinjian.bankcardPic != 'none') {
+                    $('#view3').css('background', 'url(' + imageNginxPath + vm.tVyicooJinjian.bankcardPic + ')');
+                }
+                if(vm.tVyicooJinjian.shopPic != null && vm.tVyicooJinjian.shopPic != 'undefined' && vm.tVyicooJinjian.shopPic != '' && vm.tVyicooJinjian.shopPic != 'none') {
+                    $('#view4').css('background', 'url(' + imageNginxPath + vm.tVyicooJinjian.shopPic + ')');
+                }
+                if(vm.tVyicooJinjian.extraPic2 != null && vm.tVyicooJinjian.extraPic2 != 'undefined' && vm.tVyicooJinjian.extraPic2 != '' && vm.tVyicooJinjian.extraPic2 != 'none') {
+                    $('#view5').css('background', 'url(' + imageNginxPath + vm.tVyicooJinjian.extraPic2 + ')');
+                }
+                if(vm.tVyicooJinjian.extraPic1 != null && vm.tVyicooJinjian.extraPic1 != 'undefined' && vm.tVyicooJinjian.extraPic1 != '' && vm.tVyicooJinjian.extraPic1 != 'none') {
+                    var photosPath = vm.tVyicooJinjian.extraPic1.split(',');
+                    var photosEelements = $('.imgAll>ul');
+                    photosEelements.empty();
+                    for(var i = 0; i < photosPath.length; i++) {
+                        photosEelements.append(
+                            '<li data-delid="' + i + '" data-delname="' + imageNginxPath + photosPath[i] + '">' +
+                                '<img src="' + imageNginxPath + photosPath[i] + '" alt="" class="imsg">' +
+                                '<i class="delImg">X</i>' +
+                            '</li>'
+                        );
+                    }
+                };
+		})
 		},
 		//加载省下拉框 d
         getProvince: function(){
@@ -561,6 +579,7 @@ var vm = new Vue({
                     var areaIndex=document.getElementById("area").selectedIndex;
                     areaName = document.getElementById("area").options[areaIndex].innerHTML;
                 }
+
                 $.ajax({
                     type: "POST",
                     url: baseURL + url,
