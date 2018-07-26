@@ -76,22 +76,6 @@ var menu_setting = {
 };
 
 //部门结构树
-var dept_ztree;
-var dept_setting = {
-    data: {
-        simpleData: {
-            enable: true,
-            idKey: "deptId",
-            pIdKey: "parentId",
-            rootPId: -1
-        },
-        key: {
-            url:"nourl"
-        }
-    }
-};
-
-//数据树
 var data_ztree;
 var data_setting = {
     data: {
@@ -135,8 +119,6 @@ var vm = new Vue({
             vm.role = {deptName:null, deptId:null};
             vm.getMenuTree(null);
 
-            vm.getDept();
-
             vm.getDataTree();
             window.onload = function (){
               document.body.onkeydown=function(event){
@@ -156,8 +138,6 @@ var vm = new Vue({
             vm.title = "修改";
             vm.getDataTree();
             vm.getMenuTree(roleId);
-
-            vm.getDept();
         },
         del: function () {
             var roleIds = getSelectedRows();
@@ -200,8 +180,6 @@ var vm = new Vue({
                     var node = data_ztree.getNodeByParam("deptId", deptIds[i]);
                     data_ztree.checkNode(node, true, false);
                 }
-
-                vm.getDept();
             });
         },
         verification : function(){
@@ -273,7 +251,12 @@ var vm = new Vue({
             $.get(baseURL + "sys/menu/list", function(r){
                 menu_ztree = $.fn.zTree.init($("#menuTree"), menu_setting, r);
                 //展开所有节点
-                menu_ztree.expandAll(true);
+                //menu_ztree.expandAll(true);
+                //展开二级节点
+                var nodes = menu_ztree.getNodes();
+                for (var i = 0; i < nodes.length; i++) { //设置节点展开
+                    menu_ztree.expandNode(nodes[i], true, false, true);
+                }
 
                 if(roleId != null){
                     vm.getRole(roleId);
@@ -281,24 +264,17 @@ var vm = new Vue({
             });
         },
         getDataTree: function(roleId) {
-            //加载菜单树
+            //加载部门树
             $.get(baseURL + "sys/dept/list", function(r){
                 data_ztree = $.fn.zTree.init($("#dataTree"), data_setting, r);
                 //展开所有节点
-                data_ztree.expandAll(true);
-            });
-        },
-        getDept: function(){
-            //加载部门树
-            $.get(baseURL + "sys/dept/list", function(r){
-                dept_ztree = $.fn.zTree.init($("#deptTree"), dept_setting, r);
-                var node = dept_ztree.getNodeByParam("deptId", vm.role.deptId);
-                if(node != null){
-                    dept_ztree.selectNode(node);
-
-                    vm.role.deptName = node.name;
+                //data_ztree.expandAll(true);
+                //展开二级节点
+                var nodes = data_ztree.getNodes();
+                for (var i = 0; i < nodes.length; i++) { //设置节点展开
+                    data_ztree.expandNode(nodes[i], true, false, true);
                 }
-            })
+            });
         },
         deptTree: function(){
             layer.open({
