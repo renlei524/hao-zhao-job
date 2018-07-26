@@ -75,7 +75,8 @@ var vm = new Vue({
                 gbCityNo:"0",//市
                 gbDistrictNo:"0",//区
                 photos:'',
-                avatar:null
+                avatar:null,
+                mchId:null
 
 		    },
 		    tWBUser:{
@@ -143,7 +144,6 @@ var vm = new Vue({
             }
         },
         checkBankNo: function() {
-            const checkBank = /^([1-9]{1})(\d{14}|\d{18})$/;
             if(vm.tVyicooJinjian.bankNo == "" || vm.tVyicooJinjian.bankNo == null){
                 this.msgBankNo = "*开户支行行号不能为空";
             }else if(!(/^([1-9]{1})(\d{14}|\d{18})$/.test(document.getElementById('BankNo').value))){
@@ -197,7 +197,7 @@ var vm = new Vue({
 		    $("#salesMan-window-close-button").blur();
 		    vm.tVyicooJinjian.beginTime = $("#tVyicooJinjian-beginTime").val();
             vm.tVyicooJinjian.endTime = $("#tVyicooJinjian-endTime").val();
-			var url = vm.tVyicooJinjian.type == null ? "operation/tvyicoojinjian/save" : "operation/tvyicoojinjian/update";
+			var url = vm.tVyicooJinjian.mchId == null ? "operation/tvyicoojinjian/save" : "operation/tvyicoojinjian/update";
 			$.ajax({
 				type: "POST",
 			    url: baseURL + url,
@@ -697,8 +697,8 @@ var vm = new Vue({
         var grid = $("#commercialName");
         var rowKey = grid.getGridParam("selrow");
         var tWBUserDate =  $("#commercialName").getRowData(rowKey);
-        vm.tVyicooJinjian.userId = tWBUserDate.id;
-        vm.tVyicooJinjian.commercialName = tWBUserDate.realName;
+        // vm.tVyicooJinjian.userId = tWBUserDate.id;
+        vm.tVyicooJinjian.merchantId = tWBUserDate.id;
         $("#userName").val(tWBUserDate.realName);
         $('#myModal').modal('hide');
     });
@@ -785,8 +785,8 @@ var vm = new Vue({
         var grid = $("#category");
         var rowKey = grid.getGridParam("selrow");
         var categoryDate =  $("#category").getRowData(rowKey);
-        vm.tVyicooJinjian.bCategoryId = categoryDate.id;
-        vm.tVyicooJinjian.categoryName = categoryDate.category;
+        // vm.tVyicooJinjian.bCategoryId = categoryDate.id;
+        vm.tVyicooJinjian.category = categoryDate.category;
         $("#categoryNameVal").val(categoryDate.category);
         $('#bCategory').modal('hide');
 

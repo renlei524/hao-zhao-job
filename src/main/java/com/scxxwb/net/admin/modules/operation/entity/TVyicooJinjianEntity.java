@@ -21,9 +21,14 @@ public class TVyicooJinjianEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * 商户id
+	 */
+	@ApiModelProperty(value = "商户id", required = true)
+	private Integer merchantId;
+
+	/**
 	 * 商户类型 1：企业 2：个体工商户
 	 */
-	@TableId
 	@ApiModelProperty(value = "商户类型", name = "type", required = true)
 	private String type;
 	/**
@@ -207,11 +212,6 @@ public class TVyicooJinjianEntity implements Serializable {
 	 */
 	@ApiModelProperty(value = "商户进件状态 0：申请中， 1：启用 2 : 认证中 3：失败 4：处理中")
 	private Integer verifyStatus;
-	/**
-	 * 商户id
-	 */
-	@ApiModelProperty(value = "商户id", required = true)
-	private Integer merchantId;
 
 	/**
 	 * 设置：商户类型 1：企业 2：个体工商户

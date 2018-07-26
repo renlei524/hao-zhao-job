@@ -112,10 +112,10 @@
                 <div class="col-sm-2 control-label">商户类型</div>
                 <div class="col-sm-4">
                     <label class="radio-inline radio-inline-hide">
-                        <input type="radio" name="type" value="5" v-model="tVyicooJinjian.type" checked/> 企业
+                        <input type="radio" name="type" value="1" v-model="tVyicooJinjian.type" checked/> 企业
                     </label>
                     <label class="radio-inline radio-inline-show">
-                        <input type="radio" name="type" v-model="tVyicooJinjian.type"/> 个体工商户
+                        <input type="radio" name="type" value="2" v-model="tVyicooJinjian.type"/> 个体工商户
                     </label>
                 </div>
             </div>
@@ -203,7 +203,7 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">经营类别</div>
                 <div class="col-sm-4">
-                    <input type="text" id="categoryNameVal" class="form-control" placeholder="经营类别" id="" data-toggle="modal" data-target="#bCategory" readonly="readonly" style="cursor:pointer;"/>
+                    <input type="text" v-model="tVyicooJinjian.category" id="categoryNameVal" class="form-control" placeholder="经营类别" id="" data-toggle="modal" data-target="#bCategory" readonly="readonly" style="cursor:pointer;"/>
                 </div>
             </div>
 
@@ -281,10 +281,10 @@
                 <div class="col-sm-2 control-label">帐户类型</div>
                 <div class="col-sm-4">
                     <label class="radio-inline radio-inline-hide">
-                        <input type="radio" name="accountType"  v-model="tVyicooJinjian.accountType"/> 对私
+                        <input type="radio" name="accountType" value="0" v-model="tVyicooJinjian.accountType"/> 对私
                     </label>
                     <label class="radio-inline radio-inline-show">
-                        <input type="radio" name="accountType" v-model="tVyicooJinjian.accountType"/> 对公
+                        <input type="radio" name="accountType" value="1" v-model="tVyicooJinjian.accountType"/> 对公
                     </label>
                 </div>
             </div>
@@ -310,10 +310,10 @@
                 <div class="col-sm-2 control-label">有无公众号</div>
                 <div class="col-sm-4">
                     <label class="radio-inline radio-inline-hide">
-                        <input type="radio" name="selfAppid"  v-model="tVyicooJinjian.selfAppid"/> 有公众号
+                        <input type="radio" name="selfAppid" value="1" v-model="tVyicooJinjian.selfAppid"/> 有公众号
                     </label>
                     <label class="radio-inline radio-inline-show">
-                        <input type="radio" name="selfAppid" v-model="tVyicooJinjian.selfAppid"/> 无公众号
+                        <input type="radio" name="selfAppid" value="2" v-model="tVyicooJinjian.selfAppid"/> 无公众号
                     </label>
                 </div>
             </div>
