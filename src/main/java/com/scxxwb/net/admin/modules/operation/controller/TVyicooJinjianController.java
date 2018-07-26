@@ -93,9 +93,10 @@ public class TVyicooJinjianController {
 //            @PathVariable("type") String type
             @ApiParam(value = "type", required = true) @PathVariable String type
         ){
-        TVyicooJinjianEntity tVyicooJinjian = tVyicooJinjianService.selectById(type);
-
-        return R.ok().put("tVyicooJinjian", tVyicooJinjian);
+            Map<String, Object> map = new HashMap<>();
+            map.put("merchant_id", type);
+            TVyicooJinjianEntity tVyicooJinjian = tVyicooJinjianService.selectByMap(map).get(0);
+            return R.ok().put("tVyicooJinjian", tVyicooJinjian);
     }
 
     /**
@@ -153,12 +154,13 @@ public class TVyicooJinjianController {
         ValidatorUtils.validateEntity(tVyicooJinjian);
         Map paramMap = JSONObject.parseObject(JSONObject.toJSONString(tVyicooJinjian));
 
-        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/update", basicParam(paramMap), String.class);
-        Map map = JSONObject.parseObject(mapResponseEntity.getBody());
-        Integer status = Integer.parseInt(map.get("status").toString());
-        if(status != 0) {
-            return R.error("进件资料修改失败！");
-        }
+//        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/update", basicParam(paramMap), String.class);
+//        Map map = JSONObject.parseObject(mapResponseEntity.getBody());
+//        Integer status = Integer.parseInt(map.get("status").toString());
+//        if(status != 0) {
+//            return R.error("进件资料修改失败！");
+//        }
+
         tVyicooJinjian.setVerifyStatus(3); // 修改审核中
         tVyicooJinjianService.updateAllColumnById(tVyicooJinjian);//全部更新
 
