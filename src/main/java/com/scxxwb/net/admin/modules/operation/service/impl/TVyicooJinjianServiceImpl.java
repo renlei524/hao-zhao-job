@@ -23,15 +23,15 @@ public class TVyicooJinjianServiceImpl extends ServiceImpl<TVyicooJinjianDao, TV
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        boolean flag = StringUtils.isNotBlank((String)params.get(""));
+        boolean flag = StringUtils.isNotBlank((String)params.get("name"));
         //获取查询过滤参数
-        String filter = StringUtils.trim((String)params.get(""));
+        String filter = StringUtils.trim((String)params.get("name"));
         Page<TVyicooJinjianEntity> page = this.selectPage(
                 new Query<TVyicooJinjianEntity>(params).getPage(),
                 new EntityWrapper<TVyicooJinjianEntity>()
-                        .or(flag, "name", filter)
-                        .or(flag, "realname", filter)
-                        .or(flag, "mobile", filter)
+                        .like(flag, "name", filter)
+                        .or().like(flag, "realname", filter)
+                        .or().like(flag, "mobile", filter)
         );
 
         return new PageUtils(page);
