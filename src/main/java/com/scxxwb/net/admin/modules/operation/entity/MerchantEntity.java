@@ -248,10 +248,10 @@ public class MerchantEntity implements Serializable {
 	@TableField(exist=false)
 	private String salesmanName;
 
-	/**
-	 * 合同编号
-	 */
-	@NotNull(message="合同编号不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    /**
+     * 合同编号
+     */
+    @NotNull(message="合同编号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String contractNumber;
 
 	/**
