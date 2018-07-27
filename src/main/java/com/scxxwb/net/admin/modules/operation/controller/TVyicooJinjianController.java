@@ -93,9 +93,8 @@ public class TVyicooJinjianController {
 //            @PathVariable("type") String type
             @ApiParam(value = "type", required = true) @PathVariable String type
         ){
-            Map<String, Object> map = new HashMap<>();
-            map.put("merchant_id", type);
-            TVyicooJinjianEntity tVyicooJinjian = tVyicooJinjianService.selectByMap(map).get(0);
+
+            TVyicooJinjianEntity tVyicooJinjian = tVyicooJinjianService.selectById(type);
             return R.ok().put("tVyicooJinjian", tVyicooJinjian).put("imageNginxPath", imageNginxPath);
     }
 

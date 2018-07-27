@@ -19,13 +19,17 @@ import java.util.Date;
 @TableName("t_vyicoo_jinjian")
 public class TVyicooJinjianEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 *
+	 * 主键id自增
+	 */
+	@TableId
+	private Integer Id;
 	/**
 	 * 商户id
 	 */
 	@ApiModelProperty(value = "商户id", required = true)
 	private Integer merchantId;
-
 	/**
 	 * 商户类型 1：企业 2：个体工商户
 	 */
@@ -668,5 +672,13 @@ public class TVyicooJinjianEntity implements Serializable {
 	 */
 	public Integer getMerchantId() {
 		return merchantId;
+	}
+
+	public Integer getId() {
+		return Id;
+	}
+
+	public void setId(Integer id) {
+		Id = id;
 	}
 }
