@@ -469,8 +469,15 @@ var vm = new Vue({
                             '</li>'
                         );
                     }
+                    $('.imgAll>ul>li>.delImg').off().on('click',function(){
+                        var src = $(this).prev().attr('src');
+                        deletePhotos(src);
+                        $(this).parent().fadeOut('slow',function(){
+                            $(this).remove();
+                        });
+                    })
                 };
-		})
+		    })
 		},
 		//加载省下拉框 d
         getProvince: function(){
