@@ -3,7 +3,8 @@ $(function () {
         url: baseURL + 'operation/tvyicoojinjian/list',
         datatype: "json",
         colModel: [
-            { label: '商户id', name: 'merchantId', width: 80 , hidden:true},
+            { label: '主键id', name: 'id', width: 80 , hidden:true},
+            /*{ label: '商户id', name: 'merchantId', width: 80 , hidden:true},*/
             { label: '商户名称', name: 'name',index: 'name',width: 80 },
             { label: '真实姓名', name: 'realname', index: 'realname', width: 80 },
             { label: '联系人手机号', name: 'mobile', index: 'mobile', width: 80 },
@@ -64,7 +65,8 @@ var vm = new Vue({
             msgBankCardNo:'',
             msgAccountMobile:'',
             tVyicooJinjian: {
-                merchantId:'',
+                id:'',
+            //  merchantId:'',
                 username:'',
                 type:'',
                 name:'',
@@ -197,14 +199,10 @@ var vm = new Vue({
                 if(id == null){
                     return ;
                 }
-			var merchantData = $("#jqGrid").getRowData();
-               if(merchantData == null){
-                  return ;
-               }
-             var merchantId = merchantData[0].merchantId;
+
              vm.showList = false;
              vm.title = "修改";
-             vm.getInfo(merchantId);
+             vm.getInfo(id);
 
 		},
 
@@ -558,8 +556,8 @@ var vm = new Vue({
             }).trigger("reloadGrid");
 		},
 		saveOrUpdate: function (event) {
-		    vm.tVyicooJinjian.licenseStartDate = $("#tVyicooJinjian-beginTime").val();
-            vm.tVyicooJinjian.licenseEndDate = $("#tVyicooJinjian-endTime").val();
+		    vm.tVyicooJinjian.licenseStartDate = $("#tVyicooJinjian-beginTime").text();
+            vm.tVyicooJinjian.licenseEndDate = $("#tVyicooJinjian-endTime").text();
             $("#salesMan-window-close-button").blur();
             if(vm.verification()){
                 return;
@@ -725,7 +723,8 @@ var vm = new Vue({
         var rowKey = grid.getGridParam("selrow");
         var tWBUserDate =  $("#commercialName").getRowData(rowKey);
         // vm.tVyicooJinjian.userId = tWBUserDate.id;
-        vm.tVyicooJinjian.merchantId = tWBUserDate.id;
+        //vm.tVyicooJinjian.merchantId = tWBUserDate.id;
+        vm.tVyicooJinjian.id = tWBUserDate.id;
         $("#userName").val(tWBUserDate.realName);
         $('#myModal').modal('hide');
     });
