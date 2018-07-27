@@ -193,6 +193,10 @@ var vm = new Vue({
             vm.getArea(-1);
 		},
 		update: function (event) {
+		    var id = getSelectedRow();
+                if(id == null){
+                    return ;
+                }
 			var merchantData = $("#jqGrid").getRowData();
                if(merchantData == null){
                   return ;
@@ -422,13 +426,13 @@ var vm = new Vue({
                 $("#categoryName").val(vm.tVyicooJinjian.category);
             });
         },
-		getInfo: function(type){
-			$.get(baseURL + "operation/tvyicoojinjian/info/"+type, function(r){
+		getInfo: function(merchantId){
+			$.get(baseURL + "operation/tvyicoojinjian/info/"+merchantId, function(r){
                 var imageNginxPath = r.imageNginxPath;
                 vm.tVyicooJinjian = r.tVyicooJinjian;
                 //加载省市区数据
 
-                vm.getProvince(vm.tVyicooJinjian.gbProvinceNo);
+                vm.getProvince();
                 vm.getCity(vm.tVyicooJinjian.gbCityNo);
                 vm.getArea(vm.tVyicooJinjian.gbDistrictNo);
 
@@ -438,22 +442,22 @@ var vm = new Vue({
                 /*BussinessCategoryReload();*/
 
                 if(vm.tVyicooJinjian.licensePic  != null && vm.tVyicooJinjian.licensePic  != 'undefined' && vm.tVyicooJinjian.licensePic  != '' && vm.tVyicooJinjian.licensePic  != 'none') {
-                    $('#view').css('background', 'url(' + imageNginxPath + vm.tVyicooJinjian.licensePic  + ')');
+                    $('#view').css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.licensePic  + ')');
                 }
                 if(vm.tVyicooJinjian.idFrontPic  != null && vm.tVyicooJinjian.idFrontPic  != 'undefined' && vm.tVyicooJinjian.idFrontPic  != '' && vm.tVyicooJinjian.idFrontPic  != 'none') {
-                    $('#view1').css('background', 'url(' + imageNginxPath + vm.tVyicooJinjian.idFrontPic  + ')');
+                    $('#view1').css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.idFrontPic  + ')');
                 }
                 if(vm.tVyicooJinjian.idBackPic != null && vm.tVyicooJinjian.idBackPic != 'undefined' && vm.tVyicooJinjian.idBackPic != '' && vm.tVyicooJinjian.idBackPic != 'none') {
-                    $('#view2').css('background', 'url(' + imageNginxPath + vm.tVyicooJinjian.idBackPic + ')');
+                    $('#view2').css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.idBackPic + ')');
                 }
                 if(vm.tVyicooJinjian.bankcardPic != null && vm.tVyicooJinjian.bankcardPic != 'undefined' && vm.tVyicooJinjian.bankcardPic != '' && vm.tVyicooJinjian.bankcardPic != 'none') {
-                    $('#view3').css('background', 'url(' + imageNginxPath + vm.tVyicooJinjian.bankcardPic + ')');
+                    $('#view3').css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.bankcardPic + ')');
                 }
                 if(vm.tVyicooJinjian.shopPic != null && vm.tVyicooJinjian.shopPic != 'undefined' && vm.tVyicooJinjian.shopPic != '' && vm.tVyicooJinjian.shopPic != 'none') {
-                    $('#view4').css('background', 'url(' + imageNginxPath + vm.tVyicooJinjian.shopPic + ')');
+                    $('#view4').css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.shopPic + ')');
                 }
                 if(vm.tVyicooJinjian.extraPic2 != null && vm.tVyicooJinjian.extraPic2 != 'undefined' && vm.tVyicooJinjian.extraPic2 != '' && vm.tVyicooJinjian.extraPic2 != 'none') {
-                    $('#view5').css('background', 'url(' + imageNginxPath + vm.tVyicooJinjian.extraPic2 + ')');
+                    $('#view5').css('background', 'url(' + r.imageNginxPath + vm.tVyicooJinjian.extraPic2 + ')');
                 }
                 if(vm.tVyicooJinjian.extraPic1 != null && vm.tVyicooJinjian.extraPic1 != 'undefined' && vm.tVyicooJinjian.extraPic1 != '' && vm.tVyicooJinjian.extraPic1 != 'none') {
                     var photosPath = vm.tVyicooJinjian.extraPic1.split(',');
@@ -461,8 +465,8 @@ var vm = new Vue({
                     photosEelements.empty();
                     for(var i = 0; i < photosPath.length; i++) {
                         photosEelements.append(
-                            '<li data-delid="' + i + '" data-delname="' + imageNginxPath + photosPath[i] + '">' +
-                                '<img src="' + imageNginxPath + photosPath[i] + '" alt="" class="imsg">' +
+                            '<li data-delid="' + i + '" data-delname="' + r.imageNginxPath + photosPath[i] + '">' +
+                                '<img src="' + r.imageNginxPath + photosPath[i] + '" alt="" class="imsg">' +
                                 '<i class="delImg">X</i>' +
                             '</li>'
                         );
