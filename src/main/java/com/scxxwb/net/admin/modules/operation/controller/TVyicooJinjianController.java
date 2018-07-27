@@ -16,7 +16,10 @@ import com.google.gson.JsonObject;
 import com.scxxwb.net.admin.common.utils.DateUtils;
 import com.scxxwb.net.admin.common.utils.FTPUtils;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
+import com.scxxwb.net.admin.common.validator.group.AddGroup;
+import com.scxxwb.net.admin.common.validator.group.UpdateGroup;
 import io.swagger.annotations.*;
+import org.apache.ibatis.annotations.Update;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,7 +130,7 @@ public class TVyicooJinjianController {
                             "}" +
                 "}";
         tVyicooJinjian.setPayment(payment);
-        ValidatorUtils.validateEntity(tVyicooJinjian);
+        ValidatorUtils.validateEntity(tVyicooJinjian, AddGroup.class);
 //        Map paramMap = JSONObject.parseObject(JSONObject.toJSONString(tVyicooJinjian));
 
 //        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/create", basicParam(paramMap), String.class);
@@ -150,7 +153,7 @@ public class TVyicooJinjianController {
     @RequiresPermissions("operation:tvyicoojinjian:update")
     @ApiOperation(value = "修改微易客进件", httpMethod = POST)
     public R update(@RequestBody @ApiParam( name = "进件对象", value = "传入json格式", required = true)TVyicooJinjianEntity tVyicooJinjian){
-        ValidatorUtils.validateEntity(tVyicooJinjian);
+        ValidatorUtils.validateEntity(tVyicooJinjian, UpdateGroup.class);
         Map paramMap = JSONObject.parseObject(JSONObject.toJSONString(tVyicooJinjian));
 
 //        ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/update", basicParam(paramMap), String.class);
@@ -166,17 +169,17 @@ public class TVyicooJinjianController {
         return R.ok();
     }
 
-    /**
-     * 删除
-     */
-    @RequestMapping("/delete")
-    @RequiresPermissions("operation:tvyicoojinjian:delete")
-    @ApiOperation(value = "删除微易客进件", httpMethod = POST)
-    public R delete(@RequestBody @ApiParam(name = "进件id数组", value = "typess") String[] types){
-        tVyicooJinjianService.deleteBatchIds(Arrays.asList(types));
-
-        return R.ok();
-    }
+//    /**
+//     * 删除
+//     */
+//    @RequestMapping("/delete")
+//    @RequiresPermissions("operation:tvyicoojinjian:delete")
+//    @ApiOperation(value = "删除微易客进件", httpMethod = POST)
+//    public R delete(@RequestBody @ApiParam(name = "进件id数组", value = "typess") String[] types){
+//        tVyicooJinjianService.deleteBatchIds(Arrays.asList(types));
+//
+//        return R.ok();
+//    }
 
     /**
      * imageBase64文件上传
