@@ -184,12 +184,13 @@ var vm = new Vue({
 		add: function(){
 			vm.showList = false;
             vm.title = "新增";
-            vm.tVyicooJinjian = {merchantId: null,name:null,realname:null,mobile:null,idNo:null,email:null,category:null,
+            vm.tVyicooJinjian = {merchantId: null,username:null,name:null,realname:null,mobile:null,idNo:null,email:null,category:null,
                 licenseType:null, gbProvinceNo: 1, gbCityNo: 0, gbDistrictNo: 0, licenseType:0, isVoiceFunction: 0};
             vm.twbuser = {id: null,realName:null};
 
             $('#view,#view1,#view2,#view3,#view4,#view5').css('background', '').css("background", "url(/statics/img/default.png)");
             $('.imgAll>ul').empty();
+            $("#userName").val(null);
             vm.getProvince();
             vm.getCity(-1);
             vm.getArea(-1);
@@ -430,13 +431,13 @@ var vm = new Vue({
                 var imageNginxPath = r.imageNginxPath;
                 vm.tVyicooJinjian = r.tVyicooJinjian;
                 //加载省市区数据
-
                 vm.getProvince();
                 vm.getCity(vm.tVyicooJinjian.gbCityNo);
                 vm.getArea(vm.tVyicooJinjian.gbDistrictNo);
                 vm.getUserInfo(vm.tVyicooJinjian.merchantId)
                 vm.tVyicooJinjian.licenseStartDate = $("#tVyicooJinjian-beginTime").val();
                 vm.tVyicooJinjian.licenseEndDate = $("#tVyicooJinjian-endTime").val();
+
 
                 /*BussinessCategoryReload();*/
 
@@ -571,7 +572,7 @@ var vm = new Vue({
                 return;
             }else{
                 $("#salesMan-window-close-button").attr("disabled", "disabled");
-                var url = vm.tVyicooJinjian.id == null ? "operation/tvyicoojinjian/save" : "operation/tvyicoojinjian/update";
+                var url = vm.tVyicooJinjian.mchId == null ? "operation/tvyicoojinjian/save" : "operation/tvyicoojinjian/update";
                 //getMerchantPhotos();
                 var provinceName = null;
                 var cityName = null;
@@ -731,7 +732,7 @@ var vm = new Vue({
         var rowKey = grid.getGridParam("selrow");
         var tWBUserDate =  $("#commercialName").getRowData(rowKey);
         // vm.tVyicooJinjian.userId = tWBUserDate.id;
-        //vm.tVyicooJinjian.merchantId = tWBUserDate.id;
+        vm.tVyicooJinjian.merchantId = tWBUserDate.id;
         vm.tVyicooJinjian.id = tWBUserDate.id;
         $("#userName").val(tWBUserDate.realName);
         $('#myModal').modal('hide');
