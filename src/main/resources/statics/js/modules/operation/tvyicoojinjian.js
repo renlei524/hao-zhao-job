@@ -409,8 +409,8 @@ var vm = new Vue({
         },
         //获取商户名字信息 d
         getUserInfo:function(userId) {
-            var id = vm.tVyicooJinjian.userId;
-            $.get(baseURL + "operation/twbuser/info/"+id, function(r){
+            // var id = vm.tVyicooJinjian.merch;
+            $.get(baseURL + "operation/twbuser/info/"+userId, function(r){
                 vm.tWBUser = r.tWbUser;
                 vm.tVyicooJinjian.username = r.tWbUser.realName;
                 $("#userName").val(vm.tVyicooJinjian.username);
@@ -433,7 +433,7 @@ var vm = new Vue({
                 vm.getProvince();
                 vm.getCity(vm.tVyicooJinjian.gbCityNo);
                 vm.getArea(vm.tVyicooJinjian.gbDistrictNo);
-
+                vm.getUserInfo(vm.tVyicooJinjian.merchantId)
                 $("#tVyicooJinjian-beginTime").val(r.tVyicooJinjian.beginTime);
                 $("#tVyicooJinjian-endTime").val(r.tVyicooJinjian.endTime);
 
