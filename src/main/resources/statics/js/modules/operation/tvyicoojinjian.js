@@ -193,6 +193,7 @@ var vm = new Vue({
             vm.getProvince();
             vm.getCity(-1);
             vm.getArea(-1);
+
 		},
 		update: function (event) {
 		    var id = getSelectedRow();
@@ -434,8 +435,8 @@ var vm = new Vue({
                 vm.getCity(vm.tVyicooJinjian.gbCityNo);
                 vm.getArea(vm.tVyicooJinjian.gbDistrictNo);
                 vm.getUserInfo(vm.tVyicooJinjian.merchantId)
-                $("#tVyicooJinjian-beginTime").val(r.tVyicooJinjian.beginTime);
-                $("#tVyicooJinjian-endTime").val(r.tVyicooJinjian.endTime);
+                vm.tVyicooJinjian.licenseStartDate = $("#tVyicooJinjian-beginTime").val();
+                vm.tVyicooJinjian.licenseEndDate = $("#tVyicooJinjian-endTime").val();
 
                 /*BussinessCategoryReload();*/
 
@@ -563,8 +564,8 @@ var vm = new Vue({
             }).trigger("reloadGrid");
 		},
 		saveOrUpdate: function (event) {
-		    vm.tVyicooJinjian.licenseStartDate = $("#tVyicooJinjian-beginTime").text();
-            vm.tVyicooJinjian.licenseEndDate = $("#tVyicooJinjian-endTime").text();
+		    vm.tVyicooJinjian.licenseStartDate = $("#tVyicooJinjian-beginTime").val();
+            vm.tVyicooJinjian.licenseEndDate = $("#tVyicooJinjian-endTime").val();
             $("#salesMan-window-close-button").blur();
             if(vm.verification()){
                 return;
