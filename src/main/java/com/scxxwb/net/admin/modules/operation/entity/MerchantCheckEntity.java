@@ -234,10 +234,10 @@ public class MerchantCheckEntity implements Serializable {
 	 */
 	private Integer salesman;
 
-	/**
-	 * 合同编号
-	 */
-	private String contractNumber;
+    /**
+     * 合同编号
+     */
+    private String contractNumber;
 
 	/**
 	 * 微信公众号
