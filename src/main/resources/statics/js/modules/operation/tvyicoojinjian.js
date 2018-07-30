@@ -19,7 +19,7 @@ $(function () {
         rowNum: 10,
 		rowList : [10,30,50],
         rownumbers: true, 
-        rownumWidth: 25, 
+        rownumWidth: 50,
         autowidth:true,
         multiselect: true,
         pager: "#jqGridPager",
@@ -185,7 +185,7 @@ var vm = new Vue({
 			vm.showList = false;
             vm.title = "新增";
             vm.tVyicooJinjian = {merchantId: null,username:null,name:null,realname:null,mobile:null,idNo:null,email:null,category:null,
-                licenseType:null, gbProvinceNo: 1, gbCityNo: 0, gbDistrictNo: 0, licenseType:0, isVoiceFunction: 0};
+                licenseType:null, gbProvinceNo: 1, gbCityNo: 0, gbDistrictNo: 0, licenseType:0,bankcardNo:null, isVoiceFunction: 0};
             vm.twbuser = {id: null,realName:null};
 
             $('#view,#view1,#view2,#view3,#view4,#view5').css('background', '').css("background", "url(/statics/img/default.png)");
@@ -284,14 +284,18 @@ var vm = new Vue({
             }
 
             //省市区
-            if(vm.tVyicooJinjian.gbProvinceNo == null || vm.tVyicooJinjian.gbProvinceNo == ""){
+            var ProvinceNo = $("#province").val();
+            var CityNo = $("#city").val();
+            var DistrictNo = $("#area").val();
+            if(ProvinceNo == null || ProvinceNo == ""){
                 alert("省不能为空");
                 return true;
-            }else if(vm.tVyicooJinjian.gbCityNo == null || vm.tVyicooJinjian.gbCityNo == ""){
+            }
+            if(CityNo == null || CityNo == ""){
                 alert("市不能为空");
                 return true;
             }
-            else if(vm.tVyicooJinjian.gbDistrictNo == null || vm.tVyicooJinjian.gbDistrictNo == ""){
+            if(DistrictNo == null || DistrictNo == ""){
                 alert("区不能为空");
                 return true;
             }
@@ -402,10 +406,7 @@ var vm = new Vue({
             }
 
             //照片
-            /*if(src == null || src == ""){
-                alert("上传照片不能为空");
-                return true;
-            }*/
+
             return false;
 
         },
@@ -437,7 +438,6 @@ var vm = new Vue({
                 vm.getUserInfo(vm.tVyicooJinjian.merchantId)
                 vm.tVyicooJinjian.licenseStartDate = $("#tVyicooJinjian-beginTime").val();
                 vm.tVyicooJinjian.licenseEndDate = $("#tVyicooJinjian-endTime").val();
-
 
                 /*BussinessCategoryReload();*/
 
