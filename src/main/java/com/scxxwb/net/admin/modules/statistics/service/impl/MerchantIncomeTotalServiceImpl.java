@@ -62,13 +62,18 @@ public class MerchantIncomeTotalServiceImpl extends ServiceImpl<MerchantIncomeTo
         params.put("merchantId",merchantId);
         //查询收入支出统计
         MerchantIncomeTotalEntity merchantIncomeTotalEntity =baseMapper.getMerchantIncomeTotalByArea(params);
+        if (merchantIncomeTotalEntity.getTotalIncome() != null){
+            merchantIncomeTotalEntity.setTotalIncome(merchantIncomeTotalEntity.getTotalIncome() / 100);
+        }
 
         //查询支付宝微信收入统计
         MerchantIncomeTotalEntity merchantIncomeTotals =baseMapper.getMerchantIncomeTotalByAlipay(params);
         if(merchantIncomeTotals != null)
         {
-            merchantIncomeTotalEntity.setWeChatIncome(merchantIncomeTotals.getWeChatIncome());
-            merchantIncomeTotalEntity.setAlipayIncome(merchantIncomeTotals.getAlipayIncome());
+            if (merchantIncomeTotals.getWeChatIncome() != null)
+                merchantIncomeTotalEntity.setWeChatIncome(merchantIncomeTotals.getWeChatIncome() / 100);
+            if (merchantIncomeTotals.getAlipayIncome() != null)
+                merchantIncomeTotalEntity.setAlipayIncome(merchantIncomeTotals.getAlipayIncome() / 100);
         }
         return merchantIncomeTotalEntity;
     }

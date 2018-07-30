@@ -40,7 +40,8 @@
         <result property="remark" column="remark"/>
         <result property="merchantId" column="merchant_id"/>
         <result property="salesman" column="salesman"/>
-
+        <result property="contractNumber" column="contract_number"/>
+        <result property="wechatPublicNumber" column="wechat_public_number"/>
 
     </resultMap>
 

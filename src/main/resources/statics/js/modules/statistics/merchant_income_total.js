@@ -279,5 +279,7 @@ layui.use('laydate', function(){
     laydate.render({
         elem: '#startTime-endTime' //指定元素
         ,range: true
+        ,min:"2018-07-24"
+        ,max: 0
     });
 });

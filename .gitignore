@@ -38,4 +38,3 @@ logs
 src/main/resources/*.yml
 src/main/resources/*.xml
 src/main/resources/*.txt
-

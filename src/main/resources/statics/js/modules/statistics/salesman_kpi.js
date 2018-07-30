@@ -242,5 +242,6 @@ layui.use('laydate', function(){
     laydate.render({
         elem: '#startTime-endTime' //指定元素
         ,range: true
+        ,max: 0
     });
 });

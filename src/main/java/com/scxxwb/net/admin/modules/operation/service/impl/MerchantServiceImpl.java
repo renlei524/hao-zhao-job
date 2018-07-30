@@ -115,14 +115,16 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantDao, MerchantEntity
     @Override
     public List<MerchantEntity> getMerchantByArea(Map<String, Object> params) {
         List<MerchantEntity>  merchantEntity = baseMapper.getMerchantByArea(params);
-        for (MerchantEntity merchant : merchantEntity) {
-            SysUserEntity sysUserEntity = sysUserService.selectById(merchant.getSysUserId());
-            if (sysUserEntity != null) {
-                merchant.setSysUserName(sysUserEntity.getUserName());
-            }
-            MerchantCategoryEntity merchantCategoryEntity = merchantCategoryService.selectById(merchant.getTypeId());
-            if (merchantCategoryEntity != null) {
-                merchant.setTypeName(merchantCategoryEntity.getName());
+        if (merchantEntity.size() < 100){
+            for (MerchantEntity merchant : merchantEntity) {
+                SysUserEntity sysUserEntity = sysUserService.selectById(merchant.getSalesman());
+                if (sysUserEntity != null) {
+                    merchant.setSalesmanName(sysUserEntity.getRealName());
+                }
+                MerchantCategoryEntity merchantCategoryEntity = merchantCategoryService.selectById(merchant.getTypeId());
+                if (merchantCategoryEntity != null) {
+                    merchant.setTypeName(merchantCategoryEntity.getName());
+                }
             }
         }
         return merchantEntity;

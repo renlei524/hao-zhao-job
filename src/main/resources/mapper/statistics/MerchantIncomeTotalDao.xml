@@ -16,15 +16,7 @@
 
     <select id="getMerchantIncomeTotalByArea" resultType="MerchantIncomeTotalEntity">
         SELECT
-            COUNT(1) AS totalNumberOfPen,
-            (SELECT SUM(F.transaction_amount) FROM t_merchant_finance_flow AS F WHERE F.transaction_way_value in (1,2)
-                    AND F.merchant_finance_id IN
-                    <foreach item="merchantId" collection="merchantId" open="(" separator="," close=")">
-                        #{merchantId}
-                    </foreach>
-                    <if test="startTime != null and endTime != null">
-                        AND F.transaction_time BETWEEN #{startTime} AND #{endTime}
-                    </if>) AS totalIncome,
+            COUNT(1) AS totalNumberOfPen,SUM(transaction_amount) AS totalIncome,
             (SELECT SUM(F.transaction_amount) FROM t_merchant_finance_flow AS F WHERE F.transaction_way_value in (3)
                     AND F.merchant_finance_id IN
                     <foreach item="merchantId" collection="merchantId" open="(" separator="," close=")">
@@ -41,7 +33,7 @@
                     <if test="startTime != null and endTime != null">
                         AND F.transaction_time BETWEEN #{startTime} AND #{endTime}
                     </if>) AS expenditureNumberOfPen
-        FROM t_merchant_finance_flow WHERE merchant_finance_id IN
+        FROM t_merchant_finance_flow WHERE transaction_way_value in (1,2) AND merchant_finance_id IN
         <foreach item="merchantId" collection="merchantId" open="(" separator="," close=")">
             #{merchantId}
         </foreach>
@@ -52,14 +44,14 @@
 
     <select id="getMerchantIncomeTotalByAlipay" resultType="MerchantIncomeTotalEntity">
         SELECT
-           (SELECT SUM(O.settle_amount) FROM t_wb_order AS O WHERE O.order_from in (1) AND O.status in (2) AND O.merchant_id in
+           (SELECT SUM(O.settle_amount) FROM t_wb_order AS O WHERE O.order_from in (1,3) AND O.status in (2) AND O.merchant_id in
                 <foreach item="merchantId" collection="merchantId" open="(" separator="," close=")">
                     #{merchantId}
                 </foreach>
                 <if test="startTime != null and endTime != null">
                     AND O.pay_time BETWEEN #{startTime} AND #{endTime}
                 </if>) AS weChatIncome,
-           (SELECT SUM(O.settle_amount) FROM t_wb_order AS O WHERE O.order_from in (2) AND O.status in (2) AND O.merchant_id in
+           (SELECT SUM(O.settle_amount) FROM t_wb_order AS O WHERE O.order_from in (2,4) AND O.status in (2) AND O.merchant_id in
                 <foreach item="merchantId" collection="merchantId" open="(" separator="," close=")">
                     #{merchantId}
                 </foreach>

@@ -243,6 +243,24 @@ public class MerchantEntity implements Serializable {
 	private Integer salesman;
 
 	/**
+	 * 客户经理名称
+	 */
+	@TableField(exist=false)
+	private String salesmanName;
+
+    /**
+     * 合同编号
+     */
+    @NotNull(message="合同编号不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	private String contractNumber;
+
+	/**
+	 * 微信公众号
+	 */
+	@NotNull(message="微信公众号不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	private String wechatPublicNumber;
+
+	/**
 	 * 设置：主键id,自动增长,订单表相关的后缀取此字段的最后一位
 	 */
 	public void setId(Integer id) {
@@ -678,4 +696,28 @@ public class MerchantEntity implements Serializable {
 	public void setSalesman(Integer salesman) {
 		this.salesman = salesman;
 	}
+
+	public String getSalesmanName() {
+		return salesmanName;
+	}
+
+	public void setSalesmanName(String salesmanName) {
+		this.salesmanName = salesmanName;
+	}
+
+    public String getContractNumber() {
+        return contractNumber;
+    }
+
+    public void setContractNumber(String contractNumber) {
+        this.contractNumber = contractNumber;
+    }
+
+    public String getWechatPublicNumber() {
+        return wechatPublicNumber;
+    }
+
+    public void setWechatPublicNumber(String wechatPublicNumber) {
+        this.wechatPublicNumber = wechatPublicNumber;
+    }
 }
