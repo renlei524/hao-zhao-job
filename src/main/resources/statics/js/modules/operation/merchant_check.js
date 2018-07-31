@@ -166,8 +166,8 @@ var vm = new Vue({
             vm.getInfo(id)
         },
 		saveOrUpdate: function (event) {
-            $("#text1").blur();
-            $("#text1").attr("disabled", "disabled");
+		    if($("#text1").attr("status") == 'N') return ;
+            $("#text1").attr("status", "N");
 			var url = "operation/check/check";
 			//getMerchantPhotos();
             var provinceName = null;
@@ -208,7 +208,6 @@ var vm = new Vue({
 					}else{
 						alert(r.msg);
 					}
-                    $("#text1").removeAttr("disabled");
 				}
 			});
 		},

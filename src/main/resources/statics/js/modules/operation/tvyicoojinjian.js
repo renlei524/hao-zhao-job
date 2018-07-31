@@ -395,11 +395,11 @@ var vm = new Vue({
 		saveOrUpdate: function (event) {
 		    vm.tVyicooJinjian.licenseStartDate = $("#tVyicooJinjian-beginTime").val();
             vm.tVyicooJinjian.licenseEndDate = $("#tVyicooJinjian-endTime").val();
-            $("#text1").blur();
+            $("#salesMan-window-close-button").blur();
             if(vm.verification()){
                 return;
             }else{
-                $("#text1").attr("disabled", "disabled");
+                $("#salesMan-window-close-button").attr("disabled", "disabled");
                 var url = vm.tVyicooJinjian.id == null ? "operation/tvyicoojinjian/save" : "operation/tvyicoojinjian/update";
                 //getMerchantPhotos();
                 var provinceName = null;
@@ -430,8 +430,9 @@ var vm = new Vue({
                             });
                         }else{
                             alert(r.msg);
+                             $("#text1").attr("status", "Y");
                         }
-                        $("#text1").removeAttr("disabled");
+                        $("#salesMan-window-close-button").removeAttr("disabled");
                     }
                 });
             }

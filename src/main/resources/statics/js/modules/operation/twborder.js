@@ -159,9 +159,8 @@ var vm = new Vue({
             vm.getInfo(orderId)
 		},
 		saveOrUpdate: function (event) {
-            $("#text1").blur();
-
-            $("#text1").attr("disabled", "disabled");
+        if($("#text1").attr("status") == 'N') return ;
+        $("#text1").attr("status", "N");
 			var url = vm.tWbOrder.orderId == null ? "operation/twborder/save" : "operation/twborder/update";
 			$.ajax({
 				type: "POST",
@@ -175,8 +174,8 @@ var vm = new Vue({
 						});
 					}else{
 						alert(r.msg);
+						 $("#text1").attr("status", "Y");
 					}
-                    $("#text1").removeAttr("disabled");
 				}
 			});
 		},

@@ -269,7 +269,9 @@ var vm = new Vue({
                                             vm.user.password = pwd;
                                         }
                                         alert(r.msg);
+                                        $("#text1").attr("status", "Y");
                                     }
+                                    $("#text1").removeAttr("disabled");
                                 }
                             });
                         }else {
@@ -279,7 +281,6 @@ var vm = new Vue({
                 }else {
                     alert("您输入的账号已存在");
                 }
-                $("#text1").removeAttr("disabled");
             });
         },
         getUser: function(userId){

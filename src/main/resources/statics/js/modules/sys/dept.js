@@ -135,7 +135,9 @@ var vm = new Vue({
                                         });
                                     }else{
                                         alert(r.msg);
+                                        $("#text1").attr("status", "Y");
                                     }
+                                    $("#text1").removeAttr("disabled");
                                 }
                             });
                         }else {
@@ -145,7 +147,6 @@ var vm = new Vue({
                 }else {
                     alert("您输入的公司名称已存在");
                 }
-                $("#text1").removeAttr("disabled");
             });
         },
         deptTree: function(){

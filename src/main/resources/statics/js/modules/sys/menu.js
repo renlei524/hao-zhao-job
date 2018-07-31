@@ -87,11 +87,13 @@ var vm = new Vue({
             });
         },
         saveOrUpdate: function () {
-            $("#text1").blur();
             if(vm.validator()){
                 return ;
             }
-            $("#text1").attr("disabled", "disabled");
+
+            if($("#text1").attr("status") == 'N') return ;
+            $("#text1").attr("status", "N");
+
             var url = vm.menu.menuId == null ? "sys/menu/save" : "sys/menu/update";
             $.ajax({
                 type: "POST",
@@ -105,8 +107,8 @@ var vm = new Vue({
                         });
                     }else{
                         alert(r.msg);
+                        $("#text1").attr("status", "Y");
                     }
-                    $("#text1").removeAttr("disabled");
                 }
             });
         },

@@ -68,8 +68,6 @@ var vm = new Vue({
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
-            $("#text1").blur();
-            $("#text1").attr("disabled", "disabled");
 			var url = vm.dict.id == null ? "sys/dict/save" : "sys/dict/update";
 			$.ajax({
 				type: "POST",
@@ -84,7 +82,6 @@ var vm = new Vue({
 					}else{
 						alert(r.msg);
 					}
-                    $("#text1").removeAttr("disabled");
 				}
 			});
 		},
