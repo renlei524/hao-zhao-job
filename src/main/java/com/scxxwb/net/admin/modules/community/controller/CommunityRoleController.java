@@ -1,5 +1,6 @@
 package com.scxxwb.net.admin.modules.community.controller;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.utils.PageUtils;
 import com.scxxwb.net.admin.common.utils.R;
@@ -15,6 +16,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +55,8 @@ public class CommunityRoleController extends AbstractController {
     @RequestMapping("/select")
     @RequiresPermissions("community:role:select")
     public R select(){
-        List<CommunityRoleEntity> list = communityRoleService.selectList(null);
+
+        List<CommunityRoleEntity> list = communityRoleService.selectList(new HashMap<String, Object>());
 
         return R.ok().put("list", list);
     }

@@ -149,6 +149,26 @@ var vm = new Vue({
             if($("#text1").attr("status") == 'N') return ;
         	$("#text1").attr("status", "N");
             var url = vm.community.deptId == null ? "community/community/save" : "community/community/update";
+            if ($("#province").val() != -1) {
+                var provinceIndex=document.getElementById("province").selectedIndex;
+                provinceName = document.getElementById("province").options[provinceIndex].innerHTML;
+                vm.community.address = provinceName;
+            }
+            if ($("#city").val() != -1) {
+                var cityIndex=document.getElementById("city").selectedIndex;
+                cityName = document.getElementById("city").options[cityIndex].innerHTML;
+                vm.community.address += cityName;
+            }
+            if ($("#area").val() != -1) {
+                var areaIndex=document.getElementById("area").selectedIndex;
+                areaName = document.getElementById("area").options[areaIndex].innerHTML;
+                vm.community.address += areaName;
+            }
+            if ($("#town").val() != -1) {
+                var townIndex=document.getElementById("town").selectedIndex;
+                townName = document.getElementById("town").options[townIndex].innerHTML;
+                vm.community.address += townName;
+            }
             $.ajax({
                 type: "POST",
                 url: baseURL + url,

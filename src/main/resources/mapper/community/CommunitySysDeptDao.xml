@@ -4,8 +4,8 @@
 <mapper namespace="com.scxxwb.net.admin.modules.sys.dao.SysDeptDao">
 
     <resultMap type="com.scxxwb.net.admin.modules.community.entity.CommunitySysDeptEntity" id="communitySysDeptEntity">
-        <result property="id" column="id"/>
-        <result property="parentId" column="parent_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="sysDeptId" column="sys_dept_id"/>
         <result property="name" column="name"/>
         <result property="orderNum" column="order_num"/>
         <result property="delFlag" column="del_flag"/>

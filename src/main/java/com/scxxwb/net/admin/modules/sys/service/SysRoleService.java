@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.scxxwb.net.admin.common.utils.PageUtils;
 import com.scxxwb.net.admin.modules.sys.entity.SysRoleEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,4 +23,6 @@ public interface SysRoleService extends IService<SysRoleEntity> {
 	void update(SysRoleEntity role);
 	
 	void deleteBatch(Integer[] roleIds);
+
+	List<SysRoleEntity> selectList(Map<String, Object> params);
 }

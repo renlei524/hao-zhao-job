@@ -27,6 +27,7 @@ import java.util.*;
 public class CommunitySysDeptController extends AbstractController {
         @Autowired
         private CommunitySysDeptService communitySysDeptService;
+
         /**
          * 按条件查询所有社区集合
          */
@@ -79,12 +80,13 @@ public class CommunitySysDeptController extends AbstractController {
            return  R.error("您输入的机构已存在");
        } else {
            //添加创建者id
-           communitySysDeptEntity.setCreUserId(Long.valueOf(ShiroUtils.getUserEntity().getUserId()));
+           communitySysDeptEntity.setUserId(Long.valueOf(ShiroUtils.getUserEntity().getUserId()));
            //添加版本号
            String version = (UUID.randomUUID().toString()).replaceAll("-", "");
            communitySysDeptEntity.setVersion(version);
            //添加创建时间
            communitySysDeptEntity.setCreTime(new Date());
+
            communitySysDeptService.insert(communitySysDeptEntity);
            return R.ok();
        }
