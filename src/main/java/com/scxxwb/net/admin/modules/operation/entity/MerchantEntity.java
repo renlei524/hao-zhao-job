@@ -257,6 +257,7 @@ public class MerchantEntity implements Serializable {
 	/**
 	 * 微信公众号
 	 */
+	@NotNull(message="微信公众号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String wechatPublicNumber;
 
 	/**
