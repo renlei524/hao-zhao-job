@@ -114,7 +114,7 @@ public class CommunitySysDeptController extends AbstractController {
         List<CommunitySysDeptEntity> list =  communitySysDeptService.selectByMap(map);
         if (list.size() > 0){
             CommunitySysDeptEntity communitySysDeptEntity1 = list.get(0);
-            if(communitySysDeptEntity1.getDeptId() == communitySysDeptEntity.getDeptId()){
+            if(!communitySysDeptEntity1.getDeptId().equals(communitySysDeptEntity.getDeptId())){
                 return  R.error("您输入的机构已存在");
             } else {
                 communitySysDeptEntity.setUpdTime(new Date());
@@ -122,6 +122,7 @@ public class CommunitySysDeptController extends AbstractController {
                 return R.ok();
             }
         } else {
+
             communitySysDeptEntity.setUpdTime(new Date());
             communitySysDeptService.updateById(communitySysDeptEntity);
             return R.ok();
