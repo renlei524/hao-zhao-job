@@ -59,7 +59,6 @@ public class CommunitySysDeptServiceImpl extends ServiceImpl<CommunitySysDeptDao
                         .orderBy("status DESC, cre_time DESC")
         );
         List<CommunitySysDeptEntity> list = page.getRecords();
-        //社区名称长度控制在15个字
         for(CommunitySysDeptEntity communitySysDeptEntity : list) {
             //获取创建用户id
             long id = communitySysDeptEntity.getUserId();

@@ -24,7 +24,7 @@ public class TVYiCooCategoryServiceImpl extends ServiceImpl<TVYiCooCategoryDao, 
     @Override
 //    @DataFilter(subDept = true, user = false)
     public PageUtils queryPage(Map<String, Object> params) {
-        String category = String.valueOf(params.get("category"));
+        String category = (String)params.get("categoryName");
         Page<TVYiCooCategoryEntity> page = this.selectPage(
                 new Query<TVYiCooCategoryEntity>(params).getPage(),
                 new EntityWrapper<TVYiCooCategoryEntity>()

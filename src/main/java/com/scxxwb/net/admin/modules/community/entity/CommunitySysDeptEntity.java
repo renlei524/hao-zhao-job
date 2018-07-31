@@ -32,11 +32,15 @@ public class CommunitySysDeptEntity implements Serializable {
     //部门ID
     @TableId
     private Long deptId;
-    //所属分公司
-    private Long sysDeptId;
 
     @TableField(exist=false)
     private Integer parentId = 0;
+
+    /**
+     * 所属分公司
+     */
+    private Integer sysDeptId;
+
     //部门名称
     @NotNull(message="机构名称不能为空", groups = {AddGroup.class, UpdateGroup.class})
     @Size(max = 18, message = "机构名称不能超过18个字符", groups = {AddGroup.class, UpdateGroup.class})
@@ -141,14 +145,6 @@ public class CommunitySysDeptEntity implements Serializable {
 
     public Long getDeptId() {
         return deptId;
-    }
-
-    public Long getSysDeptId() {
-        return sysDeptId;
-    }
-
-    public void setSysDeptId(Long sysDeptId) {
-        this.sysDeptId = sysDeptId;
     }
 
     /**
@@ -343,5 +339,13 @@ public class CommunitySysDeptEntity implements Serializable {
 
     public void setParentId(Integer parentId) {
         this.parentId = parentId;
+    }
+
+    public Integer getSysDeptId() {
+        return sysDeptId;
+    }
+
+    public void setSysDeptId(Integer sysDeptId) {
+        this.sysDeptId = sysDeptId;
     }
 }
