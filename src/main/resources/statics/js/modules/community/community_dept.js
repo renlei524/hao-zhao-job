@@ -43,13 +43,37 @@ $(function () {
         }
     });
 });
+
+var dept_ztree;
+var dept_setting = {
+    data: {
+        simpleData: {
+            enable: true,
+            idKey: "deptId",
+            pIdKey: "parentId",
+            rootPId: -1
+        },
+        key: {
+            url:"nourl"
+        }
+    }
+};
+
+
 var vm = new Vue({
     el:'#rrapp',
     data:{
         showList: true,
-        title: null,
+        title: null,   dept:{
+            parentName:null,
+            parentId:0,
+            orderNum:0,
+            name:null,
+            leader: null
+        },
         community:{
             communityName:null,
+            sysDeptName: null,
             leader:null,
             leaderTel:null,
             province: -1,
@@ -57,6 +81,7 @@ var vm = new Vue({
             area: -1,
             town: -1,
             status: 1,
+
         },
         q:{
             status: "",
@@ -77,6 +102,7 @@ var vm = new Vue({
             vm.showList = false;
             vm.title = "新增";
             vm.community = {province: -1, city : -1, area: -1, town: -1, status: 1};
+            vm.getDept();
             vm.getProvince();
             vm.getCity(-1);
             vm.getArea(-1);
@@ -111,6 +137,7 @@ var vm = new Vue({
                 if(vm.community.town == null){
                     vm.community.town = -1;
                 }
+                vm.getDept();
                 vm.getProvince();
                 vm.getCity(vm.community.province);
                 vm.getArea(vm.community.city);
@@ -148,6 +175,28 @@ var vm = new Vue({
             }
             if($("#text1").attr("status") == 'N') return ;
         	$("#text1").attr("status", "N");
+            var provinceName = null;
+            var cityName = null;
+            var areaName = null;
+            var townName = null;
+            if ($("#province").val() != -1) {
+                var provinceIndex=document.getElementById("province").selectedIndex;
+                provinceName = document.getElementById("province").options[provinceIndex].innerHTML;
+            }
+            if ($("#city").val() != -1) {
+                var cityIndex=document.getElementById("city").selectedIndex;
+                cityName = document.getElementById("city").options[cityIndex].innerHTML;
+            }
+            if ($("#area").val() != -1) {
+                var areaIndex=document.getElementById("area").selectedIndex;
+                areaName = document.getElementById("area").options[areaIndex].innerHTML;
+            }
+            if ($("#town").val() != -1) {
+                var townIndex=document.getElementById("town").selectedIndex;
+                townName = document.getElementById("town").options[townIndex].innerHTML;
+            }
+            vm.community.address = (provinceName == null ? "" : provinceName) + (cityName == null ? "" : cityName) +
+                (areaName == null ? "" : areaName) +  (townName == null ? "" : townName);
             var url = vm.community.deptId == null ? "community/community/save" : "community/community/update";
             $.ajax({
                 type: "POST",
@@ -310,6 +359,41 @@ var vm = new Vue({
                 page:page
             }).trigger("reloadGrid");
             $("#text1").attr("status", "Y");
+        },
+        getDept: function(){
+            //加载公司树
+            $.get(baseURL + "sys/dept/list", function(r){
+                dept_ztree = $.fn.zTree.init($("#deptTree"), dept_setting, r);
+                var node = dept_ztree.getNodeByParam("deptId", vm.community.sysDeptId);
+                if(node != null){
+                    dept_ztree.selectNode(node);
+                    vm.community.deptName = node.name;
+                    $("#communityId").val(vm.community.deptName);
+                }
+            })
+        },
+        deptTree: function(){
+            layer.open({
+                type: 1,
+                offset: '50px',
+                skin: 'layui-layer-molv',
+                title: "选择公司",
+                area: ['300px', '450px'],
+                shade: 0,
+                shadeClose: false,
+                content: jQuery("#deptLayer"),
+                btn: ['确定', '取消'],
+                btn1: function (index) {
+                    var node = dept_ztree.getSelectedNodes();
+                    //选择上级公司
+                    vm.community.sysDeptId = node[0].deptId;
+                    vm.community.sysDeptName = node[0].name;
+                    $("#communityId").val(vm.community.sysDeptName);
+                    layer.close(index);
+                    //隐藏div层
+                    $("#deptLayer").hide();
+                }
+            });
         },
     }
 });
