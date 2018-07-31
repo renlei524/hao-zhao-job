@@ -1,5 +1,6 @@
 package com.scxxwb.net.admin.modules.community.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.scxxwb.net.admin.common.annotation.DataFilter;
@@ -12,13 +13,14 @@ import com.scxxwb.net.admin.modules.community.entity.CommunityRoleEntity;
 import com.scxxwb.net.admin.modules.community.entity.CommunityUserEntity;
 import com.scxxwb.net.admin.modules.community.service.*;
 import com.scxxwb.net.admin.modules.sys.shiro.ShiroUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,37 +44,32 @@ public class CommunityRoleServiceImpl extends ServiceImpl<CommunityRoleDao, Comm
     protected KafkaProducer kafkaProducer;
 
     @Override
-    /*@DataFilter(subDept = true, user = false)*/
+    @DataFilter(subDept = true, user = false)
     public PageUtils queryPage(Map<String, Object> params) {
-        //获取查询条件
         String roleName = (String)params.get("roleName");
-        //初始化对象
-        Page<CommunityRoleEntity> page=new Page<CommunityRoleEntity>();
-        try {
-            //获取数据
-            Map<String, Object> pMap = new HashMap<String, Object>();
-            //管理员开放所有数据权限(参照目前已有结构直接写死的方式类区分管理员身份)
-            if(ShiroUtils.getUserEntity().getUserId() != Constant.SUPER_ADMIN) pMap.put("user_id", ShiroUtils.getUserEntity().getUserId());
-            pMap.put("start", ((new Query<CommunityRoleEntity>(params).getPage().getCurrent()-1)*new Query<CommunityRoleEntity>(params).getPage().getSize()));
-            pMap.put("row", new Query<CommunityRoleEntity>(params).getPage().getSize());
-            pMap.put("role_name", roleName);
-            page.setRecords(baseMapper.getRole(pMap));
-            //获取每页数据数量
-            page.setSize(new Query<CommunityRoleEntity>(params).getPage().getSize());
-            //获取页码
-            page.setCurrent(new Query<CommunityRoleEntity>(params).getPage().getCurrent());
-            //获取总页数
-            page.setTotal(baseMapper.getRole_count(pMap));
-
-            for(CommunityRoleEntity CommunityRoleEntity : page.getRecords()){
-                CommunityUserEntity CommunityUserEntity = communityUserService.selectById(CommunityRoleEntity.getUserId());
-                if(CommunityUserEntity != null){
-                    CommunityRoleEntity.setUserName(CommunityUserEntity.getUserName());
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        String num =(String)params.get(Constant.SQL_FILTER);
+        List<String> list = null;
+        if (num != null){
+            num = num.substring(13,num.length()-2);
+            String [] strs = num.split(",");
+            list=Arrays.asList(strs);
         }
+        String sysDeptIds = StringUtils.join(list,",");
+
+        Page<CommunityRoleEntity> page = this.selectPage(
+                new Query<CommunityRoleEntity>(params).getPage(),
+                new EntityWrapper<CommunityRoleEntity>()
+                        .like(StringUtils.isNotBlank(roleName),"role_name", roleName)
+                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null,"role_id in (select role_id from t_community_sys_role_dept where dept_id in( select dept_id from t_community_sys_dept where sys_dept_id in(" + sysDeptIds  + ")))")
+        );
+
+        for(CommunityRoleEntity CommunityRoleEntity : page.getRecords()){
+            CommunityUserEntity CommunityUserEntity = communityUserService.selectById(CommunityRoleEntity.getUserId());
+            if(CommunityUserEntity != null){
+                CommunityRoleEntity.setUserName(CommunityUserEntity.getUserName());
+            }
+        }
+
         return new PageUtils(page);
     }
 
@@ -116,5 +113,19 @@ public class CommunityRoleServiceImpl extends ServiceImpl<CommunityRoleDao, Comm
 
         //删除角色与用户关联
         communityUserRoleService.deleteBatch(roleIds);
+    }
+
+    @Override
+    @DataFilter(subDept = true, user = false)
+    public List<CommunityRoleEntity> selectList(Map<String, Object> params) {
+        String sql_filter =(String)params.get(Constant.SQL_FILTER);
+        List<String> list = null;
+        if (sql_filter != null){
+            sql_filter = sql_filter.substring(13,sql_filter.length()-2);
+            String [] strs = sql_filter.split(",");
+            list=Arrays.asList(strs);
+        }
+        String sysDeptIds = StringUtils.join(list,",");
+        return this.selectList(new EntityWrapper<CommunityRoleEntity>().addFilterIfNeed(params.get(Constant.SQL_FILTER) != null,"role_id in (select role_id from t_community_sys_role_dept where dept_id in( select dept_id from t_community_sys_dept where sys_dept_id in(" + sysDeptIds  + ")))"));
     }
 }

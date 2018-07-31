@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.scxxwb.net.admin.common.utils.PageUtils;
 import com.scxxwb.net.admin.modules.community.entity.CommunityRoleEntity;
 
+import java.util.List;
 import java.util.Map;
 /**
  * 角色
@@ -21,4 +22,6 @@ public interface CommunityRoleService extends IService<CommunityRoleEntity> {
     void update(CommunityRoleEntity role);
 
     void deleteBatch(Long[] roleIds);
+
+    List<CommunityRoleEntity> selectList(Map<String, Object> params);
 }

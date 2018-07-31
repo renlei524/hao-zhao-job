@@ -34,11 +34,9 @@ public class CommunitySysDeptServiceImpl extends ServiceImpl<CommunitySysDeptDao
     protected CommunitySysDeptService communitySysDeptService;
     @Autowired
     protected SysUserService sysUserService;
-    @Autowired
-    protected TWbAreaService tWbAreaService;
 
     @Override
-    /*@DataFilter(subDept = true, user = false)*/
+    @DataFilter(subDept = true, user = false)
     public PageUtils queryPage(Map<String, Object> params) {
         //数据权限管理
         String deptIds = null;
@@ -56,7 +54,7 @@ public class CommunitySysDeptServiceImpl extends ServiceImpl<CommunitySysDeptDao
                 new EntityWrapper<CommunitySysDeptEntity>()
                         .like(StringUtils.isNotBlank((String)params.get("communityName")), "name", String.valueOf(params.get("communityName")))
                         .addFilterIfNeed(StringUtils.isNotBlank((String)params.get("status")), "status = " + String.valueOf(params.get("status")))
-                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "dept_id in (" + deptIds + ")")
+                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "sys_dept_id in (" + deptIds + ")")
                         .addFilter("del_flag =" + 0)
                         .orderBy("status DESC, cre_time DESC")
         );
@@ -73,7 +71,7 @@ public class CommunitySysDeptServiceImpl extends ServiceImpl<CommunitySysDeptDao
     }
 
     @Override
-    /*@DataFilter(subDept = true, user = false)*/
+    @DataFilter(subDept = true, user = false)
     public List<CommunitySysDeptEntity> queryList(Map<String, Object> params){
         String deptIds = null;
             if(params.get(Constant.SQL_FILTER) != null){
@@ -86,7 +84,7 @@ public class CommunitySysDeptServiceImpl extends ServiceImpl<CommunitySysDeptDao
         List<CommunitySysDeptEntity> deptList =
                 this.selectList(new EntityWrapper<CommunitySysDeptEntity>()
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
-                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "dept_id in (" + deptIds + ")"));
+                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "sys_dept_id in (" + deptIds + ")"));
 
         return deptList;
     }

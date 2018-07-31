@@ -29,6 +29,7 @@ import java.util.*;
 public class CommunitySysDeptController extends AbstractController {
         @Autowired
         private CommunitySysDeptService communitySysDeptService;
+
         /**
          * 按条件查询所有社区集合
          */
@@ -92,6 +93,7 @@ public class CommunitySysDeptController extends AbstractController {
            communitySysDeptEntity.setVersion(version);
            //添加创建时间
            communitySysDeptEntity.setCreTime(new Date());
+
            communitySysDeptService.insert(communitySysDeptEntity);
            return R.ok();
        }

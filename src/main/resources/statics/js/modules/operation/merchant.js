@@ -392,29 +392,27 @@ var vm = new Vue({
                 $("#salesMan-window-close-button").attr("disabled", "disabled");
                 var url = vm.merchant.id == null ? "operation/merchant/save" : "operation/merchant/update";
                 //getMerchantPhotos();
-                var provinceName = null;
-                var cityName = null;
-                var areaName = null;
-                var townName = null;
-
-                if ($("#province").val() != 0) {
+                if ($("#province").val() != -1) {
                     var provinceIndex=document.getElementById("province").selectedIndex;
                     provinceName = document.getElementById("province").options[provinceIndex].innerHTML;
+                    vm.merchant.address = provinceName;
                 }
-                if ($("#city").val() != 0) {
+                if ($("#city").val() != -1) {
                     var cityIndex=document.getElementById("city").selectedIndex;
                     cityName = document.getElementById("city").options[cityIndex].innerHTML;
+                    vm.merchant.address += cityName;
                 }
-                if ($("#area").val() != 0) {
+                if ($("#area").val() != -1) {
                     var areaIndex=document.getElementById("area").selectedIndex;
                     areaName = document.getElementById("area").options[areaIndex].innerHTML;
+                    vm.merchant.address += areaName;
                 }
-                if ($("#town").val() != 0) {
+                if ($("#town").val() != -1) {
                     var townIndex=document.getElementById("town").selectedIndex;
                     townName = document.getElementById("town").options[townIndex].innerHTML;
+                    vm.merchant.address += townName;
                 }
-                vm.merchant.address = (provinceName == null ? "" : provinceName) + (cityName == null ? "" : cityName) +
-                    (areaName == null ? "" : areaName) +  (townName == null ? "" : townName)+ vm.merchant.simpleAddress;
+                vm.merchant.address += vm.merchant.simpleAddress;
 
                 vm.merchant.payChannel = $("input[name='payChannel']:checked").val();
                 vm.merchant.supportDispatching = $("input[name='supportDispatching']:checked").val();

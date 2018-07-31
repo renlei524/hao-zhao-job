@@ -7,11 +7,9 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.scxxwb.net.admin.common.validator.group.AddGroup;
 import com.scxxwb.net.admin.common.validator.group.UpdateGroup;
-import org.hibernate.validator.group.GroupSequenceProvider;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.validation.GroupSequence;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -34,10 +32,15 @@ public class CommunitySysDeptEntity implements Serializable {
     //部门ID
     @TableId
     private Long deptId;
+
+    @TableField(exist=false)
+    private Integer parentId = 0;
+
     /**
      * 所属分公司
      */
     private Integer sysDeptId;
+
     //部门名称
     @NotNull(message="机构名称不能为空", groups = {AddGroup.class, UpdateGroup.class})
     @Size(max = 18, message = "机构名称不能超过18个字符", groups = {AddGroup.class, UpdateGroup.class})
@@ -143,6 +146,7 @@ public class CommunitySysDeptEntity implements Serializable {
     public Long getDeptId() {
         return deptId;
     }
+
     /**
      * 设置：部门名称
      */
@@ -327,6 +331,14 @@ public class CommunitySysDeptEntity implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
     public Integer getSysDeptId() {

@@ -107,5 +107,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 		sysUserRoleService.deleteBatch(roleIds);
 	}
 
-
+	@Override
+	@DataFilter(subDept = true, user = true)
+	public List<SysRoleEntity> selectList(Map<String, Object> params) {
+		return this.selectList(new EntityWrapper<SysRoleEntity>().addFilterIfNeed(params.get(Constant.SQL_FILTER) != null,"role_id in (select role_id from t_sys_role_dept where " + params.get(Constant.SQL_FILTER)  + ")"));
+	}
 }
