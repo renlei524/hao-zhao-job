@@ -275,10 +275,6 @@ var vm = new Vue({
                 alert("合同编号不能为空");
                 return true;
             }
-            if(vm.merchant.wechatPublicNumber == null || vm.merchant.wechatPublicNumber == ""){
-                alert("微信公众号不能为空");
-                return true;
-            }
             if(vm.merchant.typeName == null || vm.merchant.typeName == ""){
                 alert("商铺分类不能为空");
                 return true;
