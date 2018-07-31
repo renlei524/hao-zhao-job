@@ -166,12 +166,12 @@ var vm = new Vue({
             return false;
         },
         saveOrUpdate: function () {
+            $("#text1").blur();
             //验证非空等
             if (vm.verification()) {
                 return;
             }
-            if($("#text1").attr("status") == 'N') return ;
-        	$("#text1").attr("status", "N");
+            $("#text1").attr("disabled", "disabled");
             var url = vm.user.userId == null ? "community/user/save" : "community/user/update";
             $.ajax({
                 type: "POST",
@@ -185,8 +185,8 @@ var vm = new Vue({
                         });
                     }else{
                         alert(r.msg);
-                        $("#text1").attr("status", "Y");
                     }
+                    $("#text1").removeAttr("disabled");
                 }
             });
         },

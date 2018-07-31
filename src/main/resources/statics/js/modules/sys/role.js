@@ -236,14 +236,13 @@ var vm = new Vue({
                                 });
                             }else{
                                 alert(r.msg);
-                                $("#text1").attr("status", "Y");
                             }
-                            $("#text1").removeAttr("disabled");
                         }
                     });
                 }else {
                     alert("您输入的角色名称已存在");
                 }
+                $("#text1").removeAttr("disabled");
             });
         },
         getMenuTree: function(roleId) {
