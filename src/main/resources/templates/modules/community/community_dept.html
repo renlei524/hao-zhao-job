@@ -44,6 +44,13 @@
 		</div>
 		<table id="jqGrid"></table>
 		<div id="jqGridPager"></div>
+		<table id="deptTable" data-mobile-responsive="true" data-click-to-select="true">
+			<thead>
+			<tr>
+				<th data-field="selectItem" data-checkbox="true"></th>
+			</tr>
+			</thead>
+		</table>
 	</div>
 
 	<div v-show="!showList" class="panel panel-default">
@@ -53,6 +60,12 @@
 				<div class="col-sm-2 control-label">机构名称<span class="span"> *</span></div>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" v-model="community.name" placeholder="机构名称" maxlength="18"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">上级公司<span class="span"> *</span></div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" style="cursor:pointer;" v-model="community.sysDeptName" @click="deptTree" readonly="readonly" id="communityId" placeholder="请选择公司"/>
 				</div>
 			</div>
 			<div class="form-group">
@@ -114,6 +127,10 @@
 </div>
 
 
+<!-- 选择公司 -->
+<div id="deptLayer" style="display: none;padding:10px;">
+	<ul id="deptTree" class="ztree"></ul>
+</div>
 
 <script src="${request.contextPath}/statics/js/modules/community/community_dept.js?_${.now?long}"></script>
 
