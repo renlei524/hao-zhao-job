@@ -170,11 +170,11 @@ var vm = new Vue({
             });
         },
         saveOrUpdate: function (event) {
+            $("#text1").blur();
             if (vm.verification()) {
                 return;
             }
-            if($("#text1").attr("status") == 'N') return ;
-        	$("#text1").attr("status", "N");
+            $("#text1").attr("disabled", "disabled");
             var provinceName = null;
             var cityName = null;
             var areaName = null;
@@ -230,8 +230,8 @@ var vm = new Vue({
                         });
                     }else{
                         alert(r.msg);
-                        $("#text1").attr("status", "Y");
                     }
+                    $("#text1").removeAttr("disabled");
                 }
             });
         },

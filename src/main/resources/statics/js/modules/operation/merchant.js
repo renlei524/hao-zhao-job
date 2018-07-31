@@ -381,11 +381,11 @@ var vm = new Vue({
         },
 		saveOrUpdate: function (event) {
 
-            $("#salesMan-window-close-button").blur();
+            $("#text1").blur();
             if(vm.verification()){
                 return;
             }else{
-                $("#salesMan-window-close-button").attr("disabled", "disabled");
+                $("#text1").attr("disabled", "disabled");
                 var url = vm.merchant.id == null ? "operation/merchant/save" : "operation/merchant/update";
                 //getMerchantPhotos();
                 if ($("#province").val() != -1) {
@@ -424,9 +424,8 @@ var vm = new Vue({
                             });
                         }else{
                             alert(r.msg);
-                             $("#text1").attr("status", "Y");
                         }
-                        $("#salesMan-window-close-button").removeAttr("disabled");
+                        $("#text1").removeAttr("disabled");
                     }
                 });
             }
