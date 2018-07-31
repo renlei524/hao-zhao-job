@@ -46,14 +46,24 @@ public class CommunityUserServiceImpl extends ServiceImpl<CommunityUserDao, Comm
 	}
 
 	@Override
-	/*@DataFilter(subDept = true, user = false)*/
+	@DataFilter(subDept = true, user = false)
 	public PageUtils queryPage(Map<String, Object> params) {
+		//数据权限管理
+		String deptIds = null;
+		if(params.get(Constant.SQL_FILTER) != null){
+			String num =  params.get(Constant.SQL_FILTER).toString();
+			num = num.substring(13, num.length() - 2);
+			String[] strs = num.split(",");
+			List<String> list = Arrays.asList(strs);
+			deptIds = StringUtils.join(list, ',');
+		}
+
         //初始化对象
 		Page<CommunityUserEntity> page = this.selectPage(
 				new Query<CommunityUserEntity>(params).getPage(),
 				new EntityWrapper<CommunityUserEntity>()
 						.like(StringUtils.isNotBlank((String)params.get("userName")), "user_name", String.valueOf(params.get("userName")))
-//						.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "dept_id in (" + deptIds + ")")
+						.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "dept_id in (select dept_id from t_community_sys_dept where sys_dept_id in(" + deptIds + "))")
 		);
 		List<CommunityUserEntity> list = page.getRecords();
 		for(CommunityUserEntity communityUserEntity : list){

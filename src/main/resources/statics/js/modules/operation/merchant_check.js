@@ -118,7 +118,8 @@ var vm = new Vue({
             remark:null,
             salesman:null,
             isVoiceFunction:1,
-            contractNumber:null
+            contractNumber:null,
+            wechatPublicNumber: null
         },
         merchantcategory:{
             categoryId:null,

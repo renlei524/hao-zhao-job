@@ -25,13 +25,13 @@
 				<input type="text" class="form-control" v-model="q.userName" @keyup.enter="query" placeholder="账号名">
 			</div>
 			<a class="btn btn-default" @click="query">查询</a>
-			<#if shiro.hasPermission("sys:user:save")>
+			<#if shiro.hasPermission("community:user:save")>
 			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
 			</#if>
-			<#if shiro.hasPermission("sys:user:update")>
+			<#if shiro.hasPermission("community:user:update")>
 			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
 			</#if>
-			<#if shiro.hasPermission("sys:user:delete")>
+			<#if shiro.hasPermission("community:user:delete")>
 			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
 			</#if>
 		</div>
@@ -136,9 +136,6 @@
 	<ul id="deptTree" class="ztree"></ul>
 </div>
 
-
 <script src="${request.contextPath}/statics/js/modules/community/community_user.js?_${.now?long}"></script>
-
-
 </body>
 </html>

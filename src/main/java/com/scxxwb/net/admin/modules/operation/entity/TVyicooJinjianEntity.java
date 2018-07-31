@@ -2,9 +2,14 @@ package com.scxxwb.net.admin.modules.operation.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.scxxwb.net.admin.common.validator.group.AddGroup;
+import com.scxxwb.net.admin.common.validator.group.UpdateGroup;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -19,178 +24,257 @@ import java.util.Date;
 @TableName("t_vyicoo_jinjian")
 public class TVyicooJinjianEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 *
+	 * 主键id自增
+	 */
+	@TableId
+	private Integer Id;
+	/**
+	 * 商户id
+	 */
+	@NotNull(message="商户id不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@ApiModelProperty(value = "商户id", required = true)
+	private Integer merchantId;
 	/**
 	 * 商户类型 1：企业 2：个体工商户
 	 */
-	@TableId
+	@NotNull(message="商户类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="商户类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "商户类型", name = "type", required = true)
 	private String type;
 	/**
 	 * 商户名称
 	 */
+	@NotNull(message="商户名称不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="商户名称不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "商户名称", name = "name", required = true)
 	private String name;
 	/**
 	 * 商户简称（4-15字）
 	 */
+	@NotNull(message="商户简称不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="商户简称不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "商户简称（4-15）个字", required = true)
 	private String shortname;
 	/**
 	 * 商户真实姓名
 	 */
+	@NotNull(message="商户真实姓名不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="商户真实姓名不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "商户真实姓名", required = true)
 	private String realname;
 	/**
 	 * 联系人手机号
 	 */
+	@NotNull(message="联系人手机号不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="联系人手机号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "联系人手机号", required = true)
 	private String mobile;
 	/**
 	 * 身份证号
 	 */
+	@NotNull(message="身份证号不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="身份证号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "身份证号", required = true)
 	private String idNo;
 	/**
 	 * 省
 	 */
+	@NotNull(message="省不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="省不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "省", required = true)
 	private String gbProvinceNo;
 	/**
 	 * 市
 	 */
+	@NotNull(message="市不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="市不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "市", required = true)
 	private String gbCityNo;
 	/**
 	 * 区
 	 */
+	@NotNull(message="区不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="区不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "区", required = true)
 	private String gbDistrictNo;
 	/**
 	 * 经营地址
 	 */
+	@NotNull(message="经营地址不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="经营地址不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "经营地址", required = true)
 	private String address;
 	/**
 	 * 联系邮箱
 	 */
+	@NotNull(message="联系邮箱不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="联系邮箱不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "联系邮箱", required = true)
 	private String email;
 	/**
 	 * 经营类别
 	 */
+	@NotNull(message="经营类别不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="经营类别不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "经营类别", required = true)
 	private String category;
 	/**
 	 * 营业执照类型
 	 */
+	@NotNull(message="营业执照类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="营业执照类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "营业执照类型", required = true)
 	private String licenseType;
 	/**
 	 * 营业执照编号
 	 */
+	@NotNull(message="营业执照编号不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="营业执照编号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "营业执照编号", required = true)
 	private String licenseNo;
 	/**
 	 * 营业执照地址
 	 */
+	@NotNull(message="营业执照地址不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="营业执照地址不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "营业执照地址", required = true)
 	private String licenseAddress;
 	/**
 	 * 注册号开始日期 （例：2017-12-01）
 	 */
+	@NotNull(message="注册号开始日期不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="注册号开始日期不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
 	@ApiModelProperty(value = "注册号开始日期", required = true)
 	private String licenseStartDate;
 	/**
 	 * 注册号结束日期 （例：2029-12-01 永久为-1）
 	 */
+	@NotNull(message="注册号结束日期不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="注册号结束日期不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
 	@ApiModelProperty(value = "注册号结束日期", required = true)
 	private String licenseEndDate;
 	/**
 	 * 开户支行ID
 	 */
+	@NotNull(message="开户支行id不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="开户支行id不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "开户支行id", required = true)
 	private String bankId;
 	/**
 	 * 开户支行所在城市编码
 	 */
 	@ApiModelProperty(value = "开户支行所在城市编码", required = true)
+	@NotBlank(message="开户支行所在城市编码不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotNull(message="开户支行所在城市编码不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String accountCity;
 	/**
 	 * 开户支行行号
 	 */
+	@NotNull(message="开户支行行号不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="开户支行行号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "开户支行行号", required = true)
 	private String bankNo;
 	/**
 	 * 帐户类型 0：对私 1：对公
 	 */
+	@NotNull(message="请选择账户类型", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="请选择账户类型", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "账户类型 0：对私 1：对公", required = true)
 	private String accountType;
 	/**
 	 * 开户名称
 	 */
+	@NotNull(message="开户名称不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="开户名称不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "开户名称", required = true)
 	private String accountName;
 	/**
 	 * 银行预留手机号
 	 */
+	@NotNull(message="银行预留手机号不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="银行预留手机号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "银行预留手机号", required = true)
 	private String accountMobile;
 	/**
 	 * 有无公众号 1：有公众号 2：无公众号
 	 */
-
+	@NotNull(message="请选择有无公众号不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="请选择有无公众号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "有无公众号 1：有 2：无", required = true)
 	private String selfAppid;
 	/**
 	 * 有公众号必填（公众号主体需同营业执照名称一致）
 	 */
+	@NotNull(message="公众号不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="公众号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "有公众号必填")
 	private String wxAppid;
 	/**
 	 * 商户微信号
 	 */
+	@NotNull(message="商户微信号不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="商户微信号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "商户微信号", required = true)
 	private String wechatId;
 	/**
 	 * 法人银行卡号
 	 */
+	@NotNull(message="法人银行卡号不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="法人银行卡号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	@ApiModelProperty(value = "法人银行卡号", required = true)
 	private String bankcardNo;
 	/**
 	 * 营业执照照片
 	 */
 	@ApiModelProperty(value = "营业执照照片", required = true)
+	@NotNull(message="营业执照照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="营业执照照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String licensePic;
 	/**
 	 * 法人身份证正面照片
 	 */
 	@ApiModelProperty(value = "法人身份证正面照片", required = true)
+	@NotNull(message="法人身份证正面照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="法人身份证正面照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String idFrontPic;
 	/**
 	 * 法人身份证反面照片
 	 */
 	@ApiModelProperty(value = "法人身份证反面照片", required = true)
+	@NotNull(message="法人身份证反面照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="法人身份证反面照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String idBackPic;
 	/**
 	 * 对私：法人结算银行卡照片 对公：开户许可证
 	 */
 	@ApiModelProperty(value = "对私：法人结算银行卡照片 对公： 开户许可证", required = true)
+	@NotNull(message="法人结算银行卡照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="法人结算银行卡照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String bankcardPic;
 	/**
 	 * 店铺门头照片
 	 */
 	@ApiModelProperty(value = "店铺门头照片", required = true)
+	@NotNull(message="店铺门头照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="店铺门头照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String shopPic;
 	/**
 	 * 经营场所内照片
 	 */
 	@ApiModelProperty(value = "经营场所内照片", required = true)
+	@NotNull(message="经营场所内照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="经营场所内照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String extraPic1;
 	/**
 	 * 收银台招牌照片
 	 */
 	@ApiModelProperty(value = "收银台招牌照片", required = true)
+	@NotNull(message="收银台招牌照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@NotBlank(message="收银台招牌照片不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String extraPic2;
 	/**
 	 * 支付方式配置json串
@@ -207,11 +291,6 @@ public class TVyicooJinjianEntity implements Serializable {
 	 */
 	@ApiModelProperty(value = "商户进件状态 0：申请中， 1：启用 2 : 认证中 3：失败 4：处理中")
 	private Integer verifyStatus;
-	/**
-	 * 商户id
-	 */
-	@ApiModelProperty(value = "商户id", required = true)
-	private Integer merchantId;
 
 	/**
 	 * 设置：商户类型 1：企业 2：个体工商户
@@ -668,5 +747,13 @@ public class TVyicooJinjianEntity implements Serializable {
 	 */
 	public Integer getMerchantId() {
 		return merchantId;
+	}
+
+	public Integer getId() {
+		return Id;
+	}
+
+	public void setId(Integer id) {
+		Id = id;
 	}
 }

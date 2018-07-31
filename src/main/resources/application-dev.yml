@@ -11,6 +11,14 @@ spring:
                 url: jdbc:mysql://192.168.10.244:3306/xxwb3?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
                 username: root
                 password: xxwb098
+            #first:  #数据源1
+                #url: jdbc:mysql://39.108.84.145:3306/xxwb3?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+                #username: xxwb3Select
+                #password: aYthr48eld93jH1Fa
+            #second:  #数据源2
+                #url: jdbc:mysql://39.108.84.145:3306/xxwb3?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+                #username: xxwb3Select
+                #password: aYthr48eld93jH1Fa
             initial-size: 10
             max-active: 100
             min-idle: 10

@@ -50,7 +50,7 @@ public class SysRoleController extends AbstractController {
 	@RequestMapping("/select")
 	@RequiresPermissions("sys:role:select")
 	public R select(){
-		List<SysRoleEntity> list = sysRoleService.selectList(null);
+		List<SysRoleEntity> list = sysRoleService.selectList(new HashMap<String, Object>());
 		
 		return R.ok().put("list", list);
 	}

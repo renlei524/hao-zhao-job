@@ -152,9 +152,13 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantDao, MerchantEntity
     public void updateMerchant(MerchantEntity merchant) {
         // 非正常和禁用状态下，改为修改待审核
         if(merchant.getStatus() != 5 && merchant.getStatus() != 6) {
-            // 修改待审核
-            merchant.setStatus(3);
-            this.updateStatus(merchant.getId(), merchant.getStatus());
+            if(merchant.getStatus() != 1) {
+                // 修改待审核
+                merchant.setStatus(3);
+                this.updateStatus(merchant.getId(), merchant.getStatus());
+            } else {
+                this.updateAllColumnById(merchant);
+            }
         }
 
         // 审核表

@@ -201,8 +201,8 @@ var vm = new Vue({
             });
         },
         getMenuTree: function(roleId) {
-            //加载菜单树
-            $.get(baseURL + "sys/menu/list", function(r){
+            //加载社区菜单树
+            $.get(baseURL + "community/menu/list", function(r){
                 menu_ztree = $.fn.zTree.init($("#menuTree"), menu_setting, r);
                 //展开所有节点
                 //menu_ztree.expandAll(true);
@@ -214,9 +214,9 @@ var vm = new Vue({
             });
         },
         getDataTree: function(roleId) {
-            //加载菜单树
-            $.get(baseURL + "sys/dept/list", function(r){
-                data_ztree = $.fn.zTree.init($("#dataTree"), data_setting, r);
+            //加载社区树
+            $.get(baseURL + "community/community/list", function(r){
+                data_ztree = $.fn.zTree.init($("#dataTree"), data_setting, r.page.list);
                 //展开所有节点
                 //data_ztree.expandAll(true);
                 vm.show_node(data_ztree);

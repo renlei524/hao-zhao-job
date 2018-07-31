@@ -1,5 +1,6 @@
 package com.scxxwb.net.admin.modules.community.controller;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.scxxwb.net.admin.common.utils.PageUtils;
 import com.scxxwb.net.admin.common.utils.R;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
@@ -8,6 +9,7 @@ import com.scxxwb.net.admin.common.validator.group.UpdateGroup;
 import com.scxxwb.net.admin.modules.sys.controller.AbstractController;
 import com.scxxwb.net.admin.modules.community.entity.CommunitySysDeptEntity;
 import com.scxxwb.net.admin.modules.community.service.CommunitySysDeptService;
+import com.scxxwb.net.admin.modules.sys.entity.TWbAreaEntity;
 import com.scxxwb.net.admin.modules.sys.shiro.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ import java.util.*;
 public class CommunitySysDeptController extends AbstractController {
         @Autowired
         private CommunitySysDeptService communitySysDeptService;
+
         /**
          * 按条件查询所有社区集合
          */
@@ -67,24 +70,30 @@ public class CommunitySysDeptController extends AbstractController {
     @RequiresPermissions("community:community:save")
     public R save(@RequestBody CommunitySysDeptEntity communitySysDeptEntity){
        ValidatorUtils.validateEntity(communitySysDeptEntity, AddGroup.class);
-       //进行社区名称重复判定
+        //查询省市区信息
+        String province = String.valueOf(communitySysDeptEntity.getProvince());
+        String city = String.valueOf(communitySysDeptEntity.getCity());
+        String area = String.valueOf(communitySysDeptEntity.getArea());
+        String town = String.valueOf(communitySysDeptEntity.getTown());
+       //进行社区重复判定
         Map<String, Object> map = new HashMap<>();
         map.put("name", String.valueOf(communitySysDeptEntity.getName()));
-        map.put("province", String.valueOf(communitySysDeptEntity.getProvince()));
-        map.put("city", String.valueOf(communitySysDeptEntity.getCity()));
-        map.put("area", String.valueOf(communitySysDeptEntity.getArea()));
-        map.put("town", String.valueOf(communitySysDeptEntity.getTown()));
+        map.put("province", province);
+        map.put("city", city);
+        map.put("area", area);
+        map.put("town", town);
        List<CommunitySysDeptEntity> list =  communitySysDeptService.selectByMap(map);
        if (list.size() > 0){
            return  R.error("您输入的机构已存在");
        } else {
            //添加创建者id
-           communitySysDeptEntity.setCreUserId(Long.valueOf(ShiroUtils.getUserEntity().getUserId()));
+           communitySysDeptEntity.setUserId(Long.valueOf(ShiroUtils.getUserEntity().getUserId()));
            //添加版本号
            String version = (UUID.randomUUID().toString()).replaceAll("-", "");
            communitySysDeptEntity.setVersion(version);
            //添加创建时间
            communitySysDeptEntity.setCreTime(new Date());
+
            communitySysDeptService.insert(communitySysDeptEntity);
            return R.ok();
        }
@@ -106,8 +115,16 @@ public class CommunitySysDeptController extends AbstractController {
         map.put("town", String.valueOf(communitySysDeptEntity.getTown()));
         List<CommunitySysDeptEntity> list =  communitySysDeptService.selectByMap(map);
         if (list.size() > 0){
-            return  R.error("您输入的机构已存在");
+            CommunitySysDeptEntity communitySysDeptEntity1 = list.get(0);
+            if(!communitySysDeptEntity1.getDeptId().equals(communitySysDeptEntity.getDeptId())){
+                return  R.error("您输入的机构已存在");
+            } else {
+                communitySysDeptEntity.setUpdTime(new Date());
+                communitySysDeptService.updateById(communitySysDeptEntity);
+                return R.ok();
+            }
         } else {
+
             communitySysDeptEntity.setUpdTime(new Date());
             communitySysDeptService.updateById(communitySysDeptEntity);
             return R.ok();
