@@ -164,8 +164,8 @@ var vm = new Vue({
             });
         },
         saveOrUpdate: function () {
-        	if($("#text1").attr("status") == 'N') return ;
-        	$("#text1").attr("status", "N");
+            $("#text1").blur();
+            $("#text1").attr("disabled", "disabled");
             //获取选择的菜单
             var nodes = menu_ztree.getCheckedNodes(true);
             var menuIdList = new Array();
@@ -195,8 +195,8 @@ var vm = new Vue({
                         });
                     }else{
                         alert(r.msg);
-                        $("#text1").attr("status", "Y");
                     }
+                    $("#text1").removeAttr("disabled");
                 }
             });
         },
