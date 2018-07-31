@@ -4,21 +4,18 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Wrapper;
 import java.util.*;
 
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.google.gson.JsonObject;
 import com.scxxwb.net.admin.common.utils.DateUtils;
 import com.scxxwb.net.admin.common.utils.FTPUtils;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
+import com.scxxwb.net.admin.common.validator.group.AddGroup;
+import com.scxxwb.net.admin.common.validator.group.UpdateGroup;
 import io.swagger.annotations.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -93,9 +90,9 @@ public class TVyicooJinjianController {
 //            @PathVariable("type") String type
             @ApiParam(value = "type", required = true) @PathVariable String type
         ){
-        TVyicooJinjianEntity tVyicooJinjian = tVyicooJinjianService.selectById(type);
 
-        return R.ok().put("tVyicooJinjian", tVyicooJinjian);
+            TVyicooJinjianEntity tVyicooJinjian = tVyicooJinjianService.selectById(type);
+            return R.ok().put("tVyicooJinjian", tVyicooJinjian).put("imageNginxPath", imageNginxPath);
     }
 
     /**
@@ -127,7 +124,7 @@ public class TVyicooJinjianController {
                             "}" +
                 "}";
         tVyicooJinjian.setPayment(payment);
-        ValidatorUtils.validateEntity(tVyicooJinjian);
+        ValidatorUtils.validateEntity(tVyicooJinjian, AddGroup.class);
         Map paramMap = JSONObject.parseObject(JSONObject.toJSONString(tVyicooJinjian));
 
         ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/create", basicParam(paramMap), String.class);
@@ -150,7 +147,7 @@ public class TVyicooJinjianController {
     @RequiresPermissions("operation:tvyicoojinjian:update")
     @ApiOperation(value = "修改微易客进件", httpMethod = POST)
     public R update(@RequestBody @ApiParam( name = "进件对象", value = "传入json格式", required = true)TVyicooJinjianEntity tVyicooJinjian){
-        ValidatorUtils.validateEntity(tVyicooJinjian);
+        ValidatorUtils.validateEntity(tVyicooJinjian, UpdateGroup.class);
         Map paramMap = JSONObject.parseObject(JSONObject.toJSONString(tVyicooJinjian));
 
         ResponseEntity<String> mapResponseEntity = restTemplate.postForEntity("https://pay.vyicoo.com/v3/mch/update", basicParam(paramMap), String.class);
@@ -159,6 +156,7 @@ public class TVyicooJinjianController {
         if(status != 0) {
             return R.error("进件资料修改失败！");
         }
+
         tVyicooJinjian.setVerifyStatus(3); // 修改审核中
         tVyicooJinjianService.updateAllColumnById(tVyicooJinjian);//全部更新
 
@@ -170,8 +168,7 @@ public class TVyicooJinjianController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("operation:tvyicoojinjian:delete")
-    @ApiOperation(value = "删除微易客进件", httpMethod = POST)
-    public R delete(@RequestBody @ApiParam(name = "进件id数组", value = "typess") String[] types){
+    public R delete(@RequestBody String[] types){
         tVyicooJinjianService.deleteBatchIds(Arrays.asList(types));
 
         return R.ok();
