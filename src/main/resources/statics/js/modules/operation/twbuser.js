@@ -161,7 +161,6 @@ var vm = new Vue({
 						});
 					}else{
 						alert(r.msg);
-                      $("#text1").attr("status", "Y");
 					}
                     $("#text1").removeAttr("disabled");
 				}

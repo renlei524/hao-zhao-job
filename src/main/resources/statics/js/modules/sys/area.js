@@ -171,14 +171,13 @@ var vm = new Vue({
                                 });
                             }else{
                                 alert(r.msg);
-                                $("#text1").attr("status", "Y");
                             }
-                            $("#text1").removeAttr("disabled");
                         }
                     });
                 }else {
                     alert("此地区名称已存在");
                 }
+                $("#text1").removeAttr("disabled");
             });
         },
         reload: function () {
