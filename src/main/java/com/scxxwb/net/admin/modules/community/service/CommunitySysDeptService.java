@@ -25,4 +25,5 @@ public interface CommunitySysDeptService extends IService<CommunitySysDeptEntity
 
     List<CommunitySysDeptEntity> queryList(Map<String, Object> map);
 
+    List<String> selectDeptIdByName(String name);
 }
