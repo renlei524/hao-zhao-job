@@ -32,6 +32,7 @@
 
     <select id="total" resultType="Integer">
         select count(1) from t_wb_order LEFT JOIN t_wb_user on t_wb_user.id = t_wb_order.user_id
+        LEFT JOIN t_merchant on t_merchant.id = t_wb_order.merchant_id
         <if test="ages != null">
             where t_wb_order.merchant_id in
             <foreach collection="ages" item="ages" open="(" close=")" separator=",">
@@ -41,16 +42,17 @@
         <if test="userName  != null and userName  != ''">
             and t_wb_user.real_name like CONCAT('%',#{userName},'%')
         </if>
-        <if test="merchantId  != null and merchantId  != ''">
-            and t_wb_order.merchant_id = #{merchantId}
+        <if test="merchantName  != null and merchantName  != ''">
+            and t_merchant.merchant_name like CONCAT('%',#{merchantName},'%')
         </if>
-        <if test="dateOfTransaction  != null and dateOfTransaction  != ''">
-            and t_wb_order.pay_time like CONCAT(#{dateOfTransaction},'%')
+        <if test="startTime != null and endTime != null">
+            AND t_wb_order.create_time BETWEEN #{startTime} AND #{endTime}
         </if>
     </select>
 
     <select id="selectByUserName" resultMap="tWbOrderMap">
         select t_wb_order.* from t_wb_order LEFT JOIN t_wb_user on t_wb_user.id = t_wb_order.user_id
+        LEFT JOIN t_merchant on t_merchant.id = t_wb_order.merchant_id
         <if test="ages != null">
             where t_wb_order.merchant_id in
             <foreach collection="ages" item="ages" open="(" close=")" separator=",">
@@ -60,11 +62,11 @@
         <if test="userName != null and userName != ''">
             and t_wb_user.real_name like CONCAT('%',#{userName},'%')
         </if>
-        <if test="merchantId  != null and merchantId  != ''">
-            and t_wb_order.merchant_id = #{merchantId}
+        <if test="merchantName  != null and merchantName  != ''">
+            and t_merchant.merchant_name like CONCAT('%',#{merchantName},'%')
         </if>
-        <if test="dateOfTransaction  != null and dateOfTransaction  != ''">
-            and t_wb_order.pay_time like CONCAT(#{dateOfTransaction},'%')
+        <if test="startTime != null and endTime != null">
+            AND t_wb_order.create_time BETWEEN #{startTime} AND #{endTime}
         </if>
         limit #{current},#{size}
     </select>
@@ -72,6 +74,7 @@
 
     <select id="totalByMerchantId" resultType="Integer">
         SELECT COUNT(1) FROM t_wb_order LEFT JOIN t_wb_user ON t_wb_order.user_id = t_wb_user.id
+        LEFT JOIN t_merchant on t_merchant.id = t_wb_order.merchant_id
         WHERE t_wb_order.status >= 1
         <if test="merchantId  != null and merchantId  != ''">
             and t_wb_order.merchant_id = #{merchantId}

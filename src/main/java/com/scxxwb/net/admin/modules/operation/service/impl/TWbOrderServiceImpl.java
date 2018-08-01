@@ -44,10 +44,21 @@ public class TWbOrderServiceImpl extends ServiceImpl<TWbOrderDao, TWbOrderEntity
         }
         List<Integer> ages =merchantService.getMerchant(list);
 
+        String startTime = (String)params.get("startTime");
+        String endTime = (String)params.get("endTime");
+        if (startTime != null){
+            startTime = startTime + " 00:00:00";
+        }
+        if (endTime != null){
+            endTime = endTime + " 23:59:59";
+        }
+
         //获取查询条件
         params.put("current",(new Query<TWbOrderEntity>(params).getPage().getCurrent()-1)*new Query<TWbOrderEntity>(params).getPage().getSize());
         params.put("size",new Query<TWbOrderEntity>(params).getPage().getSize());
         params.put("ages",ages.size() == 0 ? null : ages);
+        params.put("startTime",startTime);
+        params.put("endTime",endTime);
         //初始化对象
         Page<TWbOrderEntity> page= new Page<>();
         //获取数据

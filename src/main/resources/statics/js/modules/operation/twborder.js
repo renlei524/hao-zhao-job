@@ -18,6 +18,12 @@ $(function () {
                     }
                 } },
 			{ label: '订单状态', name: 'status', index: 'status',valign: 'middle',  width: 55,formatter: function(item, index){
+                    if(item === -2){
+                        return '<span class="label label-primary">已退款</span>';
+                    }
+                    if(item === -1){
+                        return '<span class="label label-primary">已取消</span>';
+                    }
                     if(item === 0){
                         return '<span class="label label-primary">待支付</span>';
                     }
@@ -25,10 +31,10 @@ $(function () {
                         return '<span class="label label-success">已支付</span>';
                     }
                     if(item === 2){
-                        return '<span class="label label-warning">已完成</span>';
+                        return '<span class="label label-warning">已结算</span>';
                     }
                     if(item === 3){
-                        return '<span class="label label-primary">已取消</span>';
+                        return '<span class="label label-warning">已成功</span>';
                     }
                 }},
 			{ label: '订单来源', name: 'orderFrom', index: 'order_from',valign: 'middle',  width: 55,formatter: function(item, index){
@@ -56,7 +62,7 @@ $(function () {
 			{ label: '下单时间', name: 'createTime', index: 'create_time', width: 120,formatter:function(value,options,row){
                     return new Date(value).Format('yyyy-MM-dd HH:mm:ss');}},
 			{ label: '支付完成时间', name: 'payTime', index: 'pay_time', width: 120,formatter:function(value,options,row){
-                    return new Date(value).Format('yyyy-MM-dd HH:mm:ss');}},
+                    return value != null ? new Date(value).Format('yyyy-MM-dd HH:mm:ss') : "";}},
 			{ label: '用户删除', name: 'userDelete', index: 'user_delete',valign: 'middle',  width: 55,formatter: function(item, index){
                     if(item === true){
                         return '<span class="label label-warning">已删除</span>';
@@ -90,7 +96,7 @@ $(function () {
         rownumbers: true, 
         rownumWidth: 50,
         autowidth:true,
-        multiselect: true,
+        multiselect: false,
         pager: "#jqGridPager",
         jsonReader : {
             root: "page.list",
@@ -136,7 +142,10 @@ var vm = new Vue({
 		title: null,
 		tWbOrder: {userName:null},
         q:{
-            userName:null
+            userName:null,
+            merchantName:null,
+            startTime:null,
+            endTime:null
         }
 	},
 	methods: {
@@ -209,14 +218,30 @@ var vm = new Vue({
             });
 		},
 		reload: function (event) {
-
 			vm.showList = true;
+            var time = $("#startTime-endTime").val().split(" - ");
+            vm.q.startTime = time[0];
+            vm.q.endTime = time[1];
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{
-                postData:{'userName':vm.q.userName},
+                postData:{'userName':vm.q.userName,//用户名
+                    "merchantName": vm.q.merchantName, //商户名称
+                    "endTime": vm.q.endTime, //开始时间
+                    "startTime": vm.q.startTime //结束时间
+                     },
                 page:1
             }).trigger("reloadGrid");
-             $("#text1").attr("status", "Y");
 		}
 	}
+});
+
+layui.use('laydate', function(){
+    var laydate = layui.laydate;
+
+    //执行一个laydate实例
+    laydate.render({
+        elem: '#startTime-endTime' //指定元素
+        ,range: true
+        ,max: 0
+    });
 });
