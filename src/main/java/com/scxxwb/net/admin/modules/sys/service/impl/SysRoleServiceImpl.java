@@ -51,7 +51,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 		Page<SysRoleEntity> page = this.selectPage(
 			new Query<SysRoleEntity>(params).getPage(),
 			new EntityWrapper<SysRoleEntity>()
-				.like(StringUtils.isNotBlank(roleName),"role_name", roleName)
+				.addFilterIfNeed(StringUtils.isNotBlank(roleName),"(role_name like '%" + roleName + "%'"
+						+ "or remark like '%" + roleName + "%'"
+						+ "or user_id in (select user_id from t_sys_user where real_name like '%" + roleName + "%'))")
 				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null,"role_id in (select role_id from t_sys_role_dept where " + params.get(Constant.SQL_FILTER)  + ")")
 		);
 
