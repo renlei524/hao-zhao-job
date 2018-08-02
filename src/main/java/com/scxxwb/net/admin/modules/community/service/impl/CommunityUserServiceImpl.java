@@ -72,10 +72,10 @@ public class CommunityUserServiceImpl extends ServiceImpl<CommunityUserDao, Comm
 		;Page<CommunityUserEntity> page = this.selectPage(
 				new Query<CommunityUserEntity>(params).getPage(),
 				new EntityWrapper<CommunityUserEntity>()
-						.addFilterIfNeed(deptIdFromSysUser != null, "dept_id in(" + deptIdFromSysUser + ")" )
-						.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "dept_id in (select dept_id from t_community_sys_dept where sys_dept_id in(" + deptIds + "))")
-						.orNew(flag, "user_name like '%" + queryName + "%'")
-						.or(flag, "mobile like '%" + queryName + "%'")
+						.addFilterIfNeed(deptIdFromSysUser != null, "dept_id IN(" + deptIdFromSysUser + ")" )
+						.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "dept_id IN (SELECT dept_id FROM t_community_sys_dept WHERE sys_dept_id IN(" + deptIds + "))")
+						.orNew(flag, "user_name LIKE '%" + queryName + "%'")
+						.or(flag, "mobile LIKE '%" + queryName + "%'")
 		);
 		List<CommunityUserEntity> list = page.getRecords();
 		for(CommunityUserEntity communityUserEntity : list){
