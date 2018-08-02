@@ -72,9 +72,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 			new Query<SysUserEntity>(params).getPage(),
 			new EntityWrapper<SysUserEntity>()
 				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
-				.orNew(flag, "real_name like '%" + queryName + "%'")
-				.or(flag, "mobile like '%" + queryName + "%'")
-				.or(deptList.size() != 0, "dept_id in (" + num + ")")
+				.orNew(flag, "real_name LIKE '%" + queryName + "%'")
+				.or(flag, "mobile LIKE '%" + queryName + "%'")
+				.or(deptList.size() != 0, "dept_id IN (" + num + ")")
 		);
 
 		for(SysUserEntity sysUserEntity : page.getRecords()){
