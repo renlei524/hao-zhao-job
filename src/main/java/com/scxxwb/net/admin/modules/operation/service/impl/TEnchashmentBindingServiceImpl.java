@@ -60,9 +60,7 @@ public class TEnchashmentBindingServiceImpl extends ServiceImpl<TEnchashmentBind
                         .or(flag, "account LIKE '%" + queryName + "%'")
                         .or(flag, "subbranch LIKE '%" + queryName + "%'")
                         .or(flag, "account_name LIKE '%" + queryName + "%'")
-                        .or(flag, "object_id in (" + merchantId + ")")
-
-//                        .addFilterIfNeed(merchantName != null, "object_id in ("+merchantId+")")
+                        .or(flag, "object_id IN (" + merchantId + ")")
         );
         //添加商户名称及开户行名称
         for (TEnchashmentBindingEntity tEnchashmentBindingEntity : page.getRecords()){
