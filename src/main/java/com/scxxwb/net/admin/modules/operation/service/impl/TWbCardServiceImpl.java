@@ -43,10 +43,23 @@ public class TWbCardServiceImpl extends ServiceImpl<TWbCardDao, TWbCardEntity> i
         List<Integer> merchantIds = merchantService.getMerchant(list);
         String merchantId = StringUtils.join(merchantIds,',');
         String cardContent = (String)params.get("cardContent");
+        String creatorType = (String)params.get("creatorType");
+        String type = (String)params.get("type");
+        String startTime = (String)params.get("startTime");
+        String endTime = (String)params.get("endTime");
+        if (startTime != null){
+            startTime = startTime + " 00:00:00";
+        }
+        if (endTime != null){
+            endTime = endTime + " 23:59:59";
+        }
         Page<TWbCardEntity> page = this.selectPage(
                 new Query<TWbCardEntity>(params).getPage(),
                 new EntityWrapper<TWbCardEntity>()
                         .like(StringUtils.isNotBlank(cardContent),"card_content", cardContent)
+                        .in(StringUtils.isNotBlank(creatorType) && !creatorType.equals("-1"),"creator_type",creatorType)
+                        .in(StringUtils.isNotBlank(type) && !type.equals("-1"),"type",type)
+                        .between(StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime),"create_date",startTime,endTime)
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "creator_id in ("+merchantId+")")
         );
         return new PageUtils(page);
