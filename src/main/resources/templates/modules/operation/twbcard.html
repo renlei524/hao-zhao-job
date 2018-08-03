@@ -3,6 +3,7 @@
 <head>
     <title>卡券表</title>
 		<#include "/header.html">
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/plugins/cover/css/reset.css"/>
     <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
     <script src="${request.contextPath}/statics/plugins/layui/layui.all.js"></script>
     <style>
@@ -18,8 +19,26 @@
     <div v-show="showList">
         <div class="grid-btn">
             <#if shiro.hasPermission("operation:tWbCard:list")>
-                <div class="form-group col-sm-2">
-                    <input type="text" class="form-control" v-model="q.cardContent" @keyup.enter="query" placeholder="优惠价名称">
+                <div class="form-group form-more-style">
+                    <input type="text" id="startTime-endTime" class="form-control"  placeholder="选择时间段">
+                </div>
+                <div class="form-group form-more-style">
+                    <input type="text" class="form-control" v-model="q.cardContent" @keyup.enter="query" placeholder="优惠劵名称">
+                </div>
+                <div class="form-group form-more-style">
+                    <select name="creatorType" v-model="q.creatorType"  class="form-control" placeholder="发行方类型"  id="creatorType" >
+                        <option value="-1" selected="selected">--发行方类型--</option>
+                        <option value="1">平台</option>
+                        <option value="2">商户</option>
+                    </select>
+                </div>
+                <div class="form-group form-more-style">
+                    <select name="type" v-model="q.type"  class="form-control" placeholder="卡券种类"  id="type" >
+                        <option value="-1" selected="selected">--卡券种类--</option>
+                        <option value="0">代金卷</option>
+                        <option value="1">折扣券</option>
+                        <option value="2">满减券</option>
+                    </select>
                 </div>
                 <a class="btn btn-default" @click="query">查询</a>
             </#if>
