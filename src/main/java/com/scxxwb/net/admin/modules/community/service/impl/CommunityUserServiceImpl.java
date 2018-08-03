@@ -76,6 +76,7 @@ public class CommunityUserServiceImpl extends ServiceImpl<CommunityUserDao, Comm
 						.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "dept_id IN (SELECT dept_id FROM t_community_sys_dept WHERE sys_dept_id IN(" + deptIds + "))")
 						.orNew(flag, "user_name LIKE '%" + queryName + "%'")
 						.or(flag, "mobile LIKE '%" + queryName + "%'")
+						.or(flag, "real_name LIKE '%" + queryName + "%'")
 		);
 		List<CommunityUserEntity> list = page.getRecords();
 		for(CommunityUserEntity communityUserEntity : list){

@@ -4,7 +4,8 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: '用户ID', name: 'userId', index: "user_id", width: 45, key: true, hidden: true },
-			{ label: '用户名', name: 'userName', width: 75 },
+            { label: '用户名', name: 'userName', width: 75 },
+            { label: '员工姓名', name: 'realName', width: 75 },
             { label: '所属社区', name: 'deptName', sortable: false, width: 75 },
 			{ label: '邮箱', name: 'email', width: 90 },
 			{ label: '手机号', name: 'mobile', width: 100 },
@@ -70,7 +71,8 @@ var vm = new Vue({
             status:1,
             deptId:null,
             deptName:null,
-            roleIdList:[]
+            roleIdList:[],
+            realName:null
         }
     },
     methods: {

@@ -13,7 +13,8 @@
         <result property="status" column="status"/>
         <result property="deptId" column="dept_id"/>
         <result property="deptName" column="dept_name"/>
-        <result property="createTime" column="create_time"/>
+		<result property="createTime" column="create_time"/>
+		<result property="realName" column="real_name"/>
     </resultMap>
 	
 	<!-- 查询用户的所有权限 -->
