@@ -12,9 +12,7 @@ import com.scxxwb.net.admin.modules.community.entity.CommunitySysDeptEntity;
 import com.scxxwb.net.admin.modules.community.service.CommunitySysDeptService;
 
 import com.scxxwb.net.admin.modules.sys.entity.SysUserEntity;
-import com.scxxwb.net.admin.modules.sys.entity.TWbAreaEntity;
 import com.scxxwb.net.admin.modules.sys.service.SysUserService;
-import com.scxxwb.net.admin.modules.sys.service.TWbAreaService;
 import org.apache.commons.lang.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +32,8 @@ public class CommunitySysDeptServiceImpl extends ServiceImpl<CommunitySysDeptDao
     protected CommunitySysDeptService communitySysDeptService;
     @Autowired
     protected SysUserService sysUserService;
+    @Autowired
+    protected CommunitySysDeptDao communitySysDeptDao;
 
     @Override
     @DataFilter(subDept = true, user = false)
@@ -87,5 +87,10 @@ public class CommunitySysDeptServiceImpl extends ServiceImpl<CommunitySysDeptDao
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "sys_dept_id in (" + deptIds + ")"));
 
         return deptList;
+    }
+
+    @Override
+    public List<String> selectDeptIdByName(String name) {
+        return communitySysDeptDao.selectDeptIdByName(name);
     }
 }

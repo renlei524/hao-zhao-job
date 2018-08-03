@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -49,28 +50,31 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	@Override
 	@DataFilter(subDept = true, user = false)
 	public PageUtils queryPage(Map<String, Object> params) {
-		String userName = (String)params.get("userName");
-		String deptName = (String)params.get("deptName");
-		String mobile = (String)params.get("mobile");
-
+		//获取查询参数
+		String queryName = String.valueOf(params.get("userName")).trim();
+		boolean flag = StringUtils.isNotBlank((String)params.get("userName"));
 		//根据模糊查询公司名称
-		List<SysDeptEntity> deptList =
-				sysDeptService.selectList(new EntityWrapper<SysDeptEntity>().like("name",deptName));
+		List<SysDeptEntity> deptList = new ArrayList<>();
 		String num = "";
-		if (deptList != null){
-			for (SysDeptEntity sysDeptEntity : deptList){
-				num = num + sysDeptEntity.getDeptId().toString()+",";
+		if(queryName != "null" && !queryName.isEmpty()){
+			deptList =
+					sysDeptService.selectList(new EntityWrapper<SysDeptEntity>().like("name",queryName));
+			if (deptList.size() != 0){
+				for (SysDeptEntity sysDeptEntity : deptList){
+					num = num + sysDeptEntity.getDeptId().toString()+",";
+				}
+				num = num.substring(0,num.length() - 1);
 			}
-			num = num.substring(0,num.length() - 1);
 		}
+
 		//查询用户信息
 		Page<SysUserEntity> page = this.selectPage(
 			new Query<SysUserEntity>(params).getPage(),
 			new EntityWrapper<SysUserEntity>()
-				.like(StringUtils.isNotBlank(userName),"real_name", userName)
-				.like(StringUtils.isNotBlank(mobile),"mobile", mobile)
-				.in("dept_id",num)
 				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
+				.orNew(flag, "real_name like '%" + queryName + "%'")
+				.or(flag, "mobile like '%" + queryName + "%'")
+				.or(deptList.size() != 0, "dept_id in (" + num + ")")
 		);
 
 		for(SysUserEntity sysUserEntity : page.getRecords()){

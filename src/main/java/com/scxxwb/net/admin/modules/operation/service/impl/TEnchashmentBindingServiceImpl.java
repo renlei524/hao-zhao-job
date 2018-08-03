@@ -36,10 +36,11 @@ public class TEnchashmentBindingServiceImpl extends ServiceImpl<TEnchashmentBind
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-
-        String merchantName = (String)params.get("merchantName");
+        //获取查询参数
+        String queryName = (String)params.get("merchantName");
+        boolean flag = StringUtils.isNotBlank((String)params.get("merchantName"));
         String merchantId = null;
-        if(merchantName != null) {
+        if(queryName != null) {
             //根据商户名称查询出商户信息
             List<MerchantEntity> merchantEntityList = merchantService.getMerchantByArea(params);
 
@@ -56,7 +57,10 @@ public class TEnchashmentBindingServiceImpl extends ServiceImpl<TEnchashmentBind
         Page<TEnchashmentBindingEntity> page = this.selectPage(
                 new Query<TEnchashmentBindingEntity>(params).getPage(),
                 new EntityWrapper<TEnchashmentBindingEntity>()
-                        .addFilterIfNeed(merchantName != null, "object_id in ("+merchantId+")")
+                        .or(flag, "account LIKE '%" + queryName + "%'")
+                        .or(flag, "subbranch LIKE '%" + queryName + "%'")
+                        .or(flag, "account_name LIKE '%" + queryName + "%'")
+                        .or(flag, "object_id IN (" + merchantId + ")")
         );
         //添加商户名称及开户行名称
         for (TEnchashmentBindingEntity tEnchashmentBindingEntity : page.getRecords()){
