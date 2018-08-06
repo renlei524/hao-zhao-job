@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import com.alibaba.fastjson.JSONObject;
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.utils.DateUtils;
 import com.scxxwb.net.admin.common.utils.FTPUtils;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
@@ -98,6 +99,7 @@ public class TVyicooJinjianController {
     /**
      * 审核回调
      */
+    @SysLog("点点客审核回调")
     @RequestMapping("/callback")
     @CrossOrigin
     @ApiOperation(value = "审核回调", httpMethod = POST)
@@ -109,6 +111,7 @@ public class TVyicooJinjianController {
     /**
      * 保存
      */
+    @SysLog("保存点点客进件资料")
     @RequestMapping("/save")
     @RequiresPermissions("operation:tvyicoojinjian:save")
     @ApiOperation(value = "新增微易客进件", httpMethod = POST)
@@ -143,6 +146,7 @@ public class TVyicooJinjianController {
     /**
      * 修改
      */
+    @SysLog("修改点点客进件资料")
     @RequestMapping("/update")
     @RequiresPermissions("operation:tvyicoojinjian:update")
     @ApiOperation(value = "修改微易客进件", httpMethod = POST)
@@ -166,6 +170,7 @@ public class TVyicooJinjianController {
     /**
      * 删除
      */
+    @SysLog("删除点点客进件资料")
     @RequestMapping("/delete")
     @RequiresPermissions("operation:tvyicoojinjian:delete")
     public R delete(@RequestBody String[] types){
@@ -177,6 +182,7 @@ public class TVyicooJinjianController {
     /**
      * imageBase64文件上传
      */
+    @SysLog("点点客imageBase64文件上传")
     @RequestMapping(value = "/uploadImageBase64", method = RequestMethod.POST)
     @ResponseBody
     public R uploadImageBase64(String imageBase64) throws IOException {

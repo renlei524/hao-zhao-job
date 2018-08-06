@@ -68,40 +68,4 @@ public class TWbOrderController extends AbstractController {
 
         return R.ok().put("tWbOrder", tWbOrder);
     }
-
-    /**
-     * 保存
-     */
-    @RequestMapping("/save")
-    @RequiresPermissions("operation:twborder:save")
-    public R save(@RequestBody TWbOrderEntity tWbOrder){
-        ValidatorUtils.validateEntity(tWbOrder,AddGroup.class);
-        tWbOrderService.insert(tWbOrder);
-
-        return R.ok();
-    }
-
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    @RequiresPermissions("operation:twborder:update")
-    public R update(@RequestBody TWbOrderEntity tWbOrder){
-        ValidatorUtils.validateEntity(tWbOrder,UpdateGroup.class);
-        tWbOrderService.updateAllColumnById(tWbOrder);//全部更新
-        
-        return R.ok();
-    }
-
-    /**
-     * 删除
-     */
-    @RequestMapping("/delete")
-    @RequiresPermissions("operation:twborder:delete")
-    public R delete(@RequestBody String[] orderIds){
-        tWbOrderService.deleteBatchIds(Arrays.asList(orderIds));
-
-        return R.ok();
-    }
-
 }

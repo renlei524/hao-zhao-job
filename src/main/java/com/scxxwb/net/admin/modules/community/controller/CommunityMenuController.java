@@ -89,7 +89,7 @@ public class CommunityMenuController extends AbstractController {
 	/**
 	 * 保存
 	 */
-	@SysLog("保存菜单")
+	@SysLog("保存社区菜单")
 	@RequestMapping("/save")
 	@RequiresPermissions("community:menu:save")
 	public R save(@RequestBody CommunityMenuEntity menu){
@@ -104,7 +104,7 @@ public class CommunityMenuController extends AbstractController {
 	/**
 	 * 修改
 	 */
-	@SysLog("修改菜单")
+	@SysLog("修改社区菜单")
 	@RequestMapping("/update")
 	@RequiresPermissions("community:menu:update")
 	public R update(@RequestBody CommunityMenuEntity menu){
@@ -119,7 +119,7 @@ public class CommunityMenuController extends AbstractController {
 	/**
 	 * 删除
 	 */
-	@SysLog("删除菜单")
+	@SysLog("删除社区菜单")
 	@RequestMapping("/delete")
 	@RequiresPermissions("community:menu:delete")
 	public R delete(long menuId){

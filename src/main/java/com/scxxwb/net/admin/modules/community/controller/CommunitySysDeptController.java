@@ -1,6 +1,7 @@
 package com.scxxwb.net.admin.modules.community.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.utils.PageUtils;
 import com.scxxwb.net.admin.common.utils.R;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
@@ -66,6 +67,7 @@ public class CommunitySysDeptController extends AbstractController {
     /**
      * 保存社区信息
      */
+    @SysLog("保存社区")
     @RequestMapping("/save")
     @RequiresPermissions("community:community:save")
     public R save(@RequestBody CommunitySysDeptEntity communitySysDeptEntity){
@@ -102,6 +104,7 @@ public class CommunitySysDeptController extends AbstractController {
     /**
      * 修改社区信息
      */
+    @SysLog("修改社区")
     @RequestMapping("/update")
     @RequiresPermissions("community:community:update")
     public R update(@RequestBody CommunitySysDeptEntity communitySysDeptEntity){
@@ -134,6 +137,7 @@ public class CommunitySysDeptController extends AbstractController {
     /**
      * 删除
      */
+    @SysLog("删除社区")
     @RequestMapping("/delete")
     @RequiresPermissions("community:community:delete")
     public R delete(@RequestBody Long[] deptId){
