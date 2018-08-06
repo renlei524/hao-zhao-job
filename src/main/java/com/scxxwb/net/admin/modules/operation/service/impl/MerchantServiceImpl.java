@@ -73,6 +73,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantDao, MerchantEntity
                     + "or agent_id in (select dept_id from t_sys_dept where name like '%" + merchantName + "%'))")
                 .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "agent_id in (" + agentId + ")")
                 .addFilterIfNeed(!status.equals("0"), "status =" + status)
+                .orderBy("create_time", false)
                 .orderBy(status.equals("0") ,"status")
         );
         for(MerchantEntity merchantEntity : page.getRecords()){

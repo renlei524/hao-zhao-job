@@ -1169,9 +1169,9 @@ function checkmerchantCode(){
     var merchantCode = document.getElementById('merchantCode').value;
     if(merchantCode == "" || merchantCode == null){
         return document.getElementById('uidt5').innerHTML = '';
-    }else if(!( /^\d{8}$/.test(merchantCode))){
+    }/*else if(!( /^\d{8}$/.test(merchantCode))){
         return document.getElementById('uidt5').innerHTML = '*输入8位收款码';
-    }else{
+    }*/else{
         var url = "operation/merchant/infoByCode/"+merchantCode;
         $.ajax({
             type: "POST",
@@ -1180,12 +1180,12 @@ function checkmerchantCode(){
             success: function(r){
                 if (r.merchantCode != null){
                     if(vm.merchant.id != r.merchantCode.id){
-                        return document.getElementById('uidt5').innerHTML = '当前收款码已存在！';
+                        return $('#uidt5').html('当前收款码已存在！');
                     }else {
-                        return document.getElementById('uidt5').innerHTML = '';
+                        return $('#uidt5').html(null);
                     }
                 }else {
-                    return document.getElementById('uidt5').innerHTML = '';
+                    return $('#uidt5').html(null);
                 }
             }
         });
