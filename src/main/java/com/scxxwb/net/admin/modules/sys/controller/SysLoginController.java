@@ -2,6 +2,7 @@ package com.scxxwb.net.admin.modules.sys.controller;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.utils.R;
 import com.scxxwb.net.admin.modules.sys.shiro.ShiroUtils;
 import org.apache.shiro.authc.*;
@@ -51,6 +52,7 @@ public class SysLoginController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/sys/login", method = RequestMethod.POST)
+	@SysLog("登录")
 	public R login(String username, String password, String captcha) {
 		String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
 		if(!captcha.equalsIgnoreCase(kaptcha)){
@@ -78,6 +80,7 @@ public class SysLoginController {
 	 * 退出
 	 */
 	@RequestMapping(value = "logout", method = RequestMethod.GET)
+	@SysLog("退出登录")
 	public String logout() {
 		ShiroUtils.logout();
 		return "redirect:login.html";
