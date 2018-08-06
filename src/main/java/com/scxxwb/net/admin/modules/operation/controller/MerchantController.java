@@ -205,7 +205,7 @@ public class MerchantController extends AbstractController {
     /**
      * image文件上传
      */
-    @SysLog("商户image文件上传")
+    //@SysLog("商户image文件上传")
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
     @ResponseBody
     public R uploadApp(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
@@ -226,7 +226,7 @@ public class MerchantController extends AbstractController {
     /**
      * imageBase64文件上传
      */
-    @SysLog("商户imageBase64文件上传")
+    //@SysLog("商户imageBase64文件上传")
     @RequestMapping(value = "/uploadImageBase64", method = RequestMethod.POST)
     @ResponseBody
     public R uploadImageBase64(String imageBase64) throws IOException {
@@ -257,7 +257,7 @@ public class MerchantController extends AbstractController {
     /**
      * image文件删除
      */
-    @SysLog("商户image文件删除")
+    //@SysLog("商户image文件删除")
     @RequestMapping(value = "/deleteImage", method = RequestMethod.POST)
     @ResponseBody
     public R deleteImage(String imageName) throws IOException {

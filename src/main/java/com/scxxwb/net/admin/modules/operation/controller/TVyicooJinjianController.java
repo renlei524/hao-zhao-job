@@ -182,7 +182,7 @@ public class TVyicooJinjianController {
     /**
      * imageBase64文件上传
      */
-    @SysLog("点点客imageBase64文件上传")
+    //@SysLog("点点客imageBase64文件上传")
     @RequestMapping(value = "/uploadImageBase64", method = RequestMethod.POST)
     @ResponseBody
     public R uploadImageBase64(String imageBase64) throws IOException {
