@@ -1,5 +1,6 @@
 package com.scxxwb.net.admin.modules.sys.controller;
 
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.utils.DateUtils;
 import com.scxxwb.net.admin.common.utils.FTPUtils;
 import com.scxxwb.net.admin.common.utils.PageUtils;
@@ -80,6 +81,7 @@ public class AppController {
      */
     @RequestMapping(value = "/uploadApp", method = RequestMethod.POST)
     @ResponseBody
+    @SysLog("app文件上传")
     public R uploadApp(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
         //转为流
         InputStream inputStream = file.getInputStream();
@@ -100,6 +102,7 @@ public class AppController {
      */
     @RequestMapping(value = "/deleteApp", method = RequestMethod.POST)
     @ResponseBody
+    @SysLog("app文件删除")
     public R deleteApp(String fileName) throws IOException {
         Boolean result = FTPUtils.deleteFile(url, port, userName, password, appPath, fileName);
         if(!result) {
@@ -113,6 +116,7 @@ public class AppController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("sys:app:save")
+    @SysLog("保存app版本")
     public R save(@RequestBody AppEntity tSysApp){
         tSysApp.setCreateTime(new Date());
         tSysApp.setUserId(ShiroUtils.getUserEntity().getUserId().intValue());
@@ -127,6 +131,7 @@ public class AppController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("sys:app:update")
+    @SysLog("修改app版本")
     public R update(@RequestBody AppEntity tSysApp){
         ValidatorUtils.validateEntity(tSysApp,UpdateGroup.class);
         tSysAppService.updateAllColumnById(tSysApp);//全部更新
@@ -139,6 +144,7 @@ public class AppController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("sys:app:delete")
+    @SysLog("删除app版本")
     public R delete(@RequestBody Integer[] ids){
         tSysAppService.deleteBatchIds(Arrays.asList(ids));
 
