@@ -50,9 +50,9 @@ public class SysLoginController {
 	/**
 	 * 登录
 	 */
+	//@SysLog("登录")
 	@ResponseBody
 	@RequestMapping(value = "/sys/login", method = RequestMethod.POST)
-	@SysLog("登录")
 	public R login(String username, String password, String captcha) {
 		String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
 		if(!captcha.equalsIgnoreCase(kaptcha)){
@@ -80,7 +80,6 @@ public class SysLoginController {
 	 * 退出
 	 */
 	@RequestMapping(value = "logout", method = RequestMethod.GET)
-	@SysLog("退出登录")
 	public String logout() {
 		ShiroUtils.logout();
 		return "redirect:login.html";
