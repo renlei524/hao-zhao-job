@@ -4,7 +4,7 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', width: 30, key: true , hidden:true},
-			{ label: '用户名', name: 'username', width: 50 }, 			
+			{ label: '用户名', name: 'userName', width: 50 },
 			{ label: '用户操作', name: 'operation', width: 70 }, 			
 			{ label: '请求方法', name: 'method', width: 150 }, 			
 			{ label: '请求参数', name: 'params', width: 80 },
