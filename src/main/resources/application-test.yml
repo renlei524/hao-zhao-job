@@ -4,11 +4,11 @@ spring:
         driverClassName: com.mysql.jdbc.Driver
         druid:
             first:  #数据源1
-                url: jdbc:mysql://192.168.10.3:3306/xxwb31?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+                url: jdbc:mysql://192.168.10.2:3306/xxwb31?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
                 username: xxwb3
                 password: xxwb3
             second:  #数据源2
-                url: jdbc:mysql://192.168.10.3:3306/xxwb31?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+                url: jdbc:mysql://192.168.10.2:3306/xxwb31?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
                 username: xxwb3
                 password: xxwb3
             initial-size: 10
@@ -36,22 +36,22 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
-    kafka:
-        bootstrap-servers: 192.168.10.3:9092,192.168.10.4:9092,192.168.10.5:9092
-        auto-offset-reset: earliest
-        enable-auto-commit: false
-        consumer:
-          group-id: scxxwb-admin
-          spring.kafka.consumer.key-deserializer: org.apache.kafka.common.serialization.BytesDeserializer
-          value-deserializer: org.apache.kafka.common.serialization.BytesDeserializer
-          max-poll-records: 100
-        listener:
-          concurrency: 4
+    #kafka:
+        #bootstrap-servers: 192.168.10.2:9092
+        #auto-offset-reset: earliest
+        #enable-auto-commit: false
+        #consumer:
+          #group-id: scxxwb-admin
+          #spring.kafka.consumer.key-deserializer: org.apache.kafka.common.serialization.BytesDeserializer
+          #value-deserializer: org.apache.kafka.common.serialization.BytesDeserializer
+          #max-poll-records: 100
+        #listener:
+          #concurrency: 4
     redis:
         database: 0
-        host: 192.168.10.245
+        host: 192.168.10.2
         port: 6379
-        password:      # 密码（默认为空）
+        password: redis    # 密码（默认为空）
         timeout: 6000ms  # 连接超时时长（毫秒）
         jedis:
             pool:
@@ -67,14 +67,14 @@ scxxwb:
     shiro:
         redis: false # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】
     ftp:
-        url: 192.168.10.5
+        url: 192.168.10.2
         port: 21
-        user-name: root
-        password: xxwb123
-        imagePath: /static/image
-        appPath: /static/appPkg
-        vyicooPath: /static/image
+        user-name: xxwb
+        password: xxwb5674
+        imagePath: image
+        appPath: appPkg
+        vyicooPath: image
     nginx:
-        imagePath: http://192.168.10.5:8686
-        appPath: http://192.168.10.5:8686
+        imagePath: http://192.168.10.2:808
+        appPath: http://192.168.10.2:808
     payPath: http://1mk6535653.iok.la/Pay/Trade/Pay?sn=
