@@ -3,6 +3,7 @@ package com.scxxwb.net.admin.modules.operation.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
 import com.scxxwb.net.admin.common.validator.group.AddGroup;
 import com.scxxwb.net.admin.common.validator.group.UpdateGroup;
@@ -62,6 +63,7 @@ public class TWbCardController extends AbstractController {
     /**
      * 保存
      */
+    @SysLog("保存优惠卷")
     @RequestMapping("/save")
     @RequiresPermissions("operation:twbcard:save")
     public R save(@RequestBody TWbCardEntity tWbCard){
@@ -75,6 +77,7 @@ public class TWbCardController extends AbstractController {
     /**
      * 修改
      */
+    @SysLog("修改优惠卷")
     @RequestMapping("/update")
     @RequiresPermissions("operation:twbcard:update")
     public R update(@RequestBody TWbCardEntity tWbCard){
@@ -87,6 +90,7 @@ public class TWbCardController extends AbstractController {
     /**
      * 删除
      */
+    @SysLog("删除优惠卷")
     @RequestMapping("/delete")
     @RequiresPermissions("operation:twbcard:delete")
     public R delete(@RequestBody String[] ids){

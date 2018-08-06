@@ -61,7 +61,7 @@ public class CommunityUserController extends AbstractController {
 	/**
 	 * 修改登录用户密码
 	 */
-	@SysLog("修改密码")
+	@SysLog("修改社区密码")
 	@RequestMapping("/password")
 	public R password(String password, String newPassword){
 		Assert.isBlank(newPassword, "新密码不为能空");
@@ -98,7 +98,7 @@ public class CommunityUserController extends AbstractController {
 	/**
 	 * 保存用户
 	 */
-	@SysLog("保存用户")
+	@SysLog("保存社区用户")
 	@RequestMapping("/save")
 	@RequiresPermissions("community:user:save")
 	public R save(@RequestBody CommunityUserEntity user){
@@ -112,7 +112,7 @@ public class CommunityUserController extends AbstractController {
 	/**
 	 * 修改用户
 	 */
-	@SysLog("修改用户")
+	@SysLog("修改社区用户")
 	@RequestMapping("/update")
 	@RequiresPermissions("community:user:update")
 	public R update(@RequestBody CommunityUserEntity user){
@@ -126,7 +126,7 @@ public class CommunityUserController extends AbstractController {
 	/**
 	 * 删除用户
 	 */
-	@SysLog("删除用户")
+	@SysLog("删除社区用户")
 	@RequestMapping("/delete")
 	@RequiresPermissions("community:user:delete")
 	public R delete(@RequestBody Long[] userIds){
