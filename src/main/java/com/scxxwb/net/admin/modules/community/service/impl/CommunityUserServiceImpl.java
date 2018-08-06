@@ -69,12 +69,12 @@ public class CommunityUserServiceImpl extends ServiceImpl<CommunityUserDao, Comm
 			}
 		}
         //初始化对象
-		;Page<CommunityUserEntity> page = this.selectPage(
+		Page<CommunityUserEntity> page = this.selectPage(
 				new Query<CommunityUserEntity>(params).getPage(),
 				new EntityWrapper<CommunityUserEntity>()
 						.addFilterIfNeed(deptIdFromSysUser != null, "dept_id IN(" + deptIdFromSysUser + ")" )
 						.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "dept_id IN (SELECT dept_id FROM t_community_sys_dept WHERE sys_dept_id IN(" + deptIds + "))")
-						.orNew(flag, "user_name LIKE '%" + queryName + "%'")
+						.andNew(flag, "user_name LIKE '%" + queryName + "%'")
 						.or(flag, "mobile LIKE '%" + queryName + "%'")
 						.or(flag, "real_name LIKE '%" + queryName + "%'")
 		);
