@@ -1,6 +1,7 @@
 package com.scxxwb.net.admin.modules.operation.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.utils.*;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
 import com.scxxwb.net.admin.modules.operation.entity.MerchantCheckEntity;
@@ -68,6 +69,7 @@ public class MerchantCheckController extends AbstractController {
     /**
      * 审核
      */
+    @SysLog("审核商户")
     @RequestMapping("/check")
     @RequiresPermissions("operation:check:check")
     public R check(@RequestBody MerchantCheckEntity merchantCheckEntity){

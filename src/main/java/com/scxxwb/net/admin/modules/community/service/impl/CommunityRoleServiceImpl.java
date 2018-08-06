@@ -59,7 +59,9 @@ public class CommunityRoleServiceImpl extends ServiceImpl<CommunityRoleDao, Comm
         Page<CommunityRoleEntity> page = this.selectPage(
                 new Query<CommunityRoleEntity>(params).getPage(),
                 new EntityWrapper<CommunityRoleEntity>()
-                        .like(StringUtils.isNotBlank(roleName),"role_name", roleName)
+                        .addFilterIfNeed(StringUtils.isNotBlank(roleName),"(role_name like '%" + roleName + "%'"
+                                + "or remark like '%" + roleName + "%'"
+                                + "or user_id in (select user_id from t_community_sys_user where user_name like '%" + roleName + "%'))")
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null,"role_id in (select role_id from t_community_sys_role_dept where dept_id in( select dept_id from t_community_sys_dept where sys_dept_id in(" + sysDeptIds  + ")))")
         );
 

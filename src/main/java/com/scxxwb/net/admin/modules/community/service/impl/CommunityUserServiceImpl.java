@@ -55,15 +55,28 @@ public class CommunityUserServiceImpl extends ServiceImpl<CommunityUserDao, Comm
 			num = num.substring(13, num.length() - 2);
 			String[] strs = num.split(",");
 			List<String> list = Arrays.asList(strs);
+			//所属分公司字段过滤
 			deptIds = StringUtils.join(list, ',');
 		}
-
+		//获取查询参数
+		String queryName = String.valueOf(params.get("userName")).trim();
+		boolean flag = StringUtils.isNotBlank((String)params.get("userName"));
+		String deptIdFromSysUser = null;
+		if(queryName != "null" && !queryName.isEmpty()) {
+			List<String> deptList = communitySysDeptService.selectDeptIdByName(queryName);
+			if(deptList.size() != 0){
+				deptIdFromSysUser = StringUtils.join(deptList, ",");
+			}
+		}
         //初始化对象
-		Page<CommunityUserEntity> page = this.selectPage(
+		;Page<CommunityUserEntity> page = this.selectPage(
 				new Query<CommunityUserEntity>(params).getPage(),
 				new EntityWrapper<CommunityUserEntity>()
-						.like(StringUtils.isNotBlank((String)params.get("userName")), "user_name", String.valueOf(params.get("userName")))
-						.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "dept_id in (select dept_id from t_community_sys_dept where sys_dept_id in(" + deptIds + "))")
+						.addFilterIfNeed(deptIdFromSysUser != null, "dept_id IN(" + deptIdFromSysUser + ")" )
+						.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "dept_id IN (SELECT dept_id FROM t_community_sys_dept WHERE sys_dept_id IN(" + deptIds + "))")
+						.orNew(flag, "user_name LIKE '%" + queryName + "%'")
+						.or(flag, "mobile LIKE '%" + queryName + "%'")
+						.or(flag, "real_name LIKE '%" + queryName + "%'")
 		);
 		List<CommunityUserEntity> list = page.getRecords();
 		for(CommunityUserEntity communityUserEntity : list){

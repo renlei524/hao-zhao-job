@@ -1,5 +1,6 @@
 package com.scxxwb.net.admin.modules.sys.controller;
 
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.utils.Constant;
 import com.scxxwb.net.admin.common.utils.R;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
@@ -123,6 +124,7 @@ public class SysDeptController extends AbstractController {
 	 */
 	@RequestMapping("/save")
 	@RequiresPermissions("sys:dept:save")
+	@SysLog("保存部门")
 	public R save(@RequestBody SysDeptEntity dept){
 		dept.setUserId(ShiroUtils.getUserEntity().getUserId());
 		dept.setCreateTime(new Date());
@@ -137,6 +139,7 @@ public class SysDeptController extends AbstractController {
 	 */
 	@RequestMapping("/update")
 	@RequiresPermissions("sys:dept:update")
+    @SysLog("修改部门")
 	public R update(@RequestBody SysDeptEntity dept){
 		dept.setUserId(ShiroUtils.getUserEntity().getUserId());
 		dept.setCreateTime(new Date());
@@ -200,6 +203,7 @@ public class SysDeptController extends AbstractController {
 	 */
 	@RequestMapping("/delete")
 	@RequiresPermissions("sys:dept:delete")
+    @SysLog("删除部门")
 	public R delete(Integer deptId){
 		//判断是否有子部门
 		List<Integer> deptList = sysDeptService.queryDetpIdList(deptId);

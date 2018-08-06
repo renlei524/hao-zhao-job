@@ -4,9 +4,10 @@ $(function () {
         datatype: "json",
         colModel: [
             { label: 'id', name: 'id', index: 'id', width: 80 ,hidden:true},
-			{ label: '公司类型', name: 'creatorType', width: 80, formatter: function(value, options, row){
+            { label: '优惠券名称', name: 'cardContent', index: 'card_content', width: 80 },
+			{ label: '发行方类型', name: 'creatorType', width: 80, formatter: function(value, options, row){
                     return value === 1 ?
-                        '<span class="label label-danger">平台</span>' :
+                        '<span class="label label-primary">平台</span>' :
                         '<span class="label label-success">商户</span>';
                 }},
 			// { label: '创建人/发行人', name: 'creatorId', index: 'creator_id', width: 80 },
@@ -14,13 +15,12 @@ $(function () {
 			{ label: '卡券过期时间', name: 'endTime', index: 'end_time', width: 80 }, 			
 			{ label: '卡卷数量', name: 'cardNum', index: 'card_num', width: 80 }, 			
 			{ label: '剩余卡券数量', name: 'leftNum', index: 'left_num', width: 80 }, 			
-			{ label: '用户最多持有张数', name: 'limitNum', index: 'limit_num', width: 80 }, 			
-			{ label: '卡券logo', name: 'logo', index: 'logo', width: 80 }, 			
+			{ label: '用户最多持有张数', name: 'limitNum', index: 'limit_num', width: 80 },
 			{ label: '使用说明', name: 'description', index: 'description', width: 80 },
 			{ label: '状态', name: 'status', width: 80, formatter: function(value, options, row){
                     return value === 1 ?
-                        '<span class="label label-danger">未删除</span>' :
-                        '<span class="label label-success">已删除</span>';
+                        '<span class="label label-success">未删除</span>' :
+                        '<span class="label label-danger">已删除</span>';
                 }},
 			{ label: '发行时间', name: 'createDate', index: 'create_date', width: 80 },
 			{ label: '卡券种类', name: 'type',index: 'type', align: 'center', valign: 'middle', sortable: true, width: '80px', formatter: function(item, index){
@@ -34,10 +34,9 @@ $(function () {
                         return '<span class="label label-warning">满减券</span>';
                     }
                 }},
-			{ label: '折扣(1至99的整数)', name: 'discount', index: 'discount', width: 80 },
+			{ label: '折扣', name: 'discount', index: 'discount', width: 80 },
 			{ label: '满足金额', name: 'fullMoney', index: 'full_money', width: 80 },
-			{ label: '卡券金额', name: 'cardMoney', index: 'card_money', width: 80 }, 			
-			{ label: '优惠券名称', name: 'cardContent', index: 'card_content', width: 80 }
+			{ label: '卡券金额', name: 'cardMoney', index: 'card_money', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
@@ -73,7 +72,11 @@ var vm = new Vue({
             cardContent: null
 		},
 		q:{
-            cardContent :null
+            cardContent :null,
+            startTime:null,
+            endTime:null,
+            creatorType:-1,
+            type:-1
 		},
 		showList: true,
 		title: null,
@@ -166,11 +169,18 @@ var vm = new Vue({
             });
 		},
 		reload: function (event) {
-
 			vm.showList = true;
+            var time = $("#startTime-endTime").val().split(" - ");
+            vm.q.startTime = time[0];
+            vm.q.endTime = time[1];
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{
-                postData:{'cardContent': vm.q.cardContent},
+                postData:{'cardContent': vm.q.cardContent,//优惠劵名称
+                    "endTime": vm.q.endTime, //开始时间
+                    "startTime": vm.q.startTime, //结束时间
+                    "creatorType": vm.q.creatorType, //发行方类型
+                    "type": vm.q.type //卡券种类
+                    },
                 page:1
             }).trigger("reloadGrid");
               $("#text1").attr("status", "Y");
@@ -190,6 +200,16 @@ $('.tWbCard-beginTime, .tWbCard-endTime').datetimepicker({
     });
 
 layui.use('laydate', function(){
+
+    var laydate = layui.laydate;
+
+    //执行一个laydate实例
+    laydate.render({
+        elem: '#startTime-endTime' //指定元素
+        ,range: true
+        ,max: 0
+    });
+
     var laydate_1 = layui.laydate;
     //执行一个laydate实例
     laydate_1.render({

@@ -3,6 +3,7 @@ package com.scxxwb.net.admin.modules.operation.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.utils.Constant;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
 import com.scxxwb.net.admin.common.validator.group.AddGroup;
@@ -99,6 +100,7 @@ public class MerchantCategoryController {
     /**
      * 保存
      */
+    @SysLog("保存商户类型")
     @RequestMapping("/save")
     @RequiresPermissions("sys:merchantcategory:save")
     public R save(@RequestBody MerchantCategoryEntity merchantCategory){
@@ -111,6 +113,7 @@ public class MerchantCategoryController {
     /**
      * 修改
      */
+    @SysLog("修改商户类型")
     @RequestMapping("/update")
     @RequiresPermissions("sys:merchantcategory:update")
     public R update(@RequestBody MerchantCategoryEntity merchantCategory){
@@ -123,6 +126,7 @@ public class MerchantCategoryController {
     /**
      * 删除
      */
+    @SysLog("删除商户类型")
     @RequestMapping("/delete")
     @RequiresPermissions("sys:merchantcategory:delete")
     public R delete(long categoryId){

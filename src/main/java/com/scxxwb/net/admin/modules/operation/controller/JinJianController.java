@@ -1,6 +1,7 @@
 package com.scxxwb.net.admin.modules.operation.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.utils.*;
 import com.scxxwb.net.admin.modules.operation.entity.JinJianEntity;
 import org.apache.http.HttpEntity;
@@ -45,6 +46,7 @@ public class JinJianController {
     /**
      * 进件图片上传
      */
+    @SysLog("点点客进件图片上传")
     @RequestMapping("/upload")
     @RequiresPermissions("operation:jinjian:upload")
     public R upload(String base64Str) {
@@ -97,6 +99,7 @@ public class JinJianController {
     /**
      商品进件
      */
+    @SysLog("点点客商品进件")
     @RequestMapping("/send")
     @RequiresPermissions("operation:jinjian:send")
     public R send(@RequestBody JinJianEntity jinJianEntity) {

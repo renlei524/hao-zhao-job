@@ -83,7 +83,7 @@ public class CommunityRoleController extends AbstractController {
     /**
      * 保存角色
      */
-    @SysLog("保存角色")
+    @SysLog("保存社区角色")
     @RequestMapping("/save")
     @RequiresPermissions("community:role:save")
     public R save(@RequestBody CommunityRoleEntity role){
@@ -97,7 +97,7 @@ public class CommunityRoleController extends AbstractController {
     /**
      * 修改角色
      */
-    @SysLog("修改角色")
+    @SysLog("修改社区角色")
     @RequestMapping("/update")
     @RequiresPermissions("community:role:update")
     public R update(@RequestBody CommunityRoleEntity role){
@@ -111,7 +111,7 @@ public class CommunityRoleController extends AbstractController {
     /**
      * 删除角色
      */
-    @SysLog("删除角色")
+    @SysLog("删除社区角色")
     @RequestMapping("/delete")
     @RequiresPermissions("community:role:delete")
     public R delete(@RequestBody Long[] roleIds){

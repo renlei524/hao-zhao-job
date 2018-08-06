@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import com.alibaba.fastjson.JSONObject;
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.utils.*;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
 import com.scxxwb.net.admin.common.validator.group.AddGroup;
@@ -102,6 +103,7 @@ public class MerchantController extends AbstractController {
     /**
      * 保存
      */
+    @SysLog("保存商户")
     @RequestMapping("/save")
     @RequiresPermissions("operation:merchant:save")
     public R save(@RequestBody MerchantEntity merchant){
@@ -139,6 +141,7 @@ public class MerchantController extends AbstractController {
     /**
      * 修改
      */
+    @SysLog("修改商户")
     @RequestMapping("/update")
     @RequiresPermissions("operation:merchant:update")
     public R update(@RequestBody MerchantEntity merchant){
@@ -164,6 +167,7 @@ public class MerchantController extends AbstractController {
     /**
      * 禁用
      */
+    @SysLog("禁用商户")
     @RequestMapping("/stop")
     @RequiresPermissions("operation:merchant:stop")
     public R stop(@RequestBody Integer[] ids){
@@ -176,6 +180,7 @@ public class MerchantController extends AbstractController {
     /**
      * 启用
      */
+    @SysLog("启用商户")
     @RequestMapping("/start")
     @RequiresPermissions("operation:merchant:start")
     public R start(@RequestBody Integer[] ids){
@@ -187,6 +192,7 @@ public class MerchantController extends AbstractController {
     /**
      * 删除
      */
+    @SysLog("删除商户")
     @RequestMapping("/delete")
     @RequiresPermissions("operation:merchant:delete")
     public R delete(@RequestBody Integer[] ids){
@@ -199,6 +205,7 @@ public class MerchantController extends AbstractController {
     /**
      * image文件上传
      */
+    @SysLog("商户image文件上传")
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
     @ResponseBody
     public R uploadApp(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
@@ -219,6 +226,7 @@ public class MerchantController extends AbstractController {
     /**
      * imageBase64文件上传
      */
+    @SysLog("商户imageBase64文件上传")
     @RequestMapping(value = "/uploadImageBase64", method = RequestMethod.POST)
     @ResponseBody
     public R uploadImageBase64(String imageBase64) throws IOException {
@@ -249,6 +257,7 @@ public class MerchantController extends AbstractController {
     /**
      * image文件删除
      */
+    @SysLog("商户image文件删除")
     @RequestMapping(value = "/deleteImage", method = RequestMethod.POST)
     @ResponseBody
     public R deleteImage(String imageName) throws IOException {
@@ -262,6 +271,7 @@ public class MerchantController extends AbstractController {
     /**
      * 展示收款码
      */
+    @SysLog("商户展示收款码")
     @RequestMapping(value = "/showMerchantCodeImage", method = RequestMethod.POST)
     @ResponseBody
     public R showMerchantCodeImage(String merchantCode) throws IOException {

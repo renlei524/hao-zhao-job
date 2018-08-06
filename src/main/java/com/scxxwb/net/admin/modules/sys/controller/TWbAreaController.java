@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
 import com.scxxwb.net.admin.common.validator.group.AddGroup;
 import com.scxxwb.net.admin.common.validator.group.UpdateGroup;
@@ -111,6 +112,7 @@ public class TWbAreaController {
     /**
      * 保存
      */
+    @SysLog("保存地区")
     @RequestMapping("/save")
     @RequiresPermissions("sys:twbarea:save")
     @Transactional(rollbackFor = Exception.class)
@@ -132,6 +134,7 @@ public class TWbAreaController {
     /**
      * 修改
      */
+    @SysLog("修改地区")
     @RequestMapping("/update")
     @RequiresPermissions("sys:twbarea:update")
     @Transactional(rollbackFor = Exception.class)
@@ -149,6 +152,13 @@ public class TWbAreaController {
         return R.ok();
     }
 
+    /**
+     * 删除地区
+     * @param params
+     * @param areaId
+     * @return
+     */
+    @SysLog("删除地区")
     @RequestMapping("/delete")
     @RequiresPermissions("sys:menu:delete")
     @Transactional(rollbackFor = Exception.class)

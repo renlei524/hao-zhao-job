@@ -2,6 +2,7 @@ package com.scxxwb.net.admin.modules.operation.controller;
 
 import java.util.*;
 
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
 import com.scxxwb.net.admin.common.validator.group.AddGroup;
 import com.scxxwb.net.admin.common.validator.group.UpdateGroup;
@@ -79,6 +80,7 @@ public class TWbUserController extends AbstractController {
     /**
      * 保存
      */
+    @SysLog("保存用户")
     @RequestMapping("/save")
     @RequiresPermissions("operation:twbuser:save")
     public R save(@RequestBody TWbUserEntity tWbUser){
@@ -95,6 +97,7 @@ public class TWbUserController extends AbstractController {
     /**
      * 修改
      */
+    @SysLog("修改用户")
     @RequestMapping("/update")
     @RequiresPermissions("operation:twbuser:update")
     public R update(@RequestBody TWbUserEntity tWbUser){
@@ -115,6 +118,7 @@ public class TWbUserController extends AbstractController {
     /**
      * 删除
      */
+    @SysLog("删除用户")
     @RequestMapping("/delete")
     @RequiresPermissions("operation:twbuser:delete")
     public R delete(@RequestBody String[] ids){

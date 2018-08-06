@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
 import com.scxxwb.net.admin.common.validator.group.AddGroup;
 import com.scxxwb.net.admin.common.validator.group.UpdateGroup;
@@ -92,6 +93,7 @@ public class TEnchashmentBindingController {
     /**
      * 保存
      */
+    @SysLog("保存银行卡")
     @RequestMapping("/save")
     @RequiresPermissions("operation:tenchashmentbinding:save")
     public R save(@RequestBody TEnchashmentBindingEntity tEnchashmentBinding){
@@ -117,6 +119,7 @@ public class TEnchashmentBindingController {
     /**
      * 修改
      */
+    @SysLog("修改银行卡")
     @RequestMapping("/update")
     @RequiresPermissions("operation:tenchashmentbinding:update")
     public R update(@RequestBody TEnchashmentBindingEntity tEnchashmentBinding){
@@ -142,6 +145,7 @@ public class TEnchashmentBindingController {
     /**
      * 删除
      */
+    @SysLog("删除银行卡")
     @RequestMapping("/delete")
     @RequiresPermissions("operation:tenchashmentbinding:delete")
     public R delete(@RequestBody Integer[] ids){

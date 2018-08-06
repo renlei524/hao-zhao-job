@@ -1,5 +1,6 @@
 package com.scxxwb.net.admin.modules.sys.controller;
 
+import com.scxxwb.net.admin.common.annotation.SysLog;
 import com.scxxwb.net.admin.common.utils.PageUtils;
 import com.scxxwb.net.admin.common.utils.R;
 import com.scxxwb.net.admin.common.validator.ValidatorUtils;
@@ -65,6 +66,7 @@ public class SysDictController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("sys:dict:save")
+    @SysLog("保存数据字典")
     public R save(@RequestBody SysDictEntity dict){
         //校验类型
         ValidatorUtils.validateEntity(dict);
@@ -79,6 +81,7 @@ public class SysDictController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("sys:dict:update")
+    @SysLog("修改数据字典")
     public R update(@RequestBody SysDictEntity dict){
         //校验类型
         ValidatorUtils.validateEntity(dict);
@@ -93,6 +96,7 @@ public class SysDictController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("sys:dict:delete")
+    @SysLog("删除数据字典")
     public R delete(@RequestBody Long[] ids){
         sysDictService.deleteBatchIds(Arrays.asList(ids));
 
