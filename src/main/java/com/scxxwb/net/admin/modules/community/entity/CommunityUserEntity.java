@@ -37,6 +37,10 @@ public class CommunityUserEntity implements Serializable {
 	 */
 	@NotBlank(message="用户名不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String userName;
+	/**
+	 * 员工姓名
+	 */
+	private String realName;
 
 	/**
 	 * 密码
@@ -233,5 +237,13 @@ public class CommunityUserEntity implements Serializable {
 
 	public void setDeptName(String deptName) {
 		this.deptName = deptName;
+	}
+
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
 	}
 }

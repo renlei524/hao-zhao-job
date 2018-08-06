@@ -75,6 +75,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 				.orNew(flag, "real_name LIKE '%" + queryName + "%'")
 				.or(flag, "mobile LIKE '%" + queryName + "%'")
 				.or(deptList.size() != 0, "dept_id IN (" + num + ")")
+				.or(flag, "user_name LIKE '%" + queryName + "%'")
 		);
 
 		for(SysUserEntity sysUserEntity : page.getRecords()){
