@@ -10,7 +10,9 @@ import com.scxxwb.net.admin.modules.operation.service.TWbUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -46,11 +48,19 @@ public class TWbOrderServiceImpl extends ServiceImpl<TWbOrderDao, TWbOrderEntity
 
         String startTime = (String)params.get("startTime");
         String endTime = (String)params.get("endTime");
-        if (startTime != null){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (startTime != null && startTime.length() > 5){
             startTime = startTime + " 00:00:00";
         }
-        if (endTime != null){
+        else {
+            //获取当前日期
+            startTime = (sdf.format(new Date())).substring(0,10) + " 00:00:00";
+        }
+        if (endTime != null && endTime.length() > 5){
             endTime = endTime + " 23:59:59";
+        }
+        else{
+            endTime = (sdf.format(new Date())).substring(0,10) + " 23:59:59";
         }
 
         //获取查询条件
@@ -74,9 +84,15 @@ public class TWbOrderServiceImpl extends ServiceImpl<TWbOrderDao, TWbOrderEntity
             twbOrderEntity.setTotalAmount((twbOrderEntity.getTotalAmount() / 100.00));
             twbOrderEntity.setSettleAccounts((twbOrderEntity.getSettleAccounts() / 100.00));
             twbOrderEntity.setFinalAmount((twbOrderEntity.getFinalAmount() / 100.00));
-            TWbUserEntity tWbUserEntity = tWbUserService.selectById(twbOrderEntity.getUserId());
-            if(tWbUserEntity != null){
-                twbOrderEntity.setUserName(tWbUserEntity.getRealName());
+            if (twbOrderEntity.getWbDeductible() != null){
+                twbOrderEntity.setWbDeductible((twbOrderEntity.getWbDeductible() / 100.00));
+            }else {
+                twbOrderEntity.setWbDeductible(0.00);
+            }
+            if (twbOrderEntity.getCouponsOffset() != null){
+                twbOrderEntity.setCouponsOffset((twbOrderEntity.getCouponsOffset() / 100.00));
+            }else {
+                twbOrderEntity.setCouponsOffset(0.00);
             }
             MerchantEntity merchantEntity =merchantService.selectById(twbOrderEntity.getMerchantId());
             if (merchantEntity != null){
