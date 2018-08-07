@@ -1,4 +1,26 @@
 $(function () {
+
+    /**
+     * 默认显示当前时间
+     * @type {Date}
+     */
+    var now = new Date(),
+        year = now.getFullYear(),
+        month = ((now.getMonth() + 1)>9)?(now.getMonth() + 1):("0"+(now.getMonth() + 1)),
+        date = translate(now.getDate());
+    function translate(prop){
+        if(prop <= 9){
+            return "0" + prop;
+        }else {
+            return prop
+        }
+    }
+    var dateString = year+"-"+month+"-"+date;
+    $("#startTime-endTime").val(dateString+" - "+dateString);
+    vm.q.startTime = dateString;
+    vm.q.endTime = dateString;
+
+
     $("#jqGrid").jqGrid({
         url: baseURL + 'operation/twborder/list',
         datatype: "json",
@@ -6,12 +28,17 @@ $(function () {
 			{ label: '订单号', name: 'orderId', index: 'order_id', key: true},
 			{ label: '商家名称', name: 'merchantName'},
 			{ label: '用户名称', name: 'userName'},
-			{ label: '用户电话', name: 'userTel'},
-			{ label: '订单总价', name: 'totalAmount', index: 'total_amount'},
-			{ label: '商家结算价', name: 'settleAccounts', index: 'settle_accounts'},
-			{ label: '优惠卷使用', name: '', index: ''},
-			{ label: '微宝使用', name: '', index: ''},
-			{ label: '实付金额', name: 'finalAmount', index: 'final_amount'},
+			{ label: '用户电话', name: 'mobile'},
+			{ label: '订单总价', name: 'totalAmount', index: 'total_amount', formatter:'currency', formatoptions:{decimalSeparator:".", thousandsSeparator: ",",
+                    decimalPlaces: 2}},
+			{ label: '商家结算价', name: 'settleAccounts', index: 'settle_accounts', formatter:'currency', formatoptions:{decimalSeparator:".", thousandsSeparator: ",",
+                    decimalPlaces: 2}},
+			{ label: '优惠卷使用', name: 'couponsOffset',formatter:'currency', formatoptions:{decimalSeparator:".", thousandsSeparator: ",",
+                    decimalPlaces: 2}},
+			{ label: '微宝使用', name: 'wbDeductible', formatter:'currency', formatoptions:{decimalSeparator:".", thousandsSeparator: ",",
+                    decimalPlaces: 2}},
+			{ label: '实付金额', name: 'finalAmount', index: 'final_amount', formatter:'currency', formatoptions:{decimalSeparator:".", thousandsSeparator: ",",
+                    decimalPlaces: 2}},
 			{ label: '订单状态', name: 'status', index: 'status',valign: 'middle',formatter: function(item, index){
                     if(item === -2){
                         return '<span class="label label-primary">已退款</span>';
@@ -123,7 +150,8 @@ var vm = new Vue({
             userName:null,
             merchantName:null,
             startTime:null,
-            endTime:null
+            endTime:null,
+            orderId:null
         }
 	},
 	methods: {
@@ -202,10 +230,11 @@ var vm = new Vue({
             vm.q.endTime = time[1];
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{
-                postData:{'userName':vm.q.userName,//用户名
+                postData:{'userName':vm.q.userName,//用户名称 && 用户电话号码
                     "merchantName": vm.q.merchantName, //商户名称
                     "endTime": vm.q.endTime, //开始时间
-                    "startTime": vm.q.startTime //结束时间
+                    "startTime": vm.q.startTime, //结束时间
+                    "orderId" : vm.q.orderId //订单号
                      },
                 page:1
             }).trigger("reloadGrid");

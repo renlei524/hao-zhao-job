@@ -77,6 +77,11 @@ public class TWbOrderEntity implements Serializable {
 	private Double wbDeductible;
 
     /**
+     * 优惠券抵扣
+     */
+	private Double couponsOffset;
+
+    /**
      * 手机号
      */
 	private String mobile;
@@ -405,4 +410,12 @@ public class TWbOrderEntity implements Serializable {
 	public String getMerchantName() {
 		return merchantName;
 	}
+
+    public Double getCouponsOffset() {
+        return couponsOffset;
+    }
+
+    public void setCouponsOffset(Double couponsOffset) {
+        this.couponsOffset = couponsOffset;
+    }
 }
