@@ -3,11 +3,11 @@ $(function () {
         url: baseURL + 'operation/twbuser/list',
         datatype: "json",
         colModel: [
-            { label: 'id', name: 'id', index: 'id', width: 80, hidden:true },
-			{ label: '用户手机号码', name: 'mobile', index: 'mobile', width: 80 },
-			{ label: '用户真实姓名', name: 'realName', index: 'real_name', width: 80 },
-			{ label: '用户身份证号码', name: 'idCard', index: 'id_card', width: 80 },
-			{ label: '状态', name: 'status', index: 'status',valign: 'middle', sortable: true, width: 80,formatter: function(item, index){
+            { label: 'id', name: 'id', index: 'id', hidden:true },
+			{ label: '用户手机号码', name: 'mobile', index: 'mobile'},
+			{ label: '用户真实姓名', name: 'realName', index: 'real_name'},
+			{ label: '用户身份证号码', name: 'idCard', index: 'id_card'},
+			{ label: '状态', name: 'status', index: 'status',valign: 'middle',formatter: function(item, index){
                     if(item === 0){
                         return '<span class="label label-primary">正常</span>';
                     }
@@ -18,10 +18,15 @@ $(function () {
                         return '<span class="label label-warning">冻结</span>';
                     }
                 }},
-			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80,formatter:function(value,options,row){
+			{ label: '创建时间', name: 'createTime', index: 'create_time',formatter:function(value,options,row){
                     return new Date(value).Format('yyyy-MM-dd HH:mm:ss');}},
-			{ label: '更新时间', name: 'updateTime', index: 'update_time', width: 80,formatter:function(value,options,row){
-                    return new Date(value).Format('yyyy-MM-dd HH:mm:ss');}}
+			{ label: '更新时间', name: 'updateTime', index: 'update_time',formatter:function(value,options,row){
+                    return new Date(value).Format('yyyy-MM-dd HH:mm:ss');}},
+            { label: '消费总额', name: '', index: ''},
+            { label: '最近消费时间', name: '', index: ''},
+            { label: '最近消费区域', name: '', index: ''},
+            { label: '城市经理', name: '', index: ''},
+            { label: '城市经理电话', name: '', index: ''}
         ],
 		viewrecords: true,
         height: 385,
