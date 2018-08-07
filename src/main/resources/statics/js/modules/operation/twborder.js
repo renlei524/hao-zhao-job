@@ -3,21 +3,16 @@ $(function () {
         url: baseURL + 'operation/twborder/list',
         datatype: "json",
         colModel: [			
-			{ label: '订单编号', name: 'orderId', index: 'order_id', width: 200, key: true , hidden:true},
-			{ label: '用户名称', name: 'userName', width: 80 },
-			{ label: '商家名称', name: 'merchantName', width: 80 },
-			{ label: '订单总价即原价', name: 'totalAmount', index: 'total_amount', width: 80 }, 			
-			{ label: '实际给商家的结算价', name: 'settleAccounts', index: 'settle_accounts', width: 80 }, 			
-			{ label: '实际支付价', name: 'finalAmount', index: 'final_amount', width: 60 },
-			{ label: '信用卡支付', name: 'isFinalAmountFrom', index: 'is_final_amount_from',valign: 'middle', width: 60 ,formatter: function(item, index){
-                    if(item === "0"){
-                        return '<span class="label label-success">否</span>';
-                    }
-                    if(item === "1"){
-                        return '<span class="label label-primary">是</span>';
-                    }
-                } },
-			{ label: '订单状态', name: 'status', index: 'status',valign: 'middle',  width: 55,formatter: function(item, index){
+			{ label: '订单号', name: 'orderId', index: 'order_id', key: true},
+			{ label: '商家名称', name: 'merchantName'},
+			{ label: '用户名称', name: 'userName'},
+			{ label: '用户电话', name: 'userTel'},
+			{ label: '订单总价', name: 'totalAmount', index: 'total_amount'},
+			{ label: '商家结算价', name: 'settleAccounts', index: 'settle_accounts'},
+			{ label: '优惠卷使用', name: '', index: ''},
+			{ label: '微宝使用', name: '', index: ''},
+			{ label: '实付金额', name: 'finalAmount', index: 'final_amount'},
+			{ label: '订单状态', name: 'status', index: 'status',valign: 'middle',formatter: function(item, index){
                     if(item === -2){
                         return '<span class="label label-primary">已退款</span>';
                     }
@@ -37,7 +32,7 @@ $(function () {
                         return '<span class="label label-warning">已成功</span>';
                     }
                 }},
-			{ label: '订单来源', name: 'orderFrom', index: 'order_from',valign: 'middle',  width: 55,formatter: function(item, index){
+			{ label: '订单来源', name: 'orderFrom', index: 'order_from',valign: 'middle',formatter: function(item, index){
                     if(item === 1){
                         return '<span class="label label-primary">微信</span>';
                     }
@@ -51,7 +46,7 @@ $(function () {
                         return '<span class="label label-success">支付宝反扫</span>';
                     }
                 } },
-			{ label: '订单类型', name: 'orderType', index: 'order_type',valign: 'middle',  width:55,formatter: function(item, index){
+			{ label: '订单类型', name: 'orderType', index: 'order_type',valign: 'middle',formatter: function(item, index){
                     if(item === 1){
                         return '<span class="label label-primary">扫码付</span>';
                     }
@@ -59,35 +54,18 @@ $(function () {
                         return '<span class="label label-success">商城</span>';
                     }
                 } },
-			{ label: '下单时间', name: 'createTime', index: 'create_time', width: 120,formatter:function(value,options,row){
+			{ label: '下单时间', name: 'createTime', index: 'create_time',formatter:function(value,options,row){
                     return new Date(value).Format('yyyy-MM-dd HH:mm:ss');}},
-			{ label: '支付完成时间', name: 'payTime', index: 'pay_time', width: 120,formatter:function(value,options,row){
+			{ label: '支付完成时间', name: 'payTime', index: 'pay_time',formatter:function(value,options,row){
                     return value != null ? new Date(value).Format('yyyy-MM-dd HH:mm:ss') : "";}},
-			{ label: '用户删除', name: 'userDelete', index: 'user_delete',valign: 'middle',  width: 55,formatter: function(item, index){
-                    if(item === true){
-                        return '<span class="label label-warning">已删除</span>';
-                    }
-                    if(item === false){
-                        return '<span class="label label-success">未删除</span>';
-                    }
-                } },
-			{ label: '商户删除', name: 'merchantDelete', index: 'merchant_delete',valign: 'middle',  width: 55 ,formatter: function(item, index){
-                    if(item === true){
-                        return '<span class="label label-warning">已删除</span>';
-                    }
-                    if(item === false){
-                        return '<span class="label label-success">未删除</span>';
-                    }
-                } },
-			{ label: '银行通道类型', name: 'payChannel', index: 'pay_channel',valign: 'middle',  width: 60 ,formatter: function(item, index){
+			{ label: '银行通道类型', name: 'payChannel', index: 'pay_channel',valign: 'middle' ,formatter: function(item, index){
                     if(item === 1){
                         return '<span class="label label-primary">原生</span>';
                     }
                     if(item === 2){
                         return '<span class="label label-success">点点客</span>';
                     }
-                } },
-			{ label: '备注', name: 'remark', index: 'remark', width: 50 }
+                } }
         ],
 		viewrecords: true,
         height: 385,
