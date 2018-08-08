@@ -132,4 +132,10 @@ public class TWbOrderServiceImpl extends ServiceImpl<TWbOrderDao, TWbOrderEntity
         return new PageUtils(page);
     }
 
+    @Override
+    public Double totalIncomeByMerchantId(Integer merchantId) {
+        Double num = baseMapper.totalIncomeByMerchantId(merchantId);
+        return num != null ? (num / 100) : 0.00;
+    }
+
 }

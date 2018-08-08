@@ -124,4 +124,8 @@
         limit #{current},#{size}
     </select>
 
+    <select id="totalIncomeByMerchantId" resultType="Double">
+        SELECT SUM(transaction_amount) FROM t_merchant_finance_flow WHERE transaction_way_value in (1,2) AND merchant_finance_id = #{merchantId}
+    </select>
+
 </mapper>

@@ -37,4 +37,11 @@ public interface TWbOrderDao extends BaseMapper<TWbOrderEntity> {
      * @return
      */
     public int totalByMerchantId(Map<String, Object> params);
+
+    /**
+     * 根据商户id查询总收入
+     * @param merchantId
+     * @return
+     */
+    Double totalIncomeByMerchantId(Integer merchantId);
 }
