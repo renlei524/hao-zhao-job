@@ -26,6 +26,9 @@
                     <input type="text" class="form-control" v-model="q.cardContent" @keyup.enter="query" placeholder="优惠劵名称">
                 </div>
                 <div class="form-group form-more-style">
+                    <input type="text" class="form-control" v-model="q.merchantName" @keyup.enter="query" placeholder="商户名称">
+                </div>
+                <div class="form-group form-more-style">
                     <select name="creatorType" v-model="q.creatorType"  class="form-control" placeholder="发行方类型"  id="creatorType" >
                         <option value="-1" selected="selected">--发行方类型--</option>
                         <option value="1">平台</option>
@@ -48,8 +51,11 @@
 			<#if shiro.hasPermission("operation:twbcard:update")>
             <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
 			</#if>
-			<#if shiro.hasPermission("operation:twbcard:delete")>
-            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            <#if shiro.hasPermission("operation:twbcard:start")>
+            <a class="btn btn-primary" @click="start"><i class="fa fa-trash-o"></i>&nbsp;发放</a>
+            </#if>
+			<#if shiro.hasPermission("operation:twbcard:stop")>
+            <a class="btn btn-primary" @click="stop"><i class="fa fa-trash-o"></i>&nbsp;停用</a>
 			</#if>
         </div>
         <table id="jqGrid"></table>
