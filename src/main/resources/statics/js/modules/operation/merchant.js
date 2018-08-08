@@ -342,10 +342,10 @@ var vm = new Vue({
             if(vm.merchant.merchantCode == null || vm.merchant.merchantCode == ""){
                 alert("收款码不能为空");
                 return true;
-            }else if(!( /^\d{8}$/.test(document.getElementById('merchantCode').value))){
+            }/*else if(!( /^\d{8}$/.test(document.getElementById('merchantCode').value))){
                 alert("请重新填写收款码");
                 return true;
-            }
+            }*/
             if(vm.merchant.merchantLimit == null || vm.merchant.merchantLimit == ""){
                 alert("商户限额不能为空");
                 return true;
