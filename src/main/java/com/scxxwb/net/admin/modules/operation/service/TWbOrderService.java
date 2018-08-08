@@ -19,5 +19,7 @@ public interface TWbOrderService extends IService<TWbOrderEntity> {
     PageUtils selectByUserName(Map<String, Object> params);
 
     PageUtils selectByMerchantId(Map<String, Object> params);
+
+    Double totalIncomeByMerchantId(Integer merchantId);
 }
 
