@@ -140,15 +140,7 @@ public class TWbAreaController {
     @Transactional(rollbackFor = Exception.class)
     public R update(@RequestParam Map<String, Object> params,@RequestBody TWbAreaEntity tWbArea){
         ValidatorUtils.validateEntity(tWbArea,UpdateGroup.class);
-        TWbAreaEntity tWbAreaEntity = tWbAreaService.selectById(tWbArea.getId());
-        if (!tWbAreaEntity.getAreaCode().equals(tWbArea.getAreaCode())){
-            for (TWbAreaEntity tWbAreaEntitys : tWbAreaService.infoList(params,tWbAreaEntity.getAreaCode().toString())){
-                tWbAreaEntitys.setParentCode(tWbArea.getAreaCode());
-                tWbAreaService.updateById(tWbAreaEntitys);
-            }
-        }
-        tWbAreaService.updateById(tWbArea);//全部更新
-
+        tWbAreaService.updateAreaByTWBArea(params, tWbArea);
         return R.ok();
     }
 

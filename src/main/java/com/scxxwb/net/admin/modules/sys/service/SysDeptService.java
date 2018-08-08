@@ -1,6 +1,7 @@
 package com.scxxwb.net.admin.modules.sys.service;
 
 import com.baomidou.mybatisplus.service.IService;
+import com.scxxwb.net.admin.common.utils.R;
 import com.scxxwb.net.admin.modules.sys.entity.SysDeptEntity;
 
 import java.util.List;
@@ -34,4 +35,6 @@ public interface SysDeptService extends IService<SysDeptEntity> {
 	 * @return
 	 */
 	int updateDeptByParentId(List<Integer> arr);
+
+	void updateAndForbidBySysDeptEntity(SysDeptEntity sysDeptEntity);
 }

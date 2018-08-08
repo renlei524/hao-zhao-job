@@ -10,11 +10,12 @@ $(function () {
                         '<span class="label label-primary">平台</span>' :
                         '<span class="label label-success">商户</span>';
                 }},
-			// { label: '创建人/发行人', name: 'creatorId', index: 'creator_id', width: 80 },
-			{ label: '可使用开始时间', name: 'beginTime', index: 'begin_time', width: 80 }, 			
-			{ label: '卡券过期时间', name: 'endTime', index: 'end_time', width: 80 }, 			
-			{ label: '卡卷数量', name: 'cardNum', index: 'card_num', width: 80 }, 			
-			{ label: '剩余卡券数量', name: 'leftNum', index: 'left_num', width: 80 }, 			
+			{ label: '商户名称', name: '', index: '', width: 80 },
+			{ label: '发行时间', name: 'createDate', index: 'create_date', width: 80 },
+			{ label: '开始时间', name: 'beginTime', index: 'begin_time', width: 80 },
+			{ label: '过期时间', name: 'endTime', index: 'end_time', width: 80 },
+			{ label: '总数量', name: 'cardNum', index: 'card_num', width: 80 },
+			{ label: '剩余数量', name: 'leftNum', index: 'left_num', width: 80 },
 			{ label: '用户最多持有张数', name: 'limitNum', index: 'limit_num', width: 80 },
 			{ label: '使用说明', name: 'description', index: 'description', width: 80 },
 			{ label: '状态', name: 'status', width: 80, formatter: function(value, options, row){
@@ -22,7 +23,6 @@ $(function () {
                         '<span class="label label-success">未删除</span>' :
                         '<span class="label label-danger">已删除</span>';
                 }},
-			{ label: '发行时间', name: 'createDate', index: 'create_date', width: 80 },
 			{ label: '卡券种类', name: 'type',index: 'type', align: 'center', valign: 'middle', sortable: true, width: '80px', formatter: function(item, index){
                     if(item === 0){
                         return '<span class="label label-primary">代金卷</span>';
@@ -136,7 +136,7 @@ var vm = new Vue({
 				}
 			});
 		},
-		del: function (event) {
+		stop: function (event) {
 			var ids = getSelectedRows();
 			if(ids == null){
 				return ;
@@ -160,6 +160,30 @@ var vm = new Vue({
 				});
 			});
 		},
+		start: function (event) {
+            var ids = getSelectedRows();
+            if(ids == null){
+                return ;
+            }
+
+            confirm('确定要删除选中的记录？', function(){
+                $.ajax({
+                    type: "POST",
+                    url: baseURL + "operation/twbcard/delete",
+                    contentType: "application/json",
+                    data: JSON.stringify(ids),
+                    success: function(r){
+                        if(r.code == 0){
+                            alert('操作成功', function(index){
+                                $("#jqGrid").trigger("reloadGrid");
+                            });
+                        }else{
+                            alert(r.msg);
+                        }
+                    }
+                });
+            });
+        },
 		getInfo: function(id){
 			$.get(baseURL + "operation/twbcard/info/"+id, function(r){
                 vm.tWbCard = r.tWbCard;
