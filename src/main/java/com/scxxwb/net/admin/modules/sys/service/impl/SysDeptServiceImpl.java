@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.scxxwb.net.admin.common.annotation.DataFilter;
 import com.scxxwb.net.admin.common.kafka.KafkaProducer;
 import com.scxxwb.net.admin.common.utils.Constant;
+import com.scxxwb.net.admin.common.utils.R;
 import com.scxxwb.net.admin.modules.sys.dao.SysDeptDao;
 import com.scxxwb.net.admin.modules.sys.entity.SysDeptEntity;
 import com.scxxwb.net.admin.modules.sys.entity.SysUserEntity;
@@ -12,8 +13,10 @@ import com.scxxwb.net.admin.modules.sys.service.SysDeptService;
 import com.scxxwb.net.admin.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +27,8 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDeptEntity> i
 	private SysUserService sysUserService;
 	@Autowired
 	protected KafkaProducer kafkaProducer;
+	@Autowired
+	protected SysDeptService sysDeptService;
 
 	@Override
 	@DataFilter(subDept = true, user = false)
@@ -69,6 +74,34 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDeptEntity> i
 		return baseMapper.updateDeptByParentId(arr);
 	}
 
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void updateAndForbidBySysDeptEntity(SysDeptEntity dept) {
+		//判断是否禁用此公司下面的所有子公司以及员工
+		if (dept.getStatus() == 0) {
+			//找出此公司下的所有子公司
+			Map map = new HashMap<String, Object>();
+			ArrayList<Integer> integers = new ArrayList<>();
+			List<Integer> arr = integers;
+			arr.add(dept.getDeptId());
+			List<SysDeptEntity> deptList = new ArrayList<>();
+			for (int i = 0; i < arr.size(); i++) {
+				map.put("parent_id", arr.get(i));
+				deptList = sysDeptService.selectByMap(map);
+				if (deptList != null) {
+					for (SysDeptEntity sysDeptEntity : deptList) {
+						arr.add(sysDeptEntity.getDeptId());
+					}
+				}
+				map.clear();
+			}
+			//禁用所有子公司（包括本公司）
+			sysDeptService.updateDeptByParentId(arr);
+			//禁用所有子公司下面的员工（包括本公司）
+			sysUserService.updateUserByDeptId(arr);
+		}
+		sysDeptService.updateById(dept);
+	}
 	/**
 	 * 递归
 	 */

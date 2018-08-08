@@ -8,6 +8,7 @@ import com.scxxwb.net.admin.common.kafka.KafkaProducer;
 import com.scxxwb.net.admin.common.utils.Constant;
 import com.scxxwb.net.admin.common.utils.PageUtils;
 import com.scxxwb.net.admin.common.utils.Query;
+import com.scxxwb.net.admin.common.utils.R;
 import com.scxxwb.net.admin.modules.sys.dao.TWbAreaDao;
 import com.scxxwb.net.admin.modules.sys.entity.TWbAreaEntity;
 import com.scxxwb.net.admin.modules.sys.service.TWbAreaService;
@@ -22,6 +23,8 @@ import java.util.Map;
 public class TWbAreaServiceImpl extends ServiceImpl<TWbAreaDao, TWbAreaEntity> implements TWbAreaService {
     @Autowired
     protected KafkaProducer kafkaProducer;
+    @Autowired
+    protected TWbAreaService tWbAreaService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -56,5 +59,16 @@ public class TWbAreaServiceImpl extends ServiceImpl<TWbAreaDao, TWbAreaEntity> i
                 this.selectList(new EntityWrapper<TWbAreaEntity>()
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER)));
         return deptList;
+    }
+
+    public void updateAreaByTWBArea(Map<String, Object> params, TWbAreaEntity tWbArea) {
+        TWbAreaEntity tWbAreaEntity = tWbAreaService.selectById(tWbArea.getId());
+        if (!tWbAreaEntity.getAreaCode().equals(tWbArea.getAreaCode())){
+            for (TWbAreaEntity tWbAreaEntitys : tWbAreaService.infoList(params,tWbAreaEntity.getAreaCode().toString())){
+                tWbAreaEntitys.setParentCode(tWbArea.getAreaCode());
+                tWbAreaService.updateById(tWbAreaEntitys);
+            }
+        }
+        tWbAreaService.updateById(tWbArea);//全部更新
     }
 }
