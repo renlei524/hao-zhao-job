@@ -16,6 +16,7 @@ import com.scxxwb.net.admin.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -33,6 +34,11 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sys/user")
 public class SysUserController extends AbstractController {
+	@Value("${scxxwb.socket.host}")
+	private String host;
+	@Value("${scxxwb.socket.port}")
+	private Integer port;
+
 	@Autowired
 	private SysUserService sysUserService;
 	@Autowired
@@ -57,7 +63,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@RequestMapping("/info")
 	public R info(){
-		return R.ok().put("user", getUser());
+		return R.ok().put("user", getUser()).put("host", host).put("port", port);
 	}
 	
 	/**

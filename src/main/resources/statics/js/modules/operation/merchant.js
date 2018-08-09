@@ -279,10 +279,10 @@ var vm = new Vue({
                 alert("分公司不能为空");
                 return true;
             }
-            if(vm.merchant.contractNumber == null || vm.merchant.contractNumber == ""){
+            /*if(vm.merchant.contractNumber == null || vm.merchant.contractNumber == ""){
                 alert("合同编号不能为空");
                 return true;
-            }
+            }*/
             if(vm.merchant.typeName == null || vm.merchant.typeName == ""){
                 alert("商铺分类不能为空");
                 return true;
@@ -390,6 +390,8 @@ var vm = new Vue({
 		saveOrUpdate: function (event) {
 
             $("#text1").blur();
+            vm.merchant.latitude = $("#latY").val();
+            vm.merchant.longitude = $("#lngX").val();
             if(vm.verification()){
                 return;
             }else{

@@ -86,6 +86,6 @@ scxxwb:
         imagePath: http://192.168.10.245:8686
         appPath: http://192.168.10.245:8686
     socket:
-        host: 192.168.10.245
+        host: 127.0.0.1
         port: 8082
     payPath: http://1mk6535653.iok.la/Pay/Trade/Pay?sn=

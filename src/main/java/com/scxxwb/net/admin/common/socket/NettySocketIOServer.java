@@ -3,6 +3,7 @@ package com.scxxwb.net.admin.common.socket;
 import com.corundumstudio.socketio.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 /**
  * nettySocketIOServer
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Bean;
  * @email renlei@scxxwb.com
  * @date 2018.08.09
  */
+@Component
 public class NettySocketIOServer {
     @Value("${scxxwb.socket.host}")
     private String host;
@@ -21,7 +23,8 @@ public class NettySocketIOServer {
     public SocketIOServer socketIOServer() {
         Configuration config = new Configuration();
         config.setOrigin(null);   // 注意如果开放跨域设置，需要设置为null而不是"*"
-        config.setPort(this.port);
+        config.setHostname(host);
+        config.setPort(port);
         config.setSocketConfig(new SocketConfig());
         config.setWorkerThreads(100);
         config.setAuthorizationListener(handshakeData -> true);
