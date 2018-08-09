@@ -77,4 +77,7 @@ scxxwb:
     nginx:
         imagePath: http://192.168.10.2:808
         appPath: http://192.168.10.2:808
+    socket:
+        host: 192.168.10.2
+        port: 8082
     payPath: http://1mk6535653.iok.la/Pay/Trade/Pay?sn=

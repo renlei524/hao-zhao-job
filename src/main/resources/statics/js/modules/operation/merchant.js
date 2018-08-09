@@ -9,6 +9,13 @@ $(function () {
             { label: '商户名称(店铺名称)', name: 'merchantName', index: 'merchant_name', width: 80 },
             { label: '商户分类', name: 'typeName', index: 'type_name', width: 80 },
             { label: '本店联系电话', name: 'telphone', index: 'telphone', width: 80 },
+            { label: '合同编号', name: 'contractNumber', index: 'contract_number', width: 80 },
+            { label: '商品个数', name: '', width: 80 },
+            { label: '总收入', name: 'totalIncome', width: 80 , formatter:'currency', formatoptions:{decimalSeparator:".", thousandsSeparator: ",",
+                    decimalPlaces: 2}},
+            { label: '所属区域', name: 'address', width: 80 },
+            { label: '城市经理', name: 'salesmanName', width: 80 },
+            { label: '城市经理电话', name: 'salesmanMobile', width: 80 },
             { label: '支付通道', name: 'payChannel', width: 80 , formatter: function(item, index){
                     if(item === 1){
                         return '<span class="label label-primary">原生通道</span>';
@@ -163,7 +170,8 @@ var vm = new Vue({
         q:{
             communityName:null,
             tWBUserName:null,
-            status:0
+            status:0,
+            contractNumber: null
         },
         merchant:{
             userId:0,
@@ -594,7 +602,7 @@ var vm = new Vue({
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam','page');
             $("#jqGrid").jqGrid('setGridParam',{
-                 postData:{'merchantName':vm.q.merchantName,'status' : vm.q.status},
+                 postData:{'merchantName':vm.q.merchantName,'status' : vm.q.status,'contractNumber': vm.q.contractNumber},
                  page:1
              }).trigger("reloadGrid");
              $("#text1").attr("status", "Y");

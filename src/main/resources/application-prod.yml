@@ -77,5 +77,8 @@ scxxwb:
     nginx:
         imagePath: http://img.scxxwb.com
         appPath: http://img.scxxwb.com
+    socket:
+        host: 192.168.10.245
+        port: 8082
     payPath: http://wx.scxxwb.com/Markets/QrCode/Index?sn=
     vyicooUploadPath:
