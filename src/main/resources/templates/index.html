@@ -126,9 +126,6 @@
     </div>
 </div>
 <!-- ./wrapper -->
-
-
-
 <script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
 <script src="${request.contextPath}/statics/libs/vue.min.js"></script>
 <script src="${request.contextPath}/statics/libs/router.js"></script>
@@ -136,32 +133,28 @@
 <script src="${request.contextPath}/statics/libs/app.js"></script>
 <script src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
 <script src="${request.contextPath}/statics/js/index.js"></script>
+<script src="https://cdn.bootcss.com/socket.io/2.1.0/socket.io.js"></script>
 <script>
-        (function () {
+    (function () {
+        var iframe = document.getElementById('test').contentWindow;
+        document.getElementById('test').onload = function () {
+            iframe.postMessage('hello', 'https://m.amap.com/picker/');
+        };
+        window.addEventListener("message", function (e) {
+            var Lng =  e.data.location.split(',')[0];
+            var Lat =  e.data.location.split(',')[1];
+            var parentifram=document.getElementsByTagName('iframe')[0].contentWindow;
+            parentifram.setvaluetoinput(Lng,Lat);
+            //sessionStorage.setItem("Lng", e.data.location.split(',')[0]);
+           // sessionStorage.setItem("Lat", e.data.location.split(',')[1]);
+            sessionStorage.setItem("formattedAddress", e.data.name);
 
+        }, false);
 
-            var iframe = document.getElementById('test').contentWindow;
-            document.getElementById('test').onload = function () {
-                iframe.postMessage('hello', 'https://m.amap.com/picker/');
-            };
-            window.addEventListener("message", function (e) {
-                var Lng =  e.data.location.split(',')[0];
-                var Lat =  e.data.location.split(',')[1];
-                var parentifram=document.getElementsByTagName('iframe')[0].contentWindow;
-                parentifram.setvaluetoinput(Lng,Lat);
-                //sessionStorage.setItem("Lng", e.data.location.split(',')[0]);
-               // sessionStorage.setItem("Lat", e.data.location.split(',')[1]);
-                sessionStorage.setItem("formattedAddress", e.data.name);
+        if (document.readyState == "complete") //当页面加载状态
+        { }
+    }());
 
-            }, false);
-
-            if (document.readyState == "complete") //当页面加载状态
-            { }
-
-        }());
-    </script>
-
-<script type="text/javascript">
 	var mock = {
 		log: function(result) {
 			window.parent.setIFrameResult('log', result);
@@ -179,25 +172,6 @@
 			}
 		}
 	}
-    </script>
-<script type="text/javascript">
-	var mock = {
-		log: function(result) {
-			window.parent.setIFrameResult('log', result);
-		}
-	}
-	console = mock;
-	window.Konsole = {
-		exec: function(code) {
-			code = code || '';
-			try {
-				var result = window.eval(code);
-				window.parent.setIFrameResult('result', result);
-			} catch (e) {
-				window.parent.setIFrameResult('error', e);
-			}
-		}
-	}
-    </script>
+</script>
 </body>
 </html>
