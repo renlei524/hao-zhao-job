@@ -38,16 +38,25 @@ public interface TWbOrderDao extends BaseMapper<TWbOrderEntity> {
      * @return
      */
     public int totalByMerchantId(Map<String, Object> params);
+
     /**
      * 用户管理展示，查询消费总额和最近消费区域id
      * @param userId 用户id
      * @return
      */
     TWbOrderEntity selectTWBUserTotalAndArea(Integer userId);
+
     /**
      * 用户管理展示，查询最近消费时间
      * @param userId 用户id
      * @return
      */
     Map<String, Date> selectTWBUserRecconsumptionTime(Integer userId);
+
+    /**
+     * 根据商户id查询总收入
+     * @param merchantId
+     * @return
+     */
+    Double totalIncomeByMerchantId(Integer merchantId);
 }

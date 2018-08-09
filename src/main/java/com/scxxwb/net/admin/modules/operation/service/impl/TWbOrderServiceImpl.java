@@ -142,4 +142,9 @@ public class TWbOrderServiceImpl extends ServiceImpl<TWbOrderDao, TWbOrderEntity
     public Map<String, Date> selectTWBUserRecconsumptionTime(Integer userId) {
         return tWbOrderDao.selectTWBUserRecconsumptionTime(userId);
     }
+
+    public Double totalIncomeByMerchantId(Integer merchantId) {
+        Double num = baseMapper.totalIncomeByMerchantId(merchantId);
+        return num != null ? (num / 100) : 0.00;
+    }
 }

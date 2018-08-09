@@ -259,10 +259,10 @@ $(".close-btn").click(function(){
 		$(this.dom).attr({'data-delId':_delId,'data-delName':this.imgName});
 		$(this.b).append(this.dom);
 		var _Img = new Image();
-		_Img.src = $(this.dom).find('img').attr('data-src');
+		/*_Img.src = $(this.dom).find('img').attr('data-src');
 		_Img.onload = function(){
 			$(_self.dom).find('img').attr('src',_Img.src);
-		}
+		}*/
 		_dataArr.push({'delId' :_delId,src :  this.imgSrc});
 		_self.callback(_dataArr);
 		// $(this.b).parent().parent().parent().attr('data-dataImgs',JSON.stringify(_dataArr));

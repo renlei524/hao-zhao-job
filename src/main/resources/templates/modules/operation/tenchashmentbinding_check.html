@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>商户银行卡</title>
+    <title>银行卡审核</title>
 		<#include "/header.html">
 </head>
 <style>
@@ -16,20 +16,14 @@
 <div id="rrapp" v-cloak>
     <div v-show="showList">
         <div class="grid-btn">
-            <#if shiro.hasPermission("operation:tenchashmentbinding:list")>
+            <#if shiro.hasPermission("operation:tenchashmentbindCheck:list")>
             <div class="form-group col-sm-3">
                 <input type="text"  class="form-control" v-model="q.objectName" @keyup.enter="query" placeholder="商户名称、银行卡号、开户行、开户名">
             </div>
             <a class="btn btn-default" @click="query">查询</a>
             </#if>
-			<#if shiro.hasPermission("operation:tenchashmentbinding:save")>
-            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
-			</#if>
-			<#if shiro.hasPermission("operation:tenchashmentbinding:update")>
-            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-			</#if>
-			<#if shiro.hasPermission("operation:tenchashmentbinding:delete")>
-            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			<#if shiro.hasPermission("operation:tenchashmentbindCheck:check")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;审核</a>
 			</#if>
         </div>
         <table id="jqGrid"></table>

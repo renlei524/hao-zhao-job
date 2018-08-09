@@ -127,48 +127,53 @@
         limit #{current},#{size}
     </select>
     <select id="selectTWBUserTotalAndArea" resultMap="tWbOrderMap">
-SELECT r.merchant_id recConsumptionMerchantId,
-			SUM(total) total_consumption,
-			r.rec_consumption_area
-FROM (
-SELECT
-		a.pay_time,
-		a.merchant_id,
-		SUM(final_amount) total,
-	  COUNT(merchant_id) rec_consumption_area
-	FROM
-		(
-			SELECT
-				t.final_amount,
-				t.pay_time,
-				t.merchant_id,
-				t.user_id,
-				t.status
-			FROM
-				t_wb_order AS t
-			WHERE
-				user_id = #{user_id}
-			AND status IN (1, 2, 3)
-			ORDER BY
-				pay_time DESC
-		) AS a
-	GROUP BY
-		merchant_id
-ORDER BY rec_consumption_area DESC,
-         pay_time DESC
-)AS r
-</select>
+        SELECT r.merchant_id recConsumptionMerchantId,
+                    SUM(total) total_consumption,
+                    r.rec_consumption_area
+        FROM (
+        SELECT
+                a.pay_time,
+                a.merchant_id,
+                SUM(final_amount) total,
+              COUNT(merchant_id) rec_consumption_area
+            FROM
+                (
+                    SELECT
+                        t.final_amount,
+                        t.pay_time,
+                        t.merchant_id,
+                        t.user_id,
+                        t.status
+                    FROM
+                        t_wb_order AS t
+                    WHERE
+                        user_id = #{user_id}
+                    AND status IN (1, 2, 3)
+                    ORDER BY
+                        pay_time DESC
+                ) AS a
+            GROUP BY
+                merchant_id
+        ORDER BY rec_consumption_area DESC,
+                 pay_time DESC
+        )AS r
+    </select>
+
     <select id="selectTWBUserRecconsumptionTime" resultType="map">
-			SELECT
-				pay_time rec_consumption_time,
-				status
-			FROM
-				t_wb_order
-			WHERE
-				user_id = #{user_id}
-			AND status IN (1, 2, 3)
-			ORDER BY
-				rec_consumption_time DESC
-			LIMIT 0, 1
+            SELECT
+                pay_time rec_consumption_time,
+                status
+            FROM
+                t_wb_order
+            WHERE
+                user_id = #{user_id}
+            AND status IN (1, 2, 3)
+            ORDER BY
+                rec_consumption_time DESC
+            LIMIT 0, 1
+    </select>
+
+    <select id="totalIncomeByMerchantId" resultType="Double">
+        SELECT SUM(transaction_amount) FROM t_merchant_finance_flow WHERE transaction_way_value in (1,2) AND merchant_finance_id = #{merchantId}
     </select>
 </mapper>

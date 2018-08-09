@@ -25,5 +25,7 @@ public interface TWbOrderService extends IService<TWbOrderEntity> {
     TWbOrderEntity selectTWBUserTotalAndArea(Integer userId);
 
     Map<String, Date> selectTWBUserRecconsumptionTime(Integer userId);
+
+    Double totalIncomeByMerchantId(Integer merchantId);
 }
 

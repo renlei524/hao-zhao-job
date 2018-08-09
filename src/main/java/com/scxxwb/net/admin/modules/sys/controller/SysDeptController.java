@@ -140,36 +140,11 @@ public class SysDeptController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("sys:dept:update")
     @SysLog("修改部门")
-	public R update(@RequestBody SysDeptEntity dept){
+	public R update(@RequestBody SysDeptEntity dept) {
 		dept.setUserId(ShiroUtils.getUserEntity().getUserId());
 		dept.setCreateTime(new Date());
-		ValidatorUtils.validateEntity(dept,UpdateGroup.class);
-
-		//判断是否禁用此公司下面的所有子公司以及员工
-		if (dept.getStatus() == 0){
-            //找出此公司下的所有子公司
-            Map map = new HashMap<String, Object>();
-            List<Integer> arr = new ArrayList<>();
-            arr.add(dept.getDeptId());
-            List<SysDeptEntity> deptList = new ArrayList<>();
-            for (int i = 0 ; i < arr.size() ; i++){
-                map.put("parent_id",arr.get(i));
-                deptList = sysDeptService.selectByMap(map);
-                if (deptList != null){
-                    for (SysDeptEntity sysDeptEntity : deptList){
-                        arr.add(sysDeptEntity.getDeptId());
-                    }
-                }
-                map.clear();
-            }
-            //禁用所有子公司（包括本公司）
-            sysDeptService.updateDeptByParentId(arr);
-            //禁用所有子公司下面的员工（包括本公司）
-            sysUserService.updateUserByDeptId(arr);
-        }
-
-		sysDeptService.updateById(dept);
-		
+		ValidatorUtils.validateEntity(dept, UpdateGroup.class);
+		sysDeptService.updateAndForbidBySysDeptEntity(dept);
 		return R.ok();
 	}
 
