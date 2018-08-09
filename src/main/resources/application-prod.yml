@@ -78,7 +78,7 @@ scxxwb:
         imagePath: http://img.scxxwb.com
         appPath: http://img.scxxwb.com
     socket:
-        host: 192.168.10.245
+        host: 120.79.12.142
         port: 8082
     payPath: http://wx.scxxwb.com/Markets/QrCode/Index?sn=
     vyicooUploadPath:

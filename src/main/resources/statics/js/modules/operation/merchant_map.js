@@ -43,44 +43,37 @@ $('.btn-close').click(function(){
 
 
 
-  var iframe = document.getElementById('test').contentWindow;
-            document.getElementById('test').onload = function () {
-                iframe.postMessage('hello', 'https://m.amap.com/picker/');
-            };
-            window.addEventListener("message", function (e) {
-           debugger;
-            	var longitude = JSON.stringify(e.data.location).split(',')[0].split('"')[1]
-            	var latitude = JSON.stringify(e.data.location).split(',')[1].split('"')[0];
-                console.log(longitude + latitude);
+var iframe = document.getElementById('test').contentWindow;
+document.getElementById('test').onload = function () {
+    iframe.postMessage('hello', 'https://m.amap.com/picker/');
+};
+window.addEventListener("message", function (e) {
+    debugger;
+    var longitude = JSON.stringify(e.data.location).split(',')[0].split('"')[1]
+    var latitude = JSON.stringify(e.data.location).split(',')[1].split('"')[0];
+    console.log(longitude + latitude);
 
-            }, false);
-            if (document.readyState == "complete") //当页面加载状态
-            {
-                alert(123)
-            }
+    }, false);
+    if (document.readyState == "complete") //当页面加载状态
+    {
+        alert(123)
+    }
 
-
-  	var mock = {
-  		log: function(result) {
-  			window.parent.setIFrameResult('log', result);
-  		}
-  	}
-  	console = mock;
-  	window.Konsole = {
-  		exec: function(code) {
-  			code = code || '';
-  			try {
-  				var result = window.eval(code);
-  				window.parent.setIFrameResult('result', result);
-  			} catch (e) {
-  				window.parent.setIFrameResult('error', e);
-  			}
-  		}
-  	}
-  	//子页面赋值方法
-  	function setvaluetoinput(lng,lat)
-  	{
-  	$("#lngX").val(lng);
-  	$("#latY").val(lat);
-  	$("#iframe-demo").hide();
-  	}
+    window.Konsole = {
+    exec: function(code) {
+        code = code || '';
+        try {
+            var result = window.eval(code);
+            window.parent.setIFrameResult('result', result);
+        } catch (e) {
+            window.parent.setIFrameResult('error', e);
+        }
+    }
+}
+//子页面赋值方法
+function setvaluetoinput(lng,lat)
+{
+    $("#lngX").val(lng);
+    $("#latY").val(lat);
+    $("#iframe-demo").hide();
+}
