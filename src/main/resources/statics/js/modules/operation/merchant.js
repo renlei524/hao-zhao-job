@@ -392,6 +392,7 @@ var vm = new Vue({
             $("#text1").blur();
             vm.merchant.latitude = $("#latY").val();
             vm.merchant.longitude = $("#lngX").val();
+            vm.merchant.serviceCharge = $("#serviceCharge").val();
             if(vm.verification()){
                 return;
             }else{
@@ -527,6 +528,8 @@ var vm = new Vue({
             $.get(baseURL + "operation/merchant/info/"+id, function(r){
                 var imageNginxPath = r.imageNginxPath;
                 vm.merchant = r.merchant;
+                $("#latY").val(vm.merchant.latitude);
+                $("#lngX").val(vm.merchant.longitude);
                 //获取商户名称信息
                 vm.getUserInfo();
                 // 获取当前商户社区信息
