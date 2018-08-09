@@ -54,35 +54,30 @@ var vm = new Vue({
 		getUser: function(){
 			$.getJSON("sys/user/info?_"+$.now(), function(r){
 				vm.user = r.user;
-				connectSocket(r.user.userName);
+				vm.connectSocket(r.user.userName, r.host, r.port);
 			});
 		},
-		connectSocket: function(userName) {
-            var socket = io.connect('http://localhost:12350?no=' + username);
+		connectSocket: function(userName, host, port) {
+            var socket = io.connect('http://' + host + ':' + port + '?userName=' + userName, { transports: [ 'websocket' ] });
 
             socket.on('connect', function () {
-                console.log('连接')
+                console.log('连接');
             });
 
             socket.on('runningTask', function (data) {
-                console.log("收到全服数据")
+                console.log("收到全服数据");
                 console.log(data);
             });
 
             socket.on('taskResult', function (data) {
-                console.log("收到个人数据")
+                console.log("收到个人数据");
                 console.log(data);
             });
 
-            // 可以是任意类型的数据，这里用了一个json对象，后端有对应的实体类
-            var jsonObject = {
-                "username": "username1",
-                "to": 2
-            };
-            socket.emit('messageevent', jsonObject);
+            socket.emit('messageevent', "发送信息");
 
             socket.on('disconnect', function () {
-                console.log("断开")
+                console.log("断开");
             });
 		},
         verification : function(){
