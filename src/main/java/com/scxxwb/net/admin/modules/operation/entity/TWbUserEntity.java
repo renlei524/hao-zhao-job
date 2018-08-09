@@ -69,6 +69,32 @@ public class TWbUserEntity implements Serializable {
 
 	@TableField(exist=false)
 	private List<?> list;
+	/**
+	 * 消费总金额
+	 */
+	@TableField(exist = false)
+	private Double totalConsumption;
+	/**
+	 *	最近消费时间
+	 */
+	@TableField(exist = false)
+	private Date recConsumptionTime;
+	/**
+	 * 最近消费区域
+	 */
+	@TableField(exist = false)
+	private String recConsumptionArea;
+	/**
+	 * 城市经理
+	 */
+	@TableField(exist = false)
+	private String salesMan;
+	/**
+	 * 城市经理电话
+	 */
+	@TableField(exist = false)
+	private String salesManTel;
+
 
 
 
@@ -176,5 +202,45 @@ public class TWbUserEntity implements Serializable {
 
 	public void setOpen(Boolean open) {
 		this.open = open;
+	}
+
+	public Double getTotalConsumption() {
+		return totalConsumption;
+	}
+
+	public void setTotalConsumption(Double totalConsumption) {
+		this.totalConsumption = totalConsumption;
+	}
+
+	public Date getRecConsumptionTime() {
+		return recConsumptionTime;
+	}
+
+	public void setRecConsumptionTime(Date recConsumptionTime) {
+		this.recConsumptionTime = recConsumptionTime;
+	}
+
+	public String getRecConsumptionArea() {
+		return recConsumptionArea;
+	}
+
+	public void setRecConsumptionArea(String recConsumptionArea) {
+		this.recConsumptionArea = recConsumptionArea;
+	}
+
+	public String getSalesMan() {
+		return salesMan;
+	}
+
+	public void setSalesMan(String salesMan) {
+		this.salesMan = salesMan;
+	}
+
+	public String getSalesManTel() {
+		return salesManTel;
+	}
+
+	public void setSalesManTel(String salesManTel) {
+		this.salesManTel = salesManTel;
 	}
 }
