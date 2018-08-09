@@ -5,7 +5,13 @@ $(function () {
         colModel: [
             { label: 'id', name: 'id', index: 'id', hidden:true },
 			{ label: '用户手机号码', name: 'mobile', index: 'mobile'},
-			{ label: '用户真实姓名', name: 'realName', index: 'real_name'},
+			{ label: '用户真实姓名', name: 'realName', index: 'real_name',formatter: function (value) {
+			    if (value.length > 6){
+			        return value.substring(0, 6) + "...";
+                }else {
+			        return value;
+                }
+                }},
 			{ label: '用户身份证号码', name: 'idCard', index: 'id_card'},
 			{ label: '状态', name: 'status', index: 'status',valign: 'middle',formatter: function(item, index){
                     if(item === 0){
@@ -22,11 +28,18 @@ $(function () {
                     return new Date(value).Format('yyyy-MM-dd HH:mm:ss');}},
 			{ label: '更新时间', name: 'updateTime', index: 'update_time',formatter:function(value,options,row){
                     return new Date(value).Format('yyyy-MM-dd HH:mm:ss');}},
-            { label: '消费总额', name: '', index: ''},
-            { label: '最近消费时间', name: '', index: ''},
-            { label: '最近消费区域', name: '', index: ''},
-            { label: '城市经理', name: '', index: ''},
-            { label: '城市经理电话', name: '', index: ''}
+            { label: '消费总额', name: 'totalConsumption', index: 'total_consumption',formatter:'currency', formatoptions:{decimalSeparator:".", thousandsSeparator: " ",
+                    decimalPlaces: 2}},
+            { label: '最近消费时间', name: 'recConsumptionTime', index: 'rec_consumption_time',formatter:function(value,options,row){
+                if (value != null && value != ""){
+                    return new Date(value).Format('yyyy-MM-dd HH:mm:ss');
+                }else {
+                    return "";
+                }}
+            },
+            { label: '最近消费区域', name: 'recConsumptionArea', index: 'rec_consumption_area'},
+            { label: '城市经理', name: 'salesMan', index: 'sales_man'},
+            { label: '城市经理电话', name: 'salesManTel', index: 'sales_man_tel'}
         ],
 		viewrecords: true,
         height: 385,

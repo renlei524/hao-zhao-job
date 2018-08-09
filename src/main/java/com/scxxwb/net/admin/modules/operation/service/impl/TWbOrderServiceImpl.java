@@ -33,6 +33,8 @@ public class TWbOrderServiceImpl extends ServiceImpl<TWbOrderDao, TWbOrderEntity
     MerchantService merchantService;
     @Autowired
     protected KafkaProducer kafkaProducer;
+    @Autowired
+    private TWbOrderDao tWbOrderDao;
 
     @Override
     @DataFilter(subDept = true, user = false)
@@ -131,11 +133,18 @@ public class TWbOrderServiceImpl extends ServiceImpl<TWbOrderDao, TWbOrderEntity
 
         return new PageUtils(page);
     }
+    @Override
+    public TWbOrderEntity selectTWBUserTotalAndArea(Integer userId) {
+        return tWbOrderDao.selectTWBUserTotalAndArea(userId);
+    }
 
     @Override
+    public Map<String, Date> selectTWBUserRecconsumptionTime(Integer userId) {
+        return tWbOrderDao.selectTWBUserRecconsumptionTime(userId);
+    }
+
     public Double totalIncomeByMerchantId(Integer merchantId) {
         Double num = baseMapper.totalIncomeByMerchantId(merchantId);
         return num != null ? (num / 100) : 0.00;
     }
-
 }

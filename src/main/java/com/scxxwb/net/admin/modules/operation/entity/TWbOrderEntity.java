@@ -91,6 +91,26 @@ public class TWbOrderEntity implements Serializable {
      */
 	private Integer type;
 
+	/**
+	 * 消费总金额/
+	 */
+	@TableField(exist = false)
+	private Integer totalConsumption;
+	/**
+	 *	最近消费时间
+	 */
+	@TableField(exist = false)
+	private Date recConsumptionTime;
+	/**
+	 * 最近消费商户id区域
+	 */
+	@TableField(exist = false)
+	private Integer recConsumptionMerchantId;
+
+
+
+
+
     public Integer getType() {
         return type;
     }
@@ -417,5 +437,29 @@ public class TWbOrderEntity implements Serializable {
 
     public void setCouponsOffset(Double couponsOffset) {
         this.couponsOffset = couponsOffset;
+    }
+
+	public Integer getTotalConsumption() {
+		return totalConsumption;
+	}
+
+	public void setTotalConsumption(Integer totalConsumption) {
+		this.totalConsumption = totalConsumption;
+	}
+
+	public Date getRecConsumptionTime() {
+		return recConsumptionTime;
+	}
+
+	public void setRecConsumptionTime(Date recConsumptionTime) {
+		this.recConsumptionTime = recConsumptionTime;
+	}
+
+    public Integer getRecConsumptionMerchantId() {
+        return recConsumptionMerchantId;
+    }
+
+    public void setRecConsumptionMerchantId(Integer recConsumptionMerchantId) {
+        this.recConsumptionMerchantId = recConsumptionMerchantId;
     }
 }
