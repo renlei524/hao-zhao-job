@@ -21,7 +21,7 @@ import com.corundumstudio.socketio.annotation.OnEvent;
  */
 @Component
 public class MessageEventHandler {
-    public Map<String, SocketIOClient> noClientMap = new HashMap();
+    /*public Map<String, SocketIOClient> noClientMap = new HashMap();
 
     @OnConnect
     public void onConnect(SocketIOClient client) {
@@ -62,5 +62,5 @@ public class MessageEventHandler {
         for (String userName : noClientMap.keySet()) {
             toOne(userName, "taskResult", data);
         }
-    }
+    }*/
 }

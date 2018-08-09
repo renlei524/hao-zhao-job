@@ -54,7 +54,7 @@ var vm = new Vue({
 		getUser: function(){
 			$.getJSON("sys/user/info?_"+$.now(), function(r){
 				vm.user = r.user;
-				vm.connectSocket(r.user.userName, r.host, r.port);
+				//vm.connectSocket(r.user.userName, r.host, r.port);
 			});
 		},
 		connectSocket: function(userName, host, port) {

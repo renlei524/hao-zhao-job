@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class NettySocketIOServer {
-    @Value("${scxxwb.socket.host}")
+    /*@Value("${scxxwb.socket.host}")
     private String host;
     @Value("${scxxwb.socket.port}")
     private Integer port;
@@ -31,5 +31,5 @@ public class NettySocketIOServer {
         final SocketIOServer server = new SocketIOServer(config);
         server.start();
         return server;
-    }
+    }*/
 }
