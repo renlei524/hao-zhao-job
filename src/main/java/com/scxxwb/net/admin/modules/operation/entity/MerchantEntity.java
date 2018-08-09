@@ -248,6 +248,12 @@ public class MerchantEntity implements Serializable {
 	@TableField(exist=false)
 	private String salesmanName;
 
+	/**
+	 * 客户经理手机号
+	 */
+	@TableField(exist=false)
+	private String salesmanMobile;
+
     /**
      * 合同编号
      */
@@ -258,6 +264,12 @@ public class MerchantEntity implements Serializable {
 	 * 微信公众号
 	 */
 	private String wechatPublicNumber;
+
+    /**
+     * 总收入
+     */
+    @TableField(exist=false)
+	private Double totalIncome;
 
 	/**
 	 * 设置：主键id,自动增长,订单表相关的后缀取此字段的最后一位
@@ -718,5 +730,21 @@ public class MerchantEntity implements Serializable {
 
     public void setWechatPublicNumber(String wechatPublicNumber) {
         this.wechatPublicNumber = wechatPublicNumber;
+    }
+
+    public String getSalesmanMobile() {
+        return salesmanMobile;
+    }
+
+    public void setSalesmanMobile(String salesmanMobile) {
+        this.salesmanMobile = salesmanMobile;
+    }
+
+    public Double getTotalIncome() {
+        return totalIncome;
+    }
+
+    public void setTotalIncome(Double totalIncome) {
+        this.totalIncome = totalIncome;
     }
 }

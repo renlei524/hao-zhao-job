@@ -11,6 +11,7 @@ import com.scxxwb.net.admin.modules.operation.entity.MerchantCategoryEntity;
 import com.scxxwb.net.admin.modules.operation.entity.MerchantCheckEntity;
 import com.scxxwb.net.admin.modules.operation.service.MerchantCategoryService;
 import com.scxxwb.net.admin.modules.operation.service.MerchantCheckService;
+import com.scxxwb.net.admin.modules.operation.service.TWbOrderService;
 import com.scxxwb.net.admin.modules.sys.entity.SysDeptEntity;
 import com.scxxwb.net.admin.modules.sys.entity.SysUserEntity;
 import com.scxxwb.net.admin.modules.sys.service.SysDeptService;
@@ -45,6 +46,10 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantDao, MerchantEntity
     private MerchantCategoryService merchantCategoryService;
     @Autowired
     private MerchantCheckService merchantCheckService;
+
+    @Autowired
+    private TWbOrderService tWbOrderService;
+
     @Autowired
     private MerchantDao merchantDao;
 
@@ -61,6 +66,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantDao, MerchantEntity
         String agentId = StringUtils.join(list,",");
         String merchantName = (String)params.get("merchantName");
         String status = (String)params.get("status");
+        String contractNumber = (String)params.get("contractNumber");
         if (status == null){
             status = "0";
         }
@@ -73,18 +79,24 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantDao, MerchantEntity
                     + "or agent_id in (select dept_id from t_sys_dept where name like '%" + merchantName + "%'))")
                 .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, "agent_id in (" + agentId + ")")
                 .addFilterIfNeed(!status.equals("0"), "status =" + status)
+                .addFilterIfNeed(StringUtils.isNotBlank(contractNumber), "contract_number like '%" + contractNumber +"%'")
                 .orderBy("create_time", false)
                 .orderBy(status.equals("0") ,"status")
         );
         for(MerchantEntity merchantEntity : page.getRecords()){
+            //获取部门名称
             SysDeptEntity sysDeptEntity = sysDeptService.selectById(merchantEntity.getAgentId());
             if (sysDeptEntity != null){
                 merchantEntity.setAgentName(sysDeptEntity.getName());
             }
-            SysUserEntity sysUserEntity =sysUserService.selectById(merchantEntity.getSysUserId());
+            //获取客户经理名称 &&手机号
+            SysUserEntity sysUserEntity =sysUserService.selectById(merchantEntity.getSalesman());
             if (sysUserEntity != null){
-                merchantEntity.setSysUserName(sysUserEntity.getUserName());
+                merchantEntity.setSalesmanName(sysUserEntity.getRealName());
+                merchantEntity.setSalesmanMobile(sysUserEntity.getMobile());
             }
+            //获取总收入
+            merchantEntity.setTotalIncome(tWbOrderService.totalIncomeByMerchantId(merchantEntity.getId()));
         }
         return new PageUtils(page);
     }
