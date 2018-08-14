@@ -6,10 +6,12 @@ $(function () {
             { label: 'id', name: 'id', index: 'id', hidden:true },
 			{ label: '用户手机号码', name: 'mobile', index: 'mobile'},
 			{ label: '用户真实姓名', name: 'realName', index: 'real_name',formatter: function (value) {
-			    if (value.length > 6){
-			        return value.substring(0, 6) + "...";
+			    if (value == null) {
+                    return "";
+                } else if(value.length > 6){
+                    return value.substring(0, 6) + "...";
                 }else {
-			        return value;
+                    return value;
                 }
                 }},
 			{ label: '用户身份证号码', name: 'idCard', index: 'id_card'},
