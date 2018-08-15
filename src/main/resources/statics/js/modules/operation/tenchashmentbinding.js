@@ -121,7 +121,7 @@ var vm = new Vue({
                 alert("银行卡号不能为空");
                 return true;
             }
-            if(vm.tEnchashmentBinding.account.length < 16){
+            /*if(vm.tEnchashmentBinding.account.length < 16){
                 alert("请输入正确的银行卡号！");
                 return true;
             }
@@ -129,7 +129,7 @@ var vm = new Vue({
             if(!reg.test(vm.tEnchashmentBinding.account)){
                 alert("请输入正确的银行卡号！");
                 return true;
-            }
+            }*/
             if(vm.tEnchashmentBinding.subbranch == null || vm.tEnchashmentBinding.subbranch == ""){
                 alert("开户行不能为空");
                 return true;
