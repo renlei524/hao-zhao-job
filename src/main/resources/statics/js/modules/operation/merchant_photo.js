@@ -150,7 +150,7 @@ $(".close-btn").click(function(){
 			this.fileClick = this.bom.querySelector('.imgClick');
 			this.fileBtn(this.fileClick,this.files);
 			this.imgcontent = this.bom.querySelector('.imgcontent');
-			this.imgcontent.innerHTML = '最多上传<b style="color:red">'+this.MAX+'</b>张'+_self.MW+' * '+_self.MH+'像素的图片';
+			this.imgcontent.innerHTML = '最多上传<b style="color:red">'+this.MAX+'</b>张'+_self.MW+' * '+_self.MH+'像素的图片，图片大小不超过1M！';
 
 		},
 		fileBtn : function(c,f){
@@ -312,7 +312,12 @@ var imgFile1 = new ImgUploadeFiles('.box2',function(e){
         MH : 1800, //像素限制高度
         MW : 1900, //像素限制宽度
         callback : function(arr){
-             $.ajax({
+            if(arr[0].src.split(',')[1].length > 1400000) {
+                $(".imgAll").find("li[data-delid="+ arr[0].delId +"]").remove();
+                alert("图片大小不能超过1M！");
+                return;
+            }
+            $.ajax({
                 url: baseURL + "operation/merchant/uploadImageBase64",
                 data: {
                     "imageBase64": arr[0].src.split(',')[1]
