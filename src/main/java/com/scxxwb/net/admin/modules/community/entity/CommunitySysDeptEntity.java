@@ -109,19 +109,6 @@ public class CommunitySysDeptEntity implements Serializable {
      */
     private Integer status;
     /**
-     * 审批人
-     */
-    private Integer approveUserId;
-    /**
-     * 审批时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
-    private Date approveTime;
-    /**
-     * 审批备注
-     */
-    private String approveRemark;
-    /**
      * 版本号
      */
     private String version;
@@ -283,30 +270,6 @@ public class CommunitySysDeptEntity implements Serializable {
 
     public void setUpdTime(Date updTime) {
         this.updTime = updTime;
-    }
-
-    public Integer getApproveUserId() {
-        return approveUserId;
-    }
-
-    public void setApproveUserId(Integer approveUserId) {
-        this.approveUserId = approveUserId;
-    }
-
-    public Date getApproveTime() {
-        return approveTime;
-    }
-
-    public void setApproveTime(Date approveTime) {
-        this.approveTime = approveTime;
-    }
-
-    public String getApproveRemark() {
-        return approveRemark;
-    }
-
-    public void setApproveRemark(String approveRemark) {
-        this.approveRemark = approveRemark;
     }
 
     public String getVersion() {

@@ -65,7 +65,7 @@ public class CommunitySysDeptServiceImpl extends ServiceImpl<CommunitySysDeptDao
             //获取创建用户信息
             SysUserEntity sysUserEntity = sysUserService.selectById(id);
             //添加创建人名称
-            communitySysDeptEntity.setCreUserName(sysUserEntity.getUserName());
+            communitySysDeptEntity.setCreUserName(sysUserEntity == null ? null : sysUserEntity.getUserName());
         }
         return new PageUtils(page);
     }
