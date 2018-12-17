@@ -151,7 +151,6 @@ $(".close-btn").click(function(){
 			this.fileBtn(this.fileClick,this.files);
 			this.imgcontent = this.bom.querySelector('.imgcontent');
 			this.imgcontent.innerHTML = '最多上传<b style="color:red">'+this.MAX+'</b>张'+_self.MW+' * '+_self.MH+'像素的图片，图片大小不超过1M！';
-
 		},
 		fileBtn : function(c,f){
 			var _self = this;
@@ -242,7 +241,7 @@ $(".close-btn").click(function(){
 	var ImgFileupload = function(b,imgName,imgSrc,imgSize,callback){
 		this.b = b;
 		this.imgName = imgName;
-		this.imgSize = imgSize;
+		this.imgSize = imgSize * 0.01;
 		this.imgSrc = imgSrc;
 		this.callback = callback;
 	};
@@ -258,8 +257,8 @@ $(".close-btn").click(function(){
 							'    </i>';
 		$(this.dom).attr({'data-delId':_delId,'data-delName':this.imgName});
 		$(this.b).append(this.dom);
-		var _Img = new Image();
-		/*_Img.src = $(this.dom).find('img').attr('data-src');
+		/*var _Img = new Image();
+		_Img.src = $(this.dom).find('img').attr('data-src');
 		_Img.onload = function(){
 			$(_self.dom).find('img').attr('src',_Img.src);
 		}*/

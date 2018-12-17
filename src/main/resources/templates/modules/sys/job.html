@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>任务管理</title>
+</head>
+<body>
+	<iframe id="jobIframe" style="width:100%; min-height:730px" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+</body>
+<script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
+<script>
+	$(function(){
+		$.ajax({
+			type: "POST",
+			url:"../../sys/job/index",
+			contentType: "application/json",
+			success: function(r){
+				$("#jobIframe").attr("src", r.url);
+			}
+		});
+	});
+</script>
+</html>

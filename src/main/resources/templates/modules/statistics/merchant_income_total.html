@@ -22,24 +22,29 @@
             <div class="form-group col-sm-2">
                 <input type="text" id="startTime-endTime" class="form-control"  placeholder="选择时间段">
             </div>
-            <div class="form-group col-sm-1">
-                <select name="areaProvince" v-model="q.province"  class="form-control" placeholder="省"  id="areaProvince" >
-                    <option value="0" selected="selected">请选择省</option>
-                </select>
-            </div>
-            <div class="form-group col-sm-1">
-                <select name="areaCity" v-model="q.city" class="form-control" placeholder="市"  id="areaCity">
-                    <option value="0" selected="selected">请选择市</option>
-                </select>
-            </div>
-            <div class="form-group col-sm-1">
-                <select name="areaArea" v-model="q.area" class="form-control" placeholder="区"  id="areaArea">
-                    <option value="0" selected="selected">请选择区</option>
-                </select>
-            </div>
-            <div class="form-group col-sm-1">
-                <select name="areaTown" v-model="q.town" class="form-control" placeholder="乡镇"  id="areaTown">
-                    <option value="0" selected="selected">请选择乡镇</option>
+            <!--<div class="form-group col-sm-1">-->
+                <!--<select name="areaProvince" v-model="q.province"  class="form-control" placeholder="省"  id="areaProvince" >-->
+                    <!--<option value="0" selected="selected">请选择省</option>-->
+                <!--</select>-->
+            <!--</div>-->
+            <!--<div class="form-group col-sm-1">-->
+                <!--<select name="areaCity" v-model="q.city" class="form-control" placeholder="市"  id="areaCity">-->
+                    <!--<option value="0" selected="selected">请选择市</option>-->
+                <!--</select>-->
+            <!--</div>-->
+            <!--<div class="form-group col-sm-1">-->
+                <!--<select name="areaArea" v-model="q.area" class="form-control" placeholder="区"  id="areaArea">-->
+                    <!--<option value="0" selected="selected">请选择区</option>-->
+                <!--</select>-->
+            <!--</div>-->
+            <!--<div class="form-group col-sm-1">-->
+                <!--<select name="areaTown" v-model="q.town" class="form-control" placeholder="乡镇"  id="areaTown">-->
+                    <!--<option value="0" selected="selected">请选择乡镇</option>-->
+                <!--</select>-->
+            <!--</div>-->
+            <div class="form-group col-sm-2">
+                <select name="agentId" v-model="q.agentId" class="form-control" placeholder="公司"  id="agentId">
+                    <option value="0" selected="selected">--请选择公司--</option>
                 </select>
             </div>
             <div class="form-group col-sm-1">
@@ -67,7 +72,7 @@
     <div id="fanShapedGraph" style="width: 600px;height:400px;float: left;margin-left: 100px;margin-top: 50px"></div>
     <br />
     <div style="margin-top: 500px">
-        <p style="text-align: center; font-size: 25px">总收入：<span id="totalIncome">0</span>   总笔数：<span id="totalNumberOfPen">0</span>   微宝收入：<span>0</span>   微宝笔数：<span>0</span>   总支出：<span id="totalExpenditure">0</span>   支出笔数：<span id="expenditureNumberOfPen">0</span></p>
+        <p style="text-align: center; font-size: 25px">总收入：<span id="totalIncome">0</span>   总笔数：<span id="totalNumberOfPen">0</span>   微宝收入：<span id="weiBaoIncome">0</span>   微宝笔数：<span id="weiBaoNumberOfPen">0</span>   总支出：<span id="totalExpenditure">0</span>   支出笔数：<span id="expenditureNumberOfPen">0</span></p>
     </div>
 </div>
 </div>

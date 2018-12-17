@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.scxxwb.net.admin.modules.community.dao.CommunitySysDeptDao">
+<mapper namespace="leiren.haozhaojob.modules.community.dao.CommunitySysDeptDao">
 
-    <resultMap type="com.scxxwb.net.admin.modules.community.entity.CommunitySysDeptEntity" id="communitySysDeptEntity">
+    <resultMap type="leiren.haozhaojob.modules.community.entity.CommunitySysDeptEntity" id="communitySysDeptEntity">
         <result property="deptId" column="dept_id"/>
         <result property="sysDeptId" column="sys_dept_id"/>
         <result property="name" column="name"/>

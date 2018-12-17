@@ -26,8 +26,8 @@ spring:
             stat-view-servlet:
                 enabled: true
                 url-pattern: /druid/*
-                login-username: admin
-                login-password: admin
+                login-username: renlei
+                login-password: renlei524
             filter:
                 stat:
                     log-slow-sql: true
@@ -63,21 +63,36 @@ spring:
 
 scxxwb:
     redis:
-        open: false  # 是否开启redis缓存  true开启   false关闭
+        open: true  # 是否开启redis缓存  true开启   false关闭
     shiro:
-        redis: false # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】
+        redis: true # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】
     ftp:
-        url: 192.168.10.2
+        url: 192.168.10.245
         port: 21
-        user-name: xxwb
-        password: xxwb5674
-        imagePath: image
-        appPath: appPkg
-        vyicooPath: image
+        user-name: root
+        password: xxwb1234
+        merchantPath: /static/image
+        appPath: /static/appPkg
+        vyicooPath: /static/image
+        goodsPath: /static/image
+        noticePath: /static/image
     nginx:
-        imagePath: http://192.168.10.2:808
-        appPath: http://192.168.10.2:808
+        merchantPath: http://192.168.10.245:8686
+        appPath: http://192.168.10.245:8686
+        vyicooPath: http://192.168.10.245:8686
+        goodsPath: http://192.168.10.245:8686
+        noticePath: http://192.168.10.245:8686
     socket:
         host: 192.168.10.2
         port: 8082
     payPath: http://1mk6535653.iok.la/Pay/Trade/Pay?sn=
+    vyicooUploadPath:
+    elasticJob:
+        regCenter:
+            serverList: 192.168.10.244:2181,192.168.10.245:2181,192.168.10.246:2181
+            namespace: scxxwb-admin
+        url: http://192.168.10.244:8899
+    elasticSearch:
+        url: http://192.168.10.244:9200/_plugin/head
+        esUserName: renlei
+        esPassword: renlei524

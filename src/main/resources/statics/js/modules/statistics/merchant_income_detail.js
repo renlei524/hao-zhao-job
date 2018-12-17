@@ -1,5 +1,22 @@
 $(function () {
     vm.getProvince();
+    vm.getAgentId();
+    var now = new Date(),
+        year = now.getFullYear(),
+        month = ((now.getMonth() + 1)>9)?(now.getMonth() + 1):("0"+(now.getMonth() + 1)),
+        date = translate(now.getDate());
+    function translate(prop){
+        if(prop <= 9){
+            return "0" + prop;
+        }else {
+            return prop
+        }
+    }
+    var startTime = year+"-"+month+"-01";
+    var endTime = year+"-"+month+"-"+date;
+    $("#startTime-endTime").val(startTime+" - "+endTime);
+    vm.q.startTime = startTime;
+    vm.q.endTime = endTime;
     $("#jqGrid").jqGrid({
         url: baseURL + 'statistics/merchantIncomeDetail/list',
         datatype: "json",
@@ -7,6 +24,7 @@ $(function () {
             { label: '业务员', name: 'sysUserName', index: 'sysUserName', width: 80 },
             { label: '商户名称', name: 'merchantName', index: 'merchant_name', width: 80 },
             { label: '商户类型', name: 'typeName', index: 'typeName', width: 80 },
+            { label: '所属公司', name: 'deptName', index: 'deptName', width: 80 },
             { label: '注册时间', name: 'createTime', index: 'create_time', width: 80,formatter:function(value,options,row){
                     return new Date(value).Format('yyyy-MM-dd HH:mm:ss');} },
             { label: '总收入', name: 'totalIncome', index: 'totalIncome', width: 80 , formatter:'currency', formatoptions:{decimalSeparator:".", thousandsSeparator: ",",
@@ -73,6 +91,7 @@ var vm = new Vue({
             city:0,
             area:0,
             town:0,
+            agentId: 0,
             merchantName:null,
             sysUserName:null,
             startTime:null,
@@ -99,7 +118,8 @@ var vm = new Vue({
                     "sysUserName" :vm.q.sysUserName,
                     "merchantName" :vm.q.merchantName,
                     "endTime" :vm.q.endTime,
-                    "startTime" :vm.q.startTime},
+                    "startTime" :vm.q.startTime,
+                    "agentId" : vm.q.agentId},
                 page:1
             }).trigger("reloadGrid");
         },
@@ -191,8 +211,25 @@ var vm = new Vue({
                     }
                 });
             }
-
+        },
+        getAgentId: function(){
+            var group = $("#agentId");
+            group.empty();
+            group.append("<option value='0' selected='selected'>--请选择公司--</option>");
+            //加载省下拉框
+            var url = "sys/dept/list";
+            $.ajax({
+                type: "POST",
+                url: baseURL + url,
+                contentType: "application/json",
+                success: function(r){
+                    for(var i=0;i<r.length;i++) {
+                        group.append("<option value='"+r[i].deptId+"'>"+r[i].name+"</option>");
+                    }
+                }
+            });
         }
+
     }
 });
 
@@ -226,7 +263,6 @@ layui.use('laydate', function(){
     laydate.render({
         elem: '#startTime-endTime' //指定元素
         ,range: true
-        ,min:"2018-07-24"
         ,max: 0
     });
 });

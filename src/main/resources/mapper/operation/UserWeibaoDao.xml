@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="leiren.haozhaojob.modules.operation.dao.UserWeiBaoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="leiren.haozhaojob.modules.operation.entity.UserWeiBaoEntity" id="tUserWeibaoMap">
+        <result property="userId" column="user_id"/>
+        <result property="weibaoWithdrawals" column="weibao_withdrawals"/>
+        <result property="weibaoNoWithdrawals" column="weibao_no_withdrawals"/>
+        <result property="weibaoFreezeUp" column="weibao_freeze_up"/>
+        <result property="useWB" column="useWB"/>
+        <result property="receiveWB" column="receiveWB"/>
+
+    </resultMap>
+
+    <select id="selectUserWeiBao" resultMap="tUserWeibaoMap">
+        select t_user_weibao.* ,(SELECT IFNULL(SUM(total_fee),0) FROM t_wb_order_bill WHERE type = 1 AND
+              order_id IN (SELECT order_id FROM t_wb_order WHERE user_id = t_user_weibao.user_id)) as useWB,0 as receiveWB
+        from t_user_weibao
+        <if test="(userName != null and userName != '') or (mobile != null and mobile != '')">
+            where user_id in (select id from t_wb_user where 1=1
+            <if test="userName != null and userName != ''">
+                and real_name like CONCAT('%',#{userName},'%')
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile like CONCAT('%',#{mobile},'%')
+            </if>)
+        </if>
+        <if test="sidx != null and sidx == 'useWB'">
+            ORDER BY useWB
+            <if test="order != null and order == 'desc'">
+                DESC
+            </if>
+            <if test="order != null and order == 'asc'">
+                ASC
+            </if>
+        </if>
+        <if test="sidx != null and sidx == 'weibao_withdrawals'">
+            ORDER BY weibao_withdrawals
+            <if test="order != null and order == 'desc'">
+                DESC
+            </if>
+            <if test="order != null and order == 'asc'">
+                ASC
+            </if>
+        </if>
+        <if test="sidx != null and sidx == 'receiveWB'">
+            ORDER BY receiveWB
+            <if test="order != null and order == 'desc'">
+                DESC
+            </if>
+            <if test="order != null and order == 'asc'">
+                ASC
+            </if>
+        </if>
+        limit #{current},#{size}
+    </select>
+
+    <select id="totalUserWeiBao" resultType="Integer">
+        select COUNT(1) from t_user_weibao
+        <if test="(userName != null and userName != '') or (mobile != null and mobile != '')">
+            where user_id in (select id from t_wb_user where 1=1
+            <if test="userName != null and userName != ''">
+                and real_name like CONCAT('%',#{userName},'%')
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile like CONCAT('%',#{mobile},'%')
+            </if>)
+        </if>
+    </select>
+
+</mapper>

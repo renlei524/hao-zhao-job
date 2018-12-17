@@ -16,9 +16,13 @@
                 <div class="form-group col-sm-3" style="padding-left:0;width:18%">
                     <input type="text"  class="form-control" v-model="q.merchantName" @keyup.enter="query" placeholder="公司名称、商户名、登录手机号、收款码">
                 </div>
+                <div class="form-group col-sm-3" style="padding-left:0;width:18%">
+                    <input type="text"  class="form-control" v-model="q.contractNumber" @keyup.enter="query" placeholder="合同编号">
+                </div>
                 <div class="form-group col-sm-2" style="padding-left:0;width:12%">
                     <select name="status" v-model="q.status"  class="form-control" placeholder="状态选择"  id="status" >
                         <option value="0" selected="selected">--状态选择--</option>
+                        <option value="-1">所有审核记录</option>
                         <option value="1">创建审核中</option>
                         <option value="3">修改审核中</option>
                     </select>
@@ -75,6 +79,12 @@
                 <div class="col-sm-2 control-label">店铺名称<span class="span"> *</span></div>
                 <div class="col-sm-4">
                     <input type="text" class="form-control form-active" v-model="merchant.merchantName" placeholder="商户名称(店铺名称)" disabled/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">店铺介绍</div>
+                <div class="col-sm-4">
+                    <textarea  cols="30" rows="5"  class="form-control" v-model="merchant.description" placeholder="店铺介绍"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -402,7 +412,7 @@
             <div class="form-group audit-state">
                 <div class="col-sm-2 control-label">审核意见</div>
                 <div class="col-sm-4">
-                    <textarea name="remark" id="" cols="30" rows="10" class="form-control" v-model="merchant.remark" placeholder="审核意见"></textarea>
+                    <textarea name="remark" cols="30" rows="5" class="form-control" v-model="merchant.remark" placeholder="审核意见"></textarea>
                 </div>
             </div>
 

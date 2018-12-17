@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="leiren.haozhaojob.modules.operation.dao.WbOrderDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="leiren.haozhaojob.modules.operation.entity.WbOrderEntity" id="wbOrderMap">
+        <result property="orderId" column="order_id"/>
+        <result property="parentOrderId" column="parent_order_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="merchantId" column="merchant_id"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="settleAccounts" column="settle_amount"/>
+        <result property="finalAmount" column="final_amount"/>
+        <result property="isFinalAmountFrom" column="is_final_amount_from_credit"/>
+        <result property="status" column="status"/>
+        <result property="unionId" column="union_id"/>
+        <result property="orderFrom" column="order_from"/>
+        <result property="orderType" column="order_type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="payTime" column="pay_time"/>
+        <result property="userDelete" column="user_delete"/>
+        <result property="merchantDelete" column="merchant_delete"/>
+        <result property="payChannel" column="pay_channel"/>
+        <result property="encryptedData" column="encrypted_data"/>
+        <result property="remark" column="remark"/>
+        <result property="userName" column="real_name"/>
+        <result property="wbDeductible" column="total_fee"/>
+        <result property="mobile" column="mobile"/>
+        <result property="type" column="type"/>
+        <result property="couponsOffset" column="coupons_offset"/>
+        <result property="totalConsumption" column="total_consumption"/>
+        <!--<result property="recConsumptionArea" column="rec_consumption_area"/>-->
+        <result property="recConsumptionTime" column="rec_consumption_time"/>
+    </resultMap>
+
+    <select id="total" resultType="Integer">
+        select count(1) from t_wb_order LEFT JOIN t_wb_user on t_wb_user.id = t_wb_order.user_id
+        LEFT JOIN t_merchant on t_merchant.id = t_wb_order.merchant_id
+        <if test="ages != null">
+            where t_wb_order.merchant_id in
+            <foreach collection="ages" item="ages" open="(" close=")" separator=",">
+                #{ages}
+            </foreach>
+        </if>
+        <if test="userName != null and userName != ''">
+            and (t_wb_user.real_name like CONCAT('%',#{userName},'%') or t_wb_user.mobile like
+            CONCAT('%',#{userName},'%'))
+        </if>
+        <if test="orderId != null and orderId != ''">
+            and t_wb_order.order_id like CONCAT('%',#{orderId},'%')
+        </if>
+        <if test="merchantName  != null and merchantName  != ''">
+            and t_merchant.merchant_name like CONCAT('%',#{merchantName},'%')
+        </if>
+        <if test="startTime != null and endTime != null">
+            AND t_wb_order.create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+    </select>
+
+    <select id="selectByUserName" resultMap="wbOrderMap">
+        select t_wb_order.*,t_wb_user.*,(SELECT total_fee FROM t_wb_order_bill
+        WHERE t_wb_order_bill.order_id = t_wb_order.order_id AND t_wb_order_bill.type = 1 ) AS total_fee,
+        (SELECT total_fee FROM t_wb_order_bill
+        WHERE t_wb_order_bill.order_id = t_wb_order.order_id AND t_wb_order_bill.type = 2 ) AS coupons_offset
+        from t_wb_order LEFT JOIN t_wb_user on t_wb_user.id = t_wb_order.user_id
+        LEFT JOIN t_merchant on t_merchant.id = t_wb_order.merchant_id
+        <if test="ages != null">
+            where t_wb_order.merchant_id in
+            <foreach collection="ages" item="ages" open="(" close=")" separator=",">
+                #{ages}
+            </foreach>
+        </if>
+        <if test="userName != null and userName != ''">
+            and (t_wb_user.real_name like CONCAT('%',#{userName},'%') or t_wb_user.mobile like
+            CONCAT('%',#{userName},'%'))
+        </if>
+        <if test="orderId != null and orderId != ''">
+            and t_wb_order.order_id like CONCAT('%',#{orderId},'%')
+        </if>
+        <if test="merchantName  != null and merchantName  != ''">
+            and t_merchant.merchant_name like CONCAT('%',#{merchantName},'%')
+        </if>
+        <if test="startTime != null and endTime != null">
+            AND t_wb_order.create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        limit #{current},#{size}
+    </select>
+
+
+    <select id="totalByMerchantId" resultType="Integer">
+        SELECT COUNT(1) FROM t_wb_order LEFT JOIN t_wb_user ON t_wb_order.user_id = t_wb_user.id
+        LEFT JOIN t_merchant on t_merchant.id = t_wb_order.merchant_id
+        WHERE t_wb_order.status >= 1
+        <if test="merchantId  != null and merchantId  != ''">
+            and t_wb_order.merchant_id = #{merchantId}
+        </if>
+        <if test="dateOfTransaction  != null and dateOfTransaction  != ''">
+            and t_wb_order.pay_time like CONCAT(#{dateOfTransaction},'%')
+        </if>
+        <if test="userName != null and userName != ''">
+            and t_wb_user.real_name like CONCAT('%',#{userName},'%')
+        </if>
+    </select>
+
+    <select id="selectByMerchantId" resultMap="wbOrderMap">
+        SELECT
+        t_wb_order.*, (
+        SELECT
+        total_fee
+        FROM
+        t_wb_order_bill
+        WHERE
+        t_wb_order_bill.order_id = t_wb_order.order_id
+        AND t_wb_order_bill.type = 1
+        ) AS total_fee,
+        t_wb_user.mobile AS mobile from t_wb_order
+        LEFT JOIN t_wb_user ON t_wb_user.id = t_wb_order.user_id
+        WHERE t_wb_order.status >= 1
+        <if test="merchantId  != null and merchantId  != ''">
+            and t_wb_order.merchant_id = #{merchantId}
+        </if>
+        <if test="dateOfTransaction  != null and dateOfTransaction  != ''">
+            and t_wb_order.pay_time like CONCAT(#{dateOfTransaction},'%')
+        </if>
+        <if test="userName != null and userName != ''">
+            and t_wb_user.real_name like CONCAT('%',#{userName},'%')
+        </if>
+        limit #{current},#{size}
+    </select>
+    <select id="selectTWBUserTotalAndArea" resultMap="wbOrderMap">
+        SELECT r.merchant_id recConsumptionMerchantId,
+                    SUM(total) total_consumption,
+                    r.rec_consumption_area
+        FROM (
+        SELECT
+                a.pay_time,
+                a.merchant_id,
+                SUM(final_amount) total,
+              COUNT(merchant_id) rec_consumption_area
+            FROM
+                (
+                    SELECT
+                        t.final_amount,
+                        t.pay_time,
+                        t.merchant_id,
+                        t.user_id,
+                        t.status
+                    FROM
+                        t_wb_order AS t
+                    WHERE
+                        user_id = #{user_id}
+                    AND status IN (1, 2, 3)
+                    ORDER BY
+                        pay_time DESC
+                ) AS a
+            GROUP BY
+                merchant_id
+        ORDER BY rec_consumption_area DESC,
+                 pay_time DESC
+        )AS r
+    </select>
+
+    <select id="selectTWBUserRecconsumptionTime" resultType="map">
+            SELECT
+                pay_time rec_consumption_time,
+                status
+            FROM
+                t_wb_order
+            WHERE
+                user_id = #{user_id}
+            AND status IN (1, 2, 3)
+            ORDER BY
+                rec_consumption_time DESC
+            LIMIT 0, 1
+    </select>
+
+    <select id="totalIncomeByMerchantId" resultType="Double">
+        SELECT SUM(transaction_amount) FROM t_merchant_finance_flow WHERE transaction_way_value in (1,2) AND merchant_finance_id = #{merchantId}
+    </select>
+    <select id="selectCashAmountByMerchantId" resultType="map">
+    SELECT
+	    SUM(settle_amount) cash, COUNT(order_id) bills
+    FROM
+	    t_wb_order
+    WHERE
+        merchant_id = #{arg2}
+    AND
+	    create_time BETWEEN #{arg0}
+        AND #{arg1}
+    AND STATUS IN (1, 2, 3)
+    </select>
+    <select id="selectWeiBaoAmountByMerchantId" resultType="Integer">
+        SELECT
+            SUM(settle_amount)
+        FROM
+            t_wb_order o
+        INNER JOIN t_wb_order_bill b ON o.order_id = b.order_id
+        WHERE
+            merchant_id = #{param3}
+        AND o.create_time BETWEEN #{param1}
+        AND #{param2}
+        AND b.type = 1
+    </select>
+    <select id="selectWBOrderByMerchantIdAndDate" resultMap="wbOrderMap">
+        SELECT
+		o.merchant_id,
+		o.user_id,
+		b.total_fee,
+		b.type
+    FROM
+	    t_wb_order o
+		INNER JOIN t_wb_order_bill b ON o.order_id = b.order_id
+    WHERE
+        o.merchant_id = #{id}
+    AND
+	    o.create_time BETWEEN #{startTime}
+        AND #{endTime}
+    AND o.status IN (1, 2, 3)
+        limit #{pageNum},#{pageSize}
+    </select>
+    <select id="selectOrderCountsByMerchantId" resultType="Long">
+SELECT COUNT(a.merchant_id) FROM(
+SELECT
+		o.merchant_id
+    FROM
+	    t_wb_order o
+		INNER JOIN t_wb_order_bill b ON o.order_id = b.order_id
+    WHERE
+        o.merchant_id = #{id}
+    AND
+	    o.create_time BETWEEN #{startTime}
+        AND #{endTime}
+    AND o.status IN (1, 2, 3)
+) a
+
+    </select>
+</mapper>

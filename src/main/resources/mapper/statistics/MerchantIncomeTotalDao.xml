@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.scxxwb.net.admin.modules.statistics.dao.MerchantIncomeTotalDao">
+<mapper namespace="leiren.haozhaojob.modules.statistics.dao.MerchantIncomeTotalDao">
 
-    <resultMap type="com.scxxwb.net.admin.modules.statistics.entity.MerchantIncomeTotalEntity" id="MerchantIncomeTotalMap">
+    <resultMap type="leiren.haozhaojob.modules.statistics.entity.MerchantIncomeTotalEntity" id="MerchantIncomeTotalMap">
         <result property="totalIncome" column="totalIncome"/>
         <result property="totalNumberOfPen" column="totalNumberOfPen"/>
         <result property="weiBaoIncome" column="weiBaoIncome"/>
@@ -16,8 +16,8 @@
 
     <select id="getMerchantIncomeTotalByArea" resultType="MerchantIncomeTotalEntity">
         SELECT
-            COUNT(1) AS totalNumberOfPen,SUM(transaction_amount) AS totalIncome,
-            (SELECT SUM(F.transaction_amount) FROM t_merchant_finance_flow AS F WHERE F.transaction_way_value in (3)
+            COUNT(1) AS totalNumberOfPen,IFNULL(SUM(transaction_amount),0) AS totalIncome,
+            (SELECT IFNULL(SUM(F.transaction_amount),0) FROM t_merchant_finance_flow AS F WHERE F.transaction_way_value in (4)
                     AND F.merchant_finance_id IN
                     <foreach item="merchantId" collection="merchantId" open="(" separator="," close=")">
                         #{merchantId}
@@ -25,7 +25,7 @@
                     <if test="startTime != null and endTime != null">
                         AND F.transaction_time BETWEEN #{startTime} AND #{endTime}
                     </if>) AS totalExpenditure,
-            (SELECT COUNT(1) FROM t_merchant_finance_flow AS F WHERE F.transaction_way_value in (3)
+            (SELECT COUNT(1) FROM t_merchant_finance_flow AS F WHERE F.transaction_way_value in (4)
                     AND F.merchant_finance_id IN
                     <foreach item="merchantId" collection="merchantId" open="(" separator="," close=")">
                         #{merchantId}
@@ -33,7 +33,7 @@
                     <if test="startTime != null and endTime != null">
                         AND F.transaction_time BETWEEN #{startTime} AND #{endTime}
                     </if>) AS expenditureNumberOfPen
-        FROM t_merchant_finance_flow WHERE transaction_way_value in (1,2) AND merchant_finance_id IN
+        FROM t_merchant_finance_flow WHERE transaction_way_value in (1,2,3) AND merchant_finance_id IN
         <foreach item="merchantId" collection="merchantId" open="(" separator="," close=")">
             #{merchantId}
         </foreach>
@@ -44,20 +44,34 @@
 
     <select id="getMerchantIncomeTotalByAlipay" resultType="MerchantIncomeTotalEntity">
         SELECT
-           (SELECT SUM(O.settle_amount) FROM t_wb_order AS O WHERE O.order_from in (1,3) AND O.status in (2) AND O.merchant_id in
+           (SELECT IFNULL(SUM(B.total_fee),0) FROM t_wb_order AS O RIGHT JOIN t_wb_order_bill AS B ON B.order_id = O.order_id WHERE O.status in (1,2,3) AND B.type in (4) AND O.merchant_id in
                 <foreach item="merchantId" collection="merchantId" open="(" separator="," close=")">
                     #{merchantId}
                 </foreach>
                 <if test="startTime != null and endTime != null">
                     AND O.pay_time BETWEEN #{startTime} AND #{endTime}
                 </if>) AS weChatIncome,
-           (SELECT SUM(O.settle_amount) FROM t_wb_order AS O WHERE O.order_from in (2,4) AND O.status in (2) AND O.merchant_id in
+           (SELECT IFNULL(SUM(B.total_fee),0) FROM t_wb_order AS O RIGHT JOIN t_wb_order_bill AS B ON B.order_id = O.order_id WHERE O.status in (1,2,3) AND B.type in (3) AND O.merchant_id in
                 <foreach item="merchantId" collection="merchantId" open="(" separator="," close=")">
                     #{merchantId}
                 </foreach>
                 <if test="startTime != null and endTime != null">
                     AND O.pay_time BETWEEN #{startTime} AND #{endTime}
-                </if>) AS alipayIncome
+                </if>) AS alipayIncome,
+          (SELECT IFNULL(SUM(B.total_fee),0) FROM t_wb_order AS O RIGHT JOIN t_wb_order_bill AS B ON B.order_id = O.order_id WHERE O.status in (1,2,3) AND B.type in (1) AND O.merchant_id in
+                <foreach item="merchantId" collection="merchantId" open="(" separator="," close=")">
+                    #{merchantId}
+                </foreach>
+                <if test="startTime != null and endTime != null">
+                    AND O.pay_time BETWEEN #{startTime} AND #{endTime}
+                </if>) AS weiBaoIncome,
+          (SELECT COUNT(1) FROM t_wb_order AS O RIGHT JOIN t_wb_order_bill AS B ON B.order_id = O.order_id WHERE O.status in (1,2,3) AND B.type in (1) AND O.merchant_id in
+                <foreach item="merchantId" collection="merchantId" open="(" separator="," close=")">
+                    #{merchantId}
+                </foreach>
+                <if test="startTime != null and endTime != null">
+                    AND O.pay_time BETWEEN #{startTime} AND #{endTime}
+                </if>) AS weiBaoNumberOfPen
         FROM t_wb_order LIMIT 0,1
     </select>
 

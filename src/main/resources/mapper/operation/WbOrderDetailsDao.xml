@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="leiren.haozhaojob.modules.operation.dao.WbOrderDetailsDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="leiren.haozhaojob.modules.operation.entity.WbOrderDetailsEntity" id="tWbOrderDetailsMap">
+        <result property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="price" column="price"/>
+        <result property="finalPrice" column="final_price"/>
+        <result property="quantity" column="quantity"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+
+</mapper>

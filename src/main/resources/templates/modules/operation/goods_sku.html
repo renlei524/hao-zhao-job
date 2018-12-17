@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>商品信息</title>
+    <#include "/header.html">
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/plugins/cover/css/reset.css"/>
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/plugins/cover/css/ycbootstrap.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/merchant.css">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <#if shiro.hasPermission("operation:goodsSku:list")>
+                <div class="form-group col-sm-3" style="padding-left:0;width:18%">
+                    <input type="text"  class="form-control" v-model="q.search" @keyup.enter="query" placeholder="商品名、商品标签、创建人">
+                </div>
+                <div class="form-group col-sm-3" style="padding-left:0;width:18%">
+                    <input type="text"  class="form-control" v-model="q.number" @keyup.enter="query" placeholder="商品编号">
+                </div>
+                <div class="form-group col-sm-2" style="padding-left:0;width:12%">
+                    <select name="status" v-model="q.status"  class="form-control" placeholder="状态选择"  id="status" >
+                        <option value="0" selected="selected">--状态选择--</option>
+                        <option value="1">正常使用</option>
+                        <option value="2">暂停销售</option>
+                        <option value="3">删除</option>
+                    </select>
+                </div>
+                <a class="btn btn-default" @click="query">查询</a>
+            </#if>
+			<#if shiro.hasPermission("operation:goodsSku:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("operation:goodsSku:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("operation:goodsSku:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            </#if>
+            <#if shiro.hasPermission("operation:goodsSku:export")>
+            <a class="btn btn-primary" @click="exportGoodsSku"><i class="fa fa-sort-asc"></i>&nbsp;导出</a>
+            </#if>
+            <#if shiro.hasPermission("operation:goodsSku:import")>
+            <form id="importGoodsSkuForm" enctype="multipart/form-data"  method="post">
+                <input type="file" name = "file"/>
+                <a class="btn btn-primary" @click="importGoodsSku"><i class="fa fa fa-sort-desc"></i>&nbsp;导入</a>
+            </form>
+            </#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">标签</div>
+                        <div class="col-sm-10">
+                             <select name="labelId" class="form-control" v-model="goodsSku.labelId" placeholder="商品标签"  id="labelId">
+                             </select>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodsSku.goodsName" placeholder="商品名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品详细</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodsSku.details" placeholder="商品详细"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品图片</div>
+                        <div class="col-sm-10">
+                            <div class="yc-upload-wrap">
+                                <div class="yc-upload-box">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+
+                                                <div class="ycupload-mainbox">
+                                                    <div class="ycupload-line"></div>
+
+                                                    <div  style="min-height:1px;">
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                <div class="col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+                                                                    <div style="min-height:1px;line-height:160px;text-align:center;position:relative;" ontouchstart="">
+                                                                        <div class="cover-wrap3 cover" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background: rgba(0, 0, 0, 0.5);z-index: 10000000;text-align:center;">
+                                                                            <div class="phone-max-box">
+                                                                                <div id="clipArea3" style="margin:10px;height: 370px;"></div>
+                                                                                <div class="" style="height:56px;line-height:36px;text-align: center;padding-top:8px;">
+                                                                                    <button id="clipBtn3" type="button" style="width:120px;height: 36px;border-radius: 4px;background-color:#ff8a00;color: #FFFFFF;font-size: 14px;text-align: center;line-height: 36px;outline: none;">保存封面</button>
+                                                                                </div>
+                                                                                <div class="close-btn"><img src="${request.contextPath}/statics/img/close.png" alt=""></div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div id="view3" class="view" style="width:92px;height:92px;" title="请上传 428*321 的封面图片"></div>
+                                                                        <div style="height:10px;"></div>
+                                                                        <div class="" style="width:92px;height:38px;border-radius: 2px;background-color:#009688;color: #FFFFFF;font-size: 14px;text-align:center;line-height:38px;outline:none;position:relative;">
+                                                                            点击上传
+                                                                            <input type="file" id="file_new3" style="cursor:pointer;opacity:0;filter:alpha(opacity=0);width:100%;height:100%;position:absolute;top:0;left:0;">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div style="height:25px;"></div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">备注</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodsSku.remark" placeholder="备注"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品编号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodsSku.code" placeholder="商品编号"/>
+                        </div>
+                    </div>
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input id="goodsSku" type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/cover/js/iscroll-zoom.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/cover/js/hammer.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/cover/js/lrz.all.bundle.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/cover/js/jquery.photoClip.min.js" charset="utf-8"></script>
+<script src="${request.contextPath}/statics/js/modules/operation/goods_sku.js?_${.now?long}"></script>
+<script src="${request.contextPath}/statics/js/modules/operation/goods_sku_photo.js?_${.now?long}"></script>
+</body>
+</html>

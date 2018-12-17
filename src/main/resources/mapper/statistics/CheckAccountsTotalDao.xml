@@ -1,6 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.scxxwb.net.admin.modules.statistics.dao.CheckAccountsTotalDao">
-
+<mapper namespace="leiren.haozhaojob.modules.statistics.dao.CheckAccountsTotalDao">
+	<resultMap type="leiren.haozhaojob.modules.statistics.entity.CheckAccountsTotalEntity" id="CheckAccountsTotalMap">
+		<result property="balance" column="balance"/>
+	</resultMap>
+    <select id="getBalanceByMerchantId" resultType="BigDecimal">
+        SELECT
+	      balance
+        FROM
+	      t_merchant_finance_flow
+        WHERE
+	      merchant_finance_id = #{param1}
+			AND (transaction_time &lt; #{param2})
+        ORDER BY transaction_time DESC LIMIT 0,1
+    </select>
+    <select id="getTodayIncomeByMerchantId" resultType="BigDecimal">
+SELECT
+	SUM(transaction_amount)
+FROM
+	t_merchant_finance_flow
+WHERE
+	merchant_finance_id = #{param1}
+AND transaction_type = 0
+AND transaction_time BETWEEN #{param2} AND #{param3}
+</select>
+    <select id="getTodayExpendByMerchantId" resultType="BigDecimal">
+SELECT
+	SUM(transaction_amount)
+FROM
+	t_merchant_finance_flow
+WHERE
+	merchant_finance_id = #{param1}
+AND transaction_type = 1
+AND transaction_time BETWEEN #{param2} AND #{param3}
+</select>
+    <select id="getTotalBalanceAllByDate" resultType="BigDecimal">
+        SELECT
+	SUM(a.cb)
+FROM
+	(
+		SELECT
+			SUM(b.balance) cb,
+			b.transaction_time,
+			b.merchant_finance_id
+		FROM
+			(
+				SELECT
+					f.balance,
+					f.transaction_time,
+					f.merchant_finance_id
+				FROM
+					t_merchant_finance_flow f
+				WHERE
+					f.transaction_time
+					BETWEEN #{param1} AND #{param2}
+				<if test="param3 != null and param3 != ''">
+					AND f.merchant_finance_id IN (${param3})
+				</if>
+				ORDER BY
+					f.transaction_time DESC
+			) b
+		GROUP BY
+			b.merchant_finance_id
+	) a
+    </select>
+	<select id="getTodayTotalIncomeByDate" resultType="BigDecimal">
+		SELECT
+			SUM(transaction_amount)
+		FROM
+			t_merchant_finance_flow
+		WHERE
+			transaction_time
+		BETWEEN #{param1} AND #{param2}
+		AND transaction_type = 0
+		<if test="param3 != null and param3 != ''">
+			AND merchant_finance_id IN (${param3})
+		</if>
+	</select>
+	<select id="getTodayTotalExpendByDate" resultType="BigDecimal">
+		SELECT
+		SUM(transaction_amount)
+		FROM
+		t_merchant_finance_flow
+		WHERE
+		transaction_time
+		BETWEEN #{param1} AND #{param2}
+		AND transaction_type = 1
+		<if test="param3 != null and param3 != ''">
+			AND merchant_finance_id IN (${param3})
+		</if>
+	</select>
 </mapper>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>商品标签审核</title>
+    <#include "/header.html">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/merchant.css">
+</head>
+<body>
+
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <#if shiro.hasPermission("operation:merchantproductcustomerlabel:list")>
+            <div class="form-group col-sm-3" style="padding-left:0;width:18%">
+                <input type="text"  class="form-control" v-model="q.search" @keyup.enter="query" placeholder="商户名、商品标签名">
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
+            </#if>
+            <!--<#if shiro.hasPermission("operation:merchantproductcustomerlabel:save")>-->
+            <!--<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>-->
+            <!--</#if>-->
+            <!--<#if shiro.hasPermission("operation:merchantproductcustomerlabel:update")>-->
+            <!--<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>-->
+            <!--</#if>-->
+            <#if shiro.hasPermission("operation:merchantproductcustomerlabel:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            </#if>
+            <#if shiro.hasPermission("operation:merchantproductcustomerlabel:check")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-plus"></i>&nbsp;审核</a>
+            </#if>
+</div>
+<table id="jqGrid"></table>
+<div id="jqGridPager"></div>
+</div>
+
+<div v-show="!showList" class="panel panel-default">
+    <div class="panel-heading">{{title}}</div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <div class="col-sm-2 control-label">商家名称</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-active" v-model="tMerchantProductCustomerLabel.merchantName" placeholder="商家名称" disabled/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">标签名称</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-active" v-model="tMerchantProductCustomerLabel.labelName" placeholder="标签名称" disabled/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">排序id</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-active" v-model="tMerchantProductCustomerLabel.sortNo" placeholder="排序号" disabled/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">创建时间</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-active" v-model="tMerchantProductCustomerLabel.createTime" placeholder="创建时间" disabled/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">审核</div>
+            <div class="col-sm-10">
+                <label class="radio-inline radio-inline-hide">
+                    <input type="radio" name="status" value="5" v-model="tMerchantProductCustomerLabel.status"/> 通过
+                </label>
+                <label class="radio-inline radio-inline-show">
+                    <input type="radio" id="checkStatus" value="2" name="status" v-model="tMerchantProductCustomerLabel.status"/> 不通过
+                </label>
+            </div>
+        </div>
+        <div class="form-group audit-state" id="remark">
+            <div class="col-sm-2 control-label">审核意见</div>
+            <div class="col-sm-4">
+                <textarea name="remark" cols="30" rows="5" class="form-control" v-model="tMerchantProductCustomerLabel.remark" placeholder="审核意见"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label"></div>
+            <input id="labelCheck" type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+            &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+        </div>
+    </form>
+</div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/operation/goods_label_check.js?_${.now?long}"></script>
+
+</body>
+</html>

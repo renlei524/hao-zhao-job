@@ -4,13 +4,13 @@ spring:
         driverClassName: com.mysql.jdbc.Driver
         druid:
             first:  #数据源1
-                url: jdbc:mysql://192.168.10.244:3306/xxwb3?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+                url: jdbc:mysql://127.0.0.1:3306/haozhaojob?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
                 username: root
-                password: xxwb098
+                password: r1234567890l
             second:  #数据源2
-                url: jdbc:mysql://192.168.10.244:3306/xxwb3?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+                url: jdbc:mysql://127.0.0.1:3306/haozhaojob?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
                 username: root
-                password: xxwb098
+                password: r1234567890l
             #first:  #数据源1
                 #url: jdbc:mysql://39.108.84.145:3306/xxwb3?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
                 #username: xxwb3Select
@@ -34,8 +34,8 @@ spring:
             stat-view-servlet:
                 enabled: true
                 url-pattern: /druid/*
-                login-username: admin
-                login-password: admin
+                login-username: renlei
+                login-password: renlei524
             filter:
                 stat:
                     log-slow-sql: true
@@ -57,9 +57,9 @@ spring:
           concurrency: 4
     redis:
         database: 0
-        host: 192.168.10.245
+        host: 192.168.2.200
         port: 6379
-        password:      # 密码（默认为空）
+        password: 123123     # 密码（默认为空）
         timeout: 6000ms  # 连接超时时长（毫秒）
         jedis:
             pool:
@@ -79,13 +79,28 @@ scxxwb:
         port: 21
         user-name: root
         password: xxwb1234
-        imagePath: /static/image
+        merchantPath: /static/image
         appPath: /static/appPkg
         vyicooPath: /static/image
+        goodsPath: /static/image
+        noticePath: /static/image
     nginx:
-        imagePath: http://192.168.10.245:8686
+        merchantPath: http://192.168.10.245:8686
         appPath: http://192.168.10.245:8686
+        vyicooPath: http://192.168.10.245:8686
+        goodsPath: http://192.168.10.245:8686
+        noticePath: http://192.168.10.245:8686
     socket:
         host: 127.0.0.1
         port: 8082
     payPath: http://1mk6535653.iok.la/Pay/Trade/Pay?sn=
+    vyicooUploadPath:
+    elasticJob:
+        regCenter:
+            serverList: 192.168.10.244:2181,192.168.10.245:2181,192.168.10.246:2181
+            namespace: scxxwb-admin
+        url: http://192.168.10.244:8899
+    elasticSearch:
+        url: http://192.168.10.244:9200/_plugin/head
+        esUserName: renlei
+        esPassword: renlei524

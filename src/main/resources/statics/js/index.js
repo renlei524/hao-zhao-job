@@ -38,6 +38,7 @@ Vue.component('menuItem',menuItem);
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
+	    socketClient: null,
 		user:{},
 		menuList:{},
 		main:"main.html",
@@ -51,33 +52,34 @@ var vm = new Vue({
 				vm.menuList = r.menuList;
 			});
 		},
+		loginOut: function () {
+            socketClient.disconnect();
+            window.location.href = "logout";
+		},
 		getUser: function(){
 			$.getJSON("sys/user/info?_"+$.now(), function(r){
 				vm.user = r.user;
-				//vm.connectSocket(r.user.userName, r.host, r.port);
+				vm.connectSocket(r.user.userName, r.host, r.port);
 			});
 		},
 		connectSocket: function(userName, host, port) {
-            var socket = io.connect('http://' + host + ':' + port + '?userName=' + userName, { transports: [ 'websocket' ] });
+            socketClient = io.connect('http://' + host + ':' + port + '?userName=' + userName, { transports: [ 'websocket' ] });
 
-            socket.on('connect', function () {
+            /*socketClient.on('connect', function () {
                 console.log('连接');
             });
 
-            socket.on('runningTask', function (data) {
-                console.log("收到全服数据");
-                console.log(data);
-            });
-
-            socket.on('taskResult', function (data) {
-                console.log("收到个人数据");
-                console.log(data);
-            });
-
-            socket.emit('messageevent', "发送信息");
-
-            socket.on('disconnect', function () {
+            socketClient.on('disconnect', function () {
                 console.log("断开");
+            });*/
+
+            socketClient.on('loginOut', function (data) {
+                //配置一个透明的询问框
+                /*layer.msg(data, {
+                   time: 10000, //10s后自动关闭
+                   btn: ['重新登录']
+                });*/
+                vm.loginOut();
             });
 		},
         verification : function(){
@@ -183,7 +185,8 @@ function routerList(router, menuList){
 			    $("a[href='"+url+"']").parents("li").addClass("active");
 			    $("a[href='"+url+"']").unbind("click").click(function() {
 			        if(url == preUrl) {
-			            window.location.reload();
+			            //不起效果：$('section>iframe').attr('src', url);
+			            $('section>iframe').attr('src', $('section>iframe').attr('src'));
 			        }
 			    });
                 preUrl = url;

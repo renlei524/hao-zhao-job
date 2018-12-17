@@ -9,6 +9,13 @@ $(function () {
             { label: '商户名称(店铺名称)', name: 'merchantName', index: 'merchant_name', width: 80 },
             { label: '商户分类', name: 'typeName', index: 'type_name', width: 80 },
             { label: '本店联系电话', name: 'telphone', index: 'telphone', width: 80 },
+            { label: '合同编号', name: 'contractNumber', index: 'contract_number', width: 80 },
+            /*{ label: '商品个数', name: 'goodsNumber', width: 80 },
+            { label: '总收入', name: 'totalIncome', width: 80 , formatter:'currency', formatoptions:{decimalSeparator:".", thousandsSeparator: ",",
+                    decimalPlaces: 2}},*/
+            { label: '所属区域', name: 'address', width: 80 },
+            { label: '城市经理', name: 'salesmanName', width: 80 },
+            { label: '城市经理电话', name: 'salesmanMobile', width: 80 },
             { label: '支付通道', name: 'payChannel', width: 80 , formatter: function(item, index){
                     if(item === 1){
                         return '<span class="label label-primary">原生通道</span>';
@@ -20,12 +27,22 @@ $(function () {
                         return '<span class="label label-warning">点点客</span>';
                     }
                 }},
+            { label: '更新时间', name: 'updateTime', width: 80 },
             { label: '状态', name: 'status',index: 'status', align: 'center', valign: 'middle', sortable: true, width: '80px', formatter: function(item, index){
                 if(item === 1){
                     return '<span class="label label-primary">创建审核中</span>';
                 }
+                if(item === 2){
+                    return '<span class="label label-warning">创建不通过</span>';
+                }
                 if(item === 3){
-                    return '<span class="label label-warning">修改审核中</span>';
+                    return '<span class="label label-primary">修改审核中</span>';
+                }
+                if(item === 4){
+                    return '<span class="label label-warning">修改不通过</span>';
+                }
+                if(item === 5){
+                    return '<span class="label label-success">正常使用</span>';
                 }
             }}
         ],
@@ -89,7 +106,8 @@ var vm = new Vue({
         q:{
             communityName:null,
             tWBUserName:null,
-            status:0
+            status:0,
+            contractNumber:null
         },
         merchant:{
             userId:0,
@@ -119,7 +137,8 @@ var vm = new Vue({
             salesman:null,
             isVoiceFunction:1,
             contractNumber:null,
-            wechatPublicNumber: null
+            wechatPublicNumber: null,
+            description: null
         },
         merchantcategory:{
             categoryId:null,
@@ -168,7 +187,13 @@ var vm = new Vue({
 		saveOrUpdate: function (event) {
             $("#text1").blur();
             $("#text1").attr("disabled", "disabled");
-			var url = "operation/check/check";
+            vm.merchant.status = $("input[name='status']:checked").val();
+            if(vm.merchant.status != 5 && (vm.merchant.remark == null || vm.merchant.remark == "")) {
+                alert("审批不通过，意见必填！！");
+                $("#text1").removeAttr("disabled");
+                return;
+            }
+
 			//getMerchantPhotos();
             var provinceName = null;
             var cityName = null;
@@ -194,7 +219,7 @@ var vm = new Vue({
 			vm.merchant.address = (provinceName == null ? "" : provinceName) + (cityName == null ? "" : cityName) +
                 (areaName == null ? "" : areaName) +  (townName == null ? "" : townName)+ vm.merchant.simpleAddress;
 
-            vm.merchant.status = $("input[name='status']:checked").val();
+            var url = "operation/check/check";
 			$.ajax({
 				type: "POST",
 			    url: baseURL + url,
@@ -282,7 +307,7 @@ var vm = new Vue({
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam','page');
             $("#jqGrid").jqGrid('setGridParam',{
-                 postData:{'merchantName':vm.q.merchantName,'status' : vm.q.status},
+                 postData:{'merchantName':vm.q.merchantName,'status' : vm.q.status,'contractNumber' : vm.q.contractNumber},
                  page:page
              }).trigger("reloadGrid");
               $("#text1").attr("status", "Y");
@@ -419,6 +444,17 @@ var vm = new Vue({
                 }
             });
         }
-	}
+	},
+    updated: function() {
+        $('input[type=radio][name=checkStatus]').change(function() {
+            if (this.value == '5') {
+              $("#remark").css("display", "none");
+              vm.merchant.remark = null;
+            }
+            else {
+              $("#remark").css("display", "block");
+            }
+        });
+    }
 });
 

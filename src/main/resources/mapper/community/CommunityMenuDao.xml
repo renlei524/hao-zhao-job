@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.scxxwb.net.admin.modules.community.dao.CommunityMenuDao">
+<mapper namespace="leiren.haozhaojob.modules.community.dao.CommunityMenuDao">
 
-	<select id="queryListParentId" resultType="com.scxxwb.net.admin.modules.community.entity.CommunityMenuEntity">
+	<select id="queryListParentId" resultType="leiren.haozhaojob.modules.community.entity.CommunityMenuEntity">
 		select * from t_community_sys_menu where parent_id = #{parentId} order by order_num asc
 	</select>
 	
-	<select id="queryNotButtonList" resultType="com.scxxwb.net.admin.modules.community.entity.CommunityMenuEntity">
+	<select id="queryNotButtonList" resultType="leiren.haozhaojob.modules.community.entity.CommunityMenuEntity">
 		select * from t_community_sys_menu where type != 2 order by order_num asc
 	</select>
 	

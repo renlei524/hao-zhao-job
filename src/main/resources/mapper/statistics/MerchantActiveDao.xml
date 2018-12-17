@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="leiren.haozhaojob.modules.statistics.dao.MerchantActiveDao">
+
+    <resultMap type="leiren.haozhaojob.modules.statistics.entity.MerchantActiveEntity" id="MerchantActiveMap">
+        <result property="id" column="id"/>
+        <result property="merchantName" column="merchant_name"/>
+        <result property="cashAmount" column="cash_amount"/>
+        <result property="totalBills" column="total_bills"/>
+        <result property="couponAmount" column="coupon_amount"/>
+        <result property="weiBaoAmount" column="wei_bao_amount"/>
+    </resultMap>
+    <sql id="merchant">
+         SELECT id FROM t_merchant WHERE 1 = 1
+        <if test="merchantName != null and merchantName != ''">
+            AND merchant_name LIKE CONCAT('%',#{merchant_name},'%')
+        </if>
+    </sql>
+    <select id="selectMerchantByMerchantNameAndDate" resultMap="MerchantActiveMap">
+        SELECT
+            a.id,
+            a.merchant_name,
+            b.cash_amount,
+            c.wei_bao_amount,
+            d.coupon_amount,
+            e.total_bills
+        FROM
+            t_merchant a
+        LEFT JOIN (
+            SELECT
+                o.merchant_id,
+                SUM(b.total_fee) cash_amount
+            FROM
+                t_wb_order o
+            INNER JOIN t_wb_order_bill b ON o.order_id = b.order_id
+            WHERE
+                o.merchant_id IN (
+                  <include refid="merchant"/>
+                )
+            AND o.create_time BETWEEN #{startTime}
+            AND #{endTime}
+            AND o. STATUS IN (1, 2, 3)
+            AND b.type IN (3, 4)
+            GROUP BY
+                o.merchant_id
+        ) b ON a.id = b.merchant_id
+        LEFT JOIN (
+            SELECT
+                merchant_id,
+                SUM(total_fee) wei_bao_amount
+            FROM
+                t_wb_order o
+            INNER JOIN t_wb_order_bill b ON o.order_id = b.order_id
+            WHERE
+                o.merchant_id IN (
+                    <include refid="merchant"/>
+                )
+            AND o.create_time BETWEEN #{startTime}
+            AND #{endTime}
+            AND o. STATUS IN (1, 2, 3)
+            AND b.type = 1
+            GROUP BY
+                merchant_id
+        ) c ON a.id = c.merchant_id
+        LEFT JOIN (
+            SELECT
+                merchant_id,
+                SUM(total_fee) coupon_amount
+            FROM
+                t_wb_order o
+            INNER JOIN t_wb_order_bill b ON o.order_id = b.order_id
+            WHERE
+                o.merchant_id IN (
+                      <include refid="merchant"/>
+                )
+            AND o.create_time BETWEEN #{startTime}
+            AND #{endTime}
+            AND o. STATUS IN (1, 2, 3)
+            AND b.type = 2
+            GROUP BY
+                merchant_id
+        ) d ON a.id = d.merchant_id
+        LEFT JOIN (
+            SELECT
+            merchant_id,
+            COUNT(b.order_id) total_bills
+            FROM
+            t_wb_order o
+            INNER JOIN t_wb_order_bill b ON o.order_id = b.order_id
+            WHERE
+            o.merchant_id IN (
+                <include refid="merchant"/>
+            )
+            AND o.create_time BETWEEN #{startTime}
+            AND #{endTime}
+            AND o.status IN (1, 2, 3)
+            GROUP BY o.merchant_id
+        ) e ON e.merchant_id = a.id
+        WHERE 1 = 1
+        <if test="merchantName != null and merchantName != ''">
+            AND merchant_name LIKE CONCAT('%',#{merchantName},'%')
+        </if>
+        <if test="sidx != null and sidx == 'cash_amount'">
+            ORDER BY b.cash_amount
+            <if test="order != null and order == 'desc'">
+                DESC
+            </if>
+            <if test="order != null and order == 'asc'">
+                ASC
+            </if>
+        </if>
+        <if test="sidx != null and sidx == 'wei_bao_amount'">
+            ORDER BY c.wei_bao_amount
+            <if test="order != null and order == 'desc'">
+                DESC
+            </if>
+            <if test="order != null and order == 'asc'">
+                ASC
+            </if>
+        </if>
+        <if test="sidx != null and sidx == 'coupon_amount'">
+            ORDER BY  d.coupon_amount
+            <if test="order != null and order == 'desc'">
+                DESC
+            </if>
+            <if test="order != null and order == 'asc'">
+                ASC
+            </if>
+        </if>
+        <if test="sidx != null and sidx == 'total_bills'">
+            ORDER BY e.total_bills
+            <if test="order != null and order == 'desc'">
+                DESC
+            </if>
+            <if test="order != null and order == 'asc'">
+                ASC
+            </if>
+        </if>
+        limit #{pageNum},#{pageSize}
+    </select>
+</mapper>

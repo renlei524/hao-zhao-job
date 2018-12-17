@@ -1,5 +1,6 @@
 $(function () {
     vm.getProvince();
+    vm.getAgentId();
     var now = new Date(),
         year = now.getFullYear(),
         month = ((now.getMonth() + 1)>9)?(now.getMonth() + 1):("0"+(now.getMonth() + 1)),
@@ -11,10 +12,11 @@ $(function () {
             return prop
         }
     }
-    var dateString = year+"-"+month+"-"+date;
-    $("#startTime-endTime").val(dateString+" - "+dateString);
-    vm.q.startTime = dateString;
-    vm.q.endTime = dateString;
+    var startTime = year+"-"+month+"-01";
+    var endTime = year+"-"+month+"-"+date;
+    $("#startTime-endTime").val(startTime+" - "+endTime);
+    vm.q.startTime = startTime;
+    vm.q.endTime = endTime;
     $("#jqGrid").jqGrid({
         url: baseURL + 'statistics/salesmanKPI/list',
         datatype: "json",
@@ -45,7 +47,8 @@ var vm = new Vue({
             town:0,
             sysUserName:null,
             startTime:null,
-            endTime:null
+            endTime:null,
+            agentId: null
         },
         salesmanKPIEntity:{
             sysUsetName:null,
@@ -74,7 +77,8 @@ var vm = new Vue({
                     "town" :vm.q.town,
                     "sysUserName" :vm.q.sysUserName,
                     "endTime" :vm.q.endTime,
-                    "startTime" :vm.q.startTime},
+                    "startTime" :vm.q.startTime,
+                    "agentId" : vm.q.agentId},
                 page:page
             }).trigger("reloadGrid");
         },
@@ -209,6 +213,23 @@ var vm = new Vue({
             };
             // 使用刚指定的配置项和数据显示图表。
             myChart.setOption(option);
+        },
+        getAgentId: function(){
+            var group = $("#agentId");
+            group.empty();
+            group.append("<option value='0' selected='selected'>--请选择公司--</option>");
+            //加载省下拉框
+            var url = "sys/dept/list";
+            $.ajax({
+                type: "POST",
+                url: baseURL + url,
+                contentType: "application/json",
+                success: function(r){
+                    for(var i=0;i<r.length;i++) {
+                        group.append("<option value='"+r[i].deptId+"'>"+r[i].name+"</option>");
+                    }
+                }
+            });
         }
     }
 });

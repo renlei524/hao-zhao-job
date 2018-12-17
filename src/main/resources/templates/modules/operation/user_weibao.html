@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>微宝用户</title>
+    <#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <#if shiro.hasPermission("operation:userweibao:list")>
+            <div class="grid-btn">
+                <div class="form-group col-sm-2">
+                    <input type="text" class="form-control" v-model="q.userName" @keyup.enter="query" placeholder="昵称">
+                </div>
+                <div class="form-group col-sm-2">
+                    <input type="text" class="form-control" v-model="q.mobile" @keyup.enter="query" placeholder="电话">
+                </div>
+                <a class="btn btn-default" @click="query">查询</a>
+            </div>
+        </#if>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+
+    <!--↓↓↓订单查询弹出框 d↓↓↓-->
+    <div class="modal modal.fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  style="z-index: 1041;">
+        <div class="modal-dialog modal-lg" style="width: 1030px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">用户订单</h4>
+                </div>
+                <!--显示弹窗table-->
+                <div class="form-group">
+                    <table id="commercialName"></table>
+                    <div id="commercialNamePager"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--↑↑↑订单查询弹出框 d↑↑↑-->
+
+    </div>
+</div>
+<script src="${request.contextPath}/statics/js/modules/operation/user_weibao.js?_${.now?long}"></script>
+</body>
+</html>

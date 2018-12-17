@@ -1,22 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:width="http://www.w3.org/1999/xhtml">
 <head>
     <title>活跃商户</title>
     <#include "/header.html">
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/plugins/cover/css/reset.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
+    <script src="${request.contextPath}/statics/plugins/layui/layui.all.js"></script>
+    <style>
+        .form-inline .form-control {
+            width: 70%
+        }
+    </style>
 </head>
 <body>
 <div id="rrapp" v-cloak>
     <div v-show="showList">
-        <#if shiro.hasPermission("statistics:merchantActive:list")>
-            <div class="grid-btn">
-                <div class="form-group col-sm-2">
-                    <input type="text" class="form-control" v-model="" @keyup.enter="query" placeholder="">
+        <div class="container-fluid">
+            <form class="form-inline">
+                    <#if shiro.hasPermission("statistics:merchantActive:list")>
+                <div class="grid-btn">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group col-sm-3">
+                                <label for="merchantName">商户名称</label>
+                                <input type="text" class="form-control" v-model="q.merchantName" @keyup.enter="query" id="merchantName" placeholder="请输入商户名称">
+                            </div>
+                            <div class="form-group col-sm-4 text-left">
+                                <div class="row">
+                                    <label for="datePicker">日期</label>
+                                    <input type="text" id="startTime-endTime" class="form-control" id="datePicker" placeholder="请选择日期，默认选择当天" width: width="70%">
+                                    <div class="form-group text-right">
+                                        <a class="btn btn-default" @click="query">查询</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    </div>
+                </#if>
+            </form>
+        </div>
+    <table id="jqGrid"></table>
+    <div id="jqGridPager"></div>
+    </div>
+    <!--↓↓↓订单详情弹出框 d↓↓↓-->
+    <div class="modal modal.fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  style="z-index: 1041">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">订单详情</h4>
+                    <div class="form-group">
+                        <table id="billDetails"></table>
+                        <div id="billDetailsPager"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <!--<button type="button" class="btn btn-primary" id="window-close-button">确定</button>-->
+                    </div>
                 </div>
-                <a class="btn btn-default" @click="query">查询</a>
             </div>
-        </#if>
-        <table id="jqGrid"></table>
-        <div id="jqGridPager"></div>
+        </div>
+        <!--↑↑↑订单详情弹出框 d↑↑↑-->
     </div>
 </div>
 <script src="${request.contextPath}/statics/js/modules/statistics/merchant_active.js?_${.now?long}"></script>

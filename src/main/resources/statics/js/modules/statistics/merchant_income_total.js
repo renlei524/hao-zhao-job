@@ -1,5 +1,6 @@
 $(function () {
     vm.getProvince();
+    vm.getAgentId();
     var now = new Date(),
         year = now.getFullYear(),
         month = ((now.getMonth() + 1)>9)?(now.getMonth() + 1):("0"+(now.getMonth() + 1)),
@@ -11,10 +12,11 @@ $(function () {
             return prop
         }
     }
-    var dateString = year+"-"+month+"-"+date;
-    $("#startTime-endTime").val(dateString+" - "+dateString);
-    vm.q.startTime = dateString;
-    vm.q.endTime = dateString;
+    var startTime = year+"-"+month+"-01";
+    var endTime = year+"-"+month+"-"+date;
+    $("#startTime-endTime").val(startTime+" - "+endTime);
+    vm.q.startTime = startTime;
+    vm.q.endTime = endTime;
     $("#jqGrid").jqGrid({
         url: baseURL + 'statistics/merchantIncomeTotal/list',
         datatype: "json",
@@ -29,6 +31,8 @@ $(function () {
                     $("#totalNumberOfPen").html(r.merchantIncomeTotalEntity.totalNumberOfPen);
                     $("#totalExpenditure").html(r.merchantIncomeTotalEntity.totalExpenditure);
                     $("#expenditureNumberOfPen").html(r.merchantIncomeTotalEntity.expenditureNumberOfPen);
+                    $("#weiBaoIncome").html(r.merchantIncomeTotalEntity.weiBaoIncome);
+                    $("#weiBaoNumberOfPen").html(r.merchantIncomeTotalEntity.weiBaoNumberOfPen);
                     vm.barGraph();
                     vm.fanShapedGraph();
                 }
@@ -48,6 +52,7 @@ var vm = new Vue({
             city:0,
             area:0,
             town:0,
+            agentId: 0,
             merchantName:null,
             sysUserName:null,
             startTime:null,
@@ -87,7 +92,8 @@ var vm = new Vue({
                     "sysUserName" :vm.q.sysUserName,
                     "merchantName" :vm.q.merchantName,
                     "endTime" :vm.q.endTime,
-                    "startTime" :vm.q.startTime},
+                    "startTime" :vm.q.startTime,
+                    "agentId" : vm.q.agentId},
                 page:page
             }).trigger("reloadGrid");
         },
@@ -246,6 +252,23 @@ var vm = new Vue({
             };
             // 使用刚指定的配置项和数据显示图表。
             myChart.setOption(option);
+        } ,
+        getAgentId: function(){
+            var group = $("#agentId");
+            group.empty();
+            group.append("<option value='0' selected='selected'>--请选择公司--</option>");
+            //加载省下拉框
+            var url = "sys/dept/list";
+            $.ajax({
+                type: "POST",
+                url: baseURL + url,
+                contentType: "application/json",
+                success: function(r){
+                    for(var i=0;i<r.length;i++) {
+                        group.append("<option value='"+r[i].deptId+"'>"+r[i].name+"</option>");
+                    }
+                }
+            });
         }
     }
 });
@@ -279,7 +302,6 @@ layui.use('laydate', function(){
     laydate.render({
         elem: '#startTime-endTime' //指定元素
         ,range: true
-        ,min:"2018-07-24"
         ,max: 0
     });
 });

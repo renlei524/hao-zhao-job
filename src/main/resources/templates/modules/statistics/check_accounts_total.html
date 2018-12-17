@@ -3,18 +3,62 @@
 <head>
     <title>财务核账统计</title>
     <#include "/header.html">
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/plugins/cover/css/reset.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
+    <script src="${request.contextPath}/statics/plugins/layui/layui.all.js"></script>
+    <style>
+</style>
 </head>
 <body>
 <div id="rrapp" v-cloak>
     <div v-show="showList">
-        <#if shiro.hasPermission("statistics:checkAccountsTotal:list")>
-            <div class="grid-btn">
-                <div class="form-group col-sm-2">
-                    <input type="text" class="form-control" v-model="" @keyup.enter="query" placeholder="">
+        <div class="container-fluid">
+            <form class="form-inline">
+                <#if shiro.hasPermission("statistics:checkAccountsTotal:list")>
+                <div class="grid-btn">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group col-sm-3">
+                                <label for="merchantName">商户名称</label>
+                                <input type="text" class="form-control" v-model="q.merchantName" @keyup.enter="query" id="merchantName" placeholder="请输入商户名称">
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="mobile">电话号码</label>
+                                <input type="text" class="form-control" v-model="q.mobile" @keyup.enter="query" id="mobile" placeholder="请输入电话号码">
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <div class="row">
+                                    <label for="datePicker">日期</label>
+                                    <input type="text" class="form-control" id="datePicker" placeholder="请选择日期，默认选择当天">
+                                    <div class="form-group">
+                                        <a class="btn btn-default" @click="query">查询</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <a class="btn btn-default" @click="query">查询</a>
-            </div>
-        </#if>
+                <div class="container-fluid">
+                    <div class="grid-btn">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                昨日余额(总额)：<span id="yesterdayTotalBlance"></span>
+                            </div>
+                            <div class="col-sm-3">
+                                今日收入(总额): <span id="todayTotalIncome"></span>
+                            </div>
+                            <div class="col-sm-3">
+                                今日支出(总额)：<span id="todayTotalExpend"></span>
+                            </div>
+                            <div class="col-sm-3">
+                                当前余额(总额)：<span id="currentTotalBalance"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </#if>
+            </form>
+        </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
     </div>

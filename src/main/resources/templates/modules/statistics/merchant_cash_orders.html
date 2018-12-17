@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>提现明细</title>
+		<#include "/header.html">
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/plugins/cover/css/reset.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
+    <script src="${request.contextPath}/statics/plugins/layui/layui.all.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <div class="form-group col-sm-2" style="padding-left:0;width:12%">
+                <input type="text" name="merchantName" class="form-control" v-model="q.merchantName" @keyup.enter="query" placeholder="商户名称">
+            </div>
+            <div class="form-group col-sm-2">
+                <input type="text" id="startTime-endTime" class="form-control"  placeholder="选择时间段">
+            </div>
+            <div class="form-group col-sm-2" style="padding-left:0;width:12%">
+                <select name="status" v-model="q.status"  class="form-control" placeholder="状态选择"  id="status" >
+                    <option value="0" selected="selected">全部状态</option>
+                    <option value="2">已完成</option>
+                    <option value="3">处理中</option>
+                    <!--<option value="4">失败</option>-->
+                    <!--<option value="5">已申请</option>-->
+                </select>
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商家id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.merchantId" placeholder="商家id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">提现日期</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.cashDate" placeholder="提现日期"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">提现金额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.totalAmount" placeholder="提现金额"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">提现明细总笔数</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.totalCount" placeholder="提现明细总笔数"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">手续费</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.serviceCharge" placeholder="手续费"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">提现状态  2已到账 3 待处理 4失败 5已申请</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.status" placeholder="提现状态  2已到账 3 待处理 4失败 5已申请"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">提现卡号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.toBankCard" placeholder="提现卡号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">提现银行名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.toBankName" placeholder="提现银行名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">提现开户名</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.toAccountName" placeholder="提现开户名"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">提现银行联号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.toBankNo" placeholder="提现银行联号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">银行转账完成的时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.finishDate" placeholder="银行转账完成的时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">应答返回码</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.errorCode" placeholder="应答返回码"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">应答描述</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.errorRemark" placeholder="应答描述"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.createTime" placeholder="创建时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">更新时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.updateTime" placeholder="更新时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">信用卡提现总金额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.totalAmountCerdit" placeholder="信用卡提现总金额"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">提现原始总金额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="tMerchantCashOrders.totalAmountOriginal" placeholder="提现原始总金额"/>
+                        </div>
+                    </div>
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/statistics/merchant_cash_orders.js?_${.now?long}"></script>
+</body>
+</html>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.scxxwb.net.admin.modules.operation.dao.GoodsDao">
+<mapper namespace="leiren.haozhaojob.modules.operation.dao.GoodsDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.scxxwb.net.admin.modules.operation.entity.GoodsEntity" id="goodsMap">
+    <resultMap type="leiren.haozhaojob.modules.operation.entity.GoodsEntity" id="goodsMap">
         <result property="id" column="id"/>
         <result property="merchantId" column="merchant_id"/>
         <result property="goodsName" column="goods_name"/>
@@ -14,6 +14,7 @@
         <result property="discountPrice" column="discount_price"/>
         <result property="total" column="total"/>
         <result property="sales" column="sales"/>
+        <result property="monthSales" column="month_sales"/>
         <result property="status" column="status"/>
         <result property="pictures" column="pictures"/>
         <result property="isPromotion" column="is_promotion"/>
@@ -22,9 +23,20 @@
         <result property="quantityPurchased" column="quantity_purchased"/>
         <result property="startTime" column="start_time"/>
         <result property="endTime" column="end_time"/>
-        <result property="tradeContent" column="trade_content"/>
         <result property="remark" column="remark"/>
+        <result property="labelId" column="label_id"/>
+        <result property="isRecommend" column="is_recommend"/>
+        <result property="thumbsUp" column="thumbs_up"/>
+        <result property="updateTime" column="update_time"/>
     </resultMap>
 
+    <select id="totalByMerchantId" resultType="Integer" parameterType="Integer">
+        SELECT COUNT(1) FROM t_goods WHERE merchant_id = #{merchantId}
+    </select>
+
+    <select id="insertGoods">
+        insert into t_goods (id,merchant_id,goods_name,details,original_price,market_price,discount_price,status,pictures,is_promotion,promotional_price,remark,label_id,is_recommend)
+         value (#{id},#{merchantId},#{goodsName},#{details},#{originalPrice},#{marketPrice},#{discountPrice},#{status},#{pictures},#{isPromotion},#{promotionalPrice},#{remark},#{labelId},#{isRecommend})
+    </select>
 
 </mapper>

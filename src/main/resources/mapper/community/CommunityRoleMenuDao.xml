@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.scxxwb.net.admin.modules.community.dao.CommunityRoleMenuDao">
+<mapper namespace="leiren.haozhaojob.modules.community.dao.CommunityRoleMenuDao">
 	<select id="queryMenuIdList" resultType="long">
 		select menu_id from t_community_sys_role_menu where role_id = #{value}
 	</select>

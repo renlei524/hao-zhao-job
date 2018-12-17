@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.scxxwb.net.admin.modules.community.dao.CommunityUserDao">
+<mapper namespace="leiren.haozhaojob.modules.community.dao.CommunityUserDao">
 	
-	<resultMap type="com.scxxwb.net.admin.modules.community.entity.CommunityUserEntity" id="SysUserMap">
+	<resultMap type="leiren.haozhaojob.modules.community.entity.CommunityUserEntity" id="SysUserMap">
         <result property="userId" column="user_id"/>
         <result property="userName" column="user_name"/>
         <result property="password" column="password"/>
@@ -15,6 +15,7 @@
         <result property="deptName" column="dept_name"/>
 		<result property="createTime" column="create_time"/>
 		<result property="realName" column="real_name"/>
+		<result property="delFlag" column="del_flag"/>
     </resultMap>
 	
 	<!-- 查询用户的所有权限 -->

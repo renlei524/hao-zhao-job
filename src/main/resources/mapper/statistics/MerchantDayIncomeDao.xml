@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.scxxwb.net.admin.modules.statistics.dao.MerchantDayIncomeDao">
+<mapper namespace="leiren.haozhaojob.modules.statistics.dao.MerchantDayIncomeDao">
 
-    <resultMap type="com.scxxwb.net.admin.modules.statistics.entity.MerchantDayIncomeEntity" id="MerchantDayIncomeMap">
+    <resultMap type="leiren.haozhaojob.modules.statistics.entity.MerchantDayIncomeEntity" id="MerchantDayIncomeMap">
         <result property="agentName" column="name"/>
         <result property="salesman" column="real_name"/>
         <result property="merchantId" column="merchant_id"/>
@@ -98,6 +98,10 @@
         SELECT SUM(T.final_amount) FROM
             (SELECT * FROM t_wb_order WHERE status >= 1 AND merchant_id = #{merchantId} AND pay_time LIKE CONCAT(#{dateOfTransaction},'%')) AS T
         WHERE pay_channel = 2
+    </select>
+    
+    <select id="getWBMoney" resultType="Integer" parameterType="Integer">
+        SELECT IFNULL(SUM(total_fee),0) FROM t_wb_order_bill WHERE type = 1 AND order_id IN (SELECT order_id FROM t_wb_order WHERE user_id = #{userId})
     </select>
 
 </mapper>

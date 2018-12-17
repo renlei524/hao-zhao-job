@@ -10,7 +10,7 @@ $(function () {
             { label: '商户分类', name: 'typeName', index: 'type_name', width: 80 },
             { label: '本店联系电话', name: 'telphone', index: 'telphone', width: 80 },
             { label: '合同编号', name: 'contractNumber', index: 'contract_number', width: 80 },
-            { label: '商品个数', name: '', width: 80 },
+            { label: '商品个数', name: 'goodsNumber', width: 80 },
             { label: '总收入', name: 'totalIncome', width: 80 , formatter:'currency', formatoptions:{decimalSeparator:".", thousandsSeparator: ",",
                     decimalPlaces: 2}},
             { label: '所属区域', name: 'address', width: 80 },
@@ -200,7 +200,8 @@ var vm = new Vue({
             salesManName:null,
             isVoiceFunction:1,
             contractNumber: null,
-            wechatPublicNumber: null
+            wechatPublicNumber: null,
+            description: null
         },
         merchantcategory:{
             categoryId:null,
@@ -448,7 +449,7 @@ var vm = new Vue({
                 return ;
             }
             for(var index in ids) {
-                if($("#" + ids[index]).find("td").eq(9).attr("title") != "正常使用") {
+                if($("#" + ids[index]).find("td").eq(15).attr("title") != "正常使用") {
                     alert("只能禁用正常使用的商户！");
                     return;
                 }
@@ -477,7 +478,7 @@ var vm = new Vue({
                 return ;
             }
             for(var index in ids) {
-                if($("#" + ids[index] + ">td").eq(9).attr("title") != "禁用") {
+                if($("#" + ids[index] + ">td").eq(15).attr("title") != "禁用") {
                     alert("只能启用禁用的商户！");
                     return;
                 }
@@ -571,7 +572,7 @@ var vm = new Vue({
                         /*$.ajax({
                             url: baseURL + "operation/merchant/deleteImage",
                             data: {
-                                "imageName": src.split('/')[4]
+                                "imageName": src.split('/')[4],
                             },
                             type: "post",
                             async: false,
@@ -608,7 +609,7 @@ var vm = new Vue({
             var page = $("#jqGrid").jqGrid('getGridParam','page');
             $("#jqGrid").jqGrid('setGridParam',{
                  postData:{'merchantName':vm.q.merchantName,'status' : vm.q.status,'contractNumber': vm.q.contractNumber},
-                 page:1
+                 page:page
              }).trigger("reloadGrid");
              $("#text1").attr("status", "Y");
         },

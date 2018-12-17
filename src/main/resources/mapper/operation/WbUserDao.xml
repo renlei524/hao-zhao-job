@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="leiren.haozhaojob.modules.operation.dao.WbUserDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="leiren.haozhaojob.modules.operation.entity.WbUserEntity" id="wbUserMap">
+        <result property="id" column="id"/>
+        <result property="mobile" column="mobile"/>
+        <result property="realName" column="real_name"/>
+        <result property="idCard" column="id_card"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <select id="selectUserIdByUserNameOrMobile" resultType="Integer">
+    SELECT
+        id
+    FROM
+        t_wb_user
+    WHERE
+        real_name
+    LIKE
+        CONCAT('%', #{search}, '%')
+    OR
+        mobile
+    LIKE
+        CONCAT('%', #{search}, '%')
+</select>
+<select id="selectUserNameAndMobileByUserId" resultMap="wbUserMap">
+    SELECT real_name, mobile FROM t_wb_user WHERE id = #{id}
+</select>
+</mapper>

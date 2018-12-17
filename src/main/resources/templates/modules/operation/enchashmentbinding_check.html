@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>商户与用户的提现账户绑定</title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <#if shiro.hasPermission("operation:enchashmentBindingCheck:list")>
+                <div class="form-group col-sm-3">
+                    <input type="text"  class="form-control" v-model="q.objectName" @keyup.enter="query" placeholder="商户名称、银行卡号、开户行、开户名">
+                </div>
+                <div class="form-group col-sm-2" style="padding-left:0;width:12%">
+                    <select name="status" v-model="q.status"  class="form-control" placeholder="状态选择"  id="status" >
+                        <option value="0" selected="selected">--状态选择--</option>
+                        <option value="2">创建审核中</option>
+                        <option value="4">修改审核中</option>
+                    </select>
+                </div>
+                <a class="btn btn-default" @click="query">查询</a>
+            </#if>
+			<#if shiro.hasPermission("operation:enchashmentBindingCheck:check")>
+                <a class="btn btn-primary" @click="check"><i class="fa fa-plus"></i>&nbsp;审核</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">商户名或用户名<i style="color:red;margin-right:5px">*</i></div>
+                <div class="col-sm-10">
+                    <input type="text" id="objectName" class="form-control" v-model="enchashmentBindingCheck.objectName" placeholder="请选择商户名或用户名" data-toggle="modal" data-target="#myModal" readonly="readonly" style="cursor:pointer;"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">是否是默认提现账号<i style="color:red;margin-right:5px">*</i></div>
+                <label class="radio-inline">
+                    <input type="radio" name="isDefault" value="1" v-model="enchashmentBindingCheck.isDefault"/> 是
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="isDefault" value="0" v-model="enchashmentBindingCheck.isDefault"/> 否
+                </label>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">银行卡号<i style="color:red;margin-right:5px">*</i></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" maxlength="19" v-model="enchashmentBindingCheck.account" placeholder="银行卡号"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">开户行<i style="color:red;margin-right:5px">*</i></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="subbranch" readonly="readonly"  maxlength="50" style="cursor:pointer;" placeholder="开户行" v-model="enchashmentBindingCheck.subbranch" data-toggle="modal" data-target="#communityModal"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">开户名<i style="color:red;margin-right:5px">*</i></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" maxlength="30" v-model="enchashmentBindingCheck.accountName" placeholder="开户名"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">审核<i style="color:red;margin-right:5px">*</i></div>
+                <label class="radio-inline radio-inline-hide">
+                    <input type="radio" name="checkStatus" value="1" v-model="enchashmentBindingCheck.checkStatus"/> 通过
+                </label>
+                <label class="radio-inline radio-inline-show">
+                    <input type="radio" value="0" name="checkStatus" v-model="enchashmentBindingCheck.checkStatus"/> 不通过
+                </label>
+            </div>
+            <div class="form-group audit-state">
+                <div class="col-sm-2 control-label">审核意见</div>
+                <div class="col-sm-4">
+                    <textarea name="remark" cols="30" rows="5" class="form-control" v-model="enchashmentBindingCheck.remark" placeholder="审核意见"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input id="bankCardCheck" type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/operation/enchashmentbinding_check.js?_${.now?long}"></script>
+</body>
+</html>

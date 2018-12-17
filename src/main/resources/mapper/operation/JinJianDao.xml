@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.scxxwb.net.admin.modules.operation.dao.JinJianDao">
+<mapper namespace="leiren.haozhaojob.modules.operation.dao.DiandiankeJinJianDao">
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.scxxwb.net.admin.modules.operation.entity.JinJianEntity" id="jinJianMap">
+    <resultMap type="leiren.haozhaojob.modules.operation.entity.DiandiankeJinJianEntity" id="jinJianMap">
         <result property="merchantId" column="merchant_id"/>
         <result property="merchantMemberId" column="merchant_member_id"/>
         <result property="merchantClass" column="merchant_class"/>

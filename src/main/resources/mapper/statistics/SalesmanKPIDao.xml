@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.scxxwb.net.admin.modules.statistics.dao.SalesmanKPIDao">
+<mapper namespace="leiren.haozhaojob.modules.statistics.dao.SalesmanKPIDao">
 
-    <resultMap type="com.scxxwb.net.admin.modules.statistics.entity.SalesmanKPIEntity" id="SalesmanKPIMap">
+    <resultMap type="leiren.haozhaojob.modules.statistics.entity.SalesmanKPIEntity" id="SalesmanKPIMap">
         <result property="sysUsetName" column="sysUsetName"/>
         <result property="numBers" column="numBers"/>
     </resultMap>
@@ -22,6 +22,9 @@
         </if>
         <if test="town != null and town > 0">
             AND t_merchant.town = #{town}
+        </if>
+        <if test="agentId != null and agentId > 0">
+            and t_merchant.agent_id = #{agentId}
         </if>
         <if test="sysUserName != null and sysUserName != ''">
             AND t_sys_user.real_name LIKE CONCAT('%',#{sysUserName},'%')

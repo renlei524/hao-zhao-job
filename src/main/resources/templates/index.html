@@ -38,10 +38,13 @@
         <span class="sr-only">Toggle navigation</span>
       </a>
 	  <div style="float:left;color:#fff;padding:15px 10px;">欢迎 {{user.userName}}</div>
+      <div style="float:left;color:#fff;padding:15px 10px;">
+          <iframe width="800" scrolling="no" height="18" frameborder="0" allowtransparency="true" src="//i.tianqi.com/index.php?c=code&id=1&color=%23FFFFFF&icon=1&wind=1&num=1&site=12"></iframe>
+      </div>
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
 		  <li><a href="javascript:;" @click="updatePassword"><i class="fa fa-lock"></i> &nbsp;修改密码</a></li>
-          <li><a href="logout"><i class="fa fa-sign-out"></i> &nbsp;退出系统</a></li>
+          <li><a @click="loginOut"><i class="fa fa-sign-out"></i> &nbsp;退出系统</a></li>
 		</ul>
       </div>
     </nav>
@@ -85,7 +88,7 @@
 
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      Version 3.0.0
+      Version 3.2.0
     </div>
     Copyright &copy; 2018 <a href="http://www.scxxwb.com" target="_blank">四川犀星微宝</a> All Rights Reserved
   </footer>

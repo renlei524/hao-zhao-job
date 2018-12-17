@@ -1,31 +1,202 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>商品审核</title>
+    <title>商品信息审核</title>
 		<#include "/header.html">
-   <!-- <style>
-		.ui-jqgrid .ui-jqgrid-btable tbody tr.jqgrow td{
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/merchant.css">
+    <style type="text/css">
 
-			text-overflow:ellipsis!important;
-
-		}
-	</style>-->
+        /*table tbody tr td img{*/
+            /*cursor: pointer;*/
+            /*transition: all 0.6s;*/
+            /*position: absolute;*/
+        /*}*/
+        /*table tbody tr td img:hover{*/
+            /*transform: scale(3.5);*/
+        /*}*/
+        #img{
+            height: 100px;
+            width: 100px;
+            cursor: pointer;
+            transition: all 0.3s;
+            float: left;
+            margin-top: -800px;
+        }
+    </style>
 </head>
 <body>
 <div id="rrapp" v-cloak>
     <div v-show="showList">
-        <#if shiro.hasPermission("operation:goods:list")>
-            <div class="grid-btn">
-                <div class="form-group col-sm-2">
-                    <input type="text" class="form-control" v-model="goods.goodsName" @keyup.enter="query" placeholder="商品名">
+        <div class="grid-btn">
+            <#if shiro.hasPermission("operation:goodsCheck:list")>
+                <div class="form-group col-sm-3" style="padding-left:0;width:18%">
+                    <input type="text"  class="form-control" v-model="q.search" @keyup.enter="query" placeholder="商户名、商品名称">
+                </div>
+                <!--<div class="form-group col-sm-3" style="padding-left:0;width:18%">
+                    <input type="text"  class="form-control" v-model="goodsCheck.number" @keyup.enter="query" placeholder="编号">
+                </div>-->
+                <div class="form-group col-sm-2" style="padding-left:0;width:12%">
+                    <select name="status" v-model="q.status"  class="form-control" placeholder="状态选择"  id="status" >
+                        <option value="0" selected="selected">--状态选择--</option>
+                        <option value="1">创建审核中</option>
+                        <option value="3">修改审核中</option>
+                    </select>
                 </div>
                 <a class="btn btn-default" @click="query">查询</a>
-            </div>
-        </#if>
+            </#if>
+			<#if shiro.hasPermission("operation:goodsCheck:check")>
+                <a class="btn btn-primary" @click="check"><i class="fa fa-plus"></i>&nbsp;审核</a>
+                <a class="btn btn-primary" @click="checkBitchYes"><i class="fa fa-plus"></i>&nbsp;批量通过</a>
+                <a class="btn btn-primary" @click="checkBitchNo"><i class="fa fa-plus"></i>&nbsp;批量不通过</a>
+			</#if>
+        </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
     </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商户名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.merchantName" placeholder="商户ID" disabled/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.goodsName" placeholder="商品名称" disabled/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品详细</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.details" placeholder="商品详细" disabled/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">成本价</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.originalPrice" placeholder="成本价" disabled/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">市场价</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.marketPrice" placeholder="市场价" disabled/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">折后价</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.discountPrice" placeholder="折后价" disabled/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品总库存</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.total" placeholder="商品总库存" disabled/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品图片</div>
+                        <div class="col-sm-10">
+                            <img src="" width="200px" height="200px" id="pictures"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品促销</div>
+                        <div class="col-sm-10">
+                            <label class="radio-inline radio-inline-hide">
+                                <input type="radio" name="isPromotion" value="true" v-model="goodsCheck.isPromotion" disabled/> 促销
+                            </label>
+                            <label class="radio-inline radio-inline-show">
+                                <input type="radio" id="isPromotion" value="false" name="isPromotion" v-model="goodsCheck.isPromotion" disabled/> 不促销
+                            </label>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">促销价</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.promotionalPrice" placeholder="促销价" disabled/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">剩余库存</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.surplusInventory" placeholder="剩余库存" disabled/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">限购数量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.quantityPurchased" placeholder="限购数量" disabled/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">开始时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.startTime" placeholder="开始时间" disabled/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">结束时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.endTime" placeholder="结束时间" disabled/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品标签</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.labelName" placeholder="商品标签Id" disabled/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">是否推荐</div>
+                        <div class="col-sm-10">
+                            <label class="radio-inline radio-inline-hide">
+                                <input type="radio" name="isRecommend" value="true" v-model="goodsCheck.isRecommend" disabled/> 推荐
+                            </label>
+                            <label class="radio-inline radio-inline-show">
+                                <input type="radio" id="isRecommend" value="false" name="isRecommend" v-model="goodsCheck.isRecommend" disabled/> 不推荐
+                            </label>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">点赞数量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-active" v-model="goodsCheck.thumbsUp" placeholder="点赞数量" disabled/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">审核</div>
+                        <div class="col-sm-10">
+                            <label class="radio-inline radio-inline-hide">
+                                <input type="radio" name="status" value="5" v-model="goodsCheck.status"/> 通过
+                            </label>
+                            <label class="radio-inline radio-inline-show">
+                                <input type="radio" id="checkStatus" value="2" name="status" v-model="goodsCheck.status"/> 不通过
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group audit-state" id="remark">
+                        <div class="col-sm-2 control-label">审核意见</div>
+                        <div class="col-sm-4">
+                            <textarea name="remark" cols="30" rows="5" maxlength="30" class="form-control" v-model="goodsCheck.remark" placeholder="审核意见"></textarea>
+                        </div>
+                    </div>
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input id="goodsCheck" type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+<img src="#" id="img"/>
 </div>
-<script src="${request.contextPath}/statics/js/modules/operation/goods.js?_${.now?long}"></script>
+
+<script src="${request.contextPath}/statics/js/modules/operation/goods_check.js?_${.now?long}"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/modules/operation/merchant_check_photo.js?_${.now?long}"></script>
 </body>
 </html>
