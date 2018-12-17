@@ -30,16 +30,16 @@ public class SwaggerConfig{
             //加了ApiOperation注解的类，生成接口文档
             .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
             //包下的类，生成接口文档
-            .apis(RequestHandlerSelectors.basePackage("com.scxxwb.net.admin.modules"))
+            .apis(RequestHandlerSelectors.basePackage("leiren.haozhaojob.modules"))
             .paths(PathSelectors.any())
             .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("犀星微宝")
-            .description("scxxwb-admin文档")
-            .termsOfServiceUrl("http://www.scxxwb.com")
+            .title("Hao Zhao Job")
+            .description("Hao Zhao Job文档")
+            .termsOfServiceUrl("http://www.HaoZhaoJob.com")
             .version("3.0.0")
             .build();
     }

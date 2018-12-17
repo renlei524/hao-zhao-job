@@ -7,7 +7,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-@MapperScan(basePackages = {"com.scxxwb.net.admin.modules.*.dao"})
+@MapperScan(basePackages = {"leiren.haozhaojob.modules.*.dao"})
 public class AdminApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
